@@ -26,9 +26,9 @@ module.exports = (sequelize) => {
 				defaultValue: DataTypes.NOW
 			},
 			rating: {
-				type: DataTypes.DECIMAL,
+				type: DataTypes.INTEGER,
 				allowNull: false
 			},
-		}, { timestamps: false }
+		}, { timestamps: false, createdAt: false }
 	)
 }

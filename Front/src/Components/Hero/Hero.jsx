@@ -13,14 +13,12 @@ import img from '../../assets/heroImage/heroImage.svg'
 const Hero = () => {
   return (
     <Flex
-      p={10}
       direction={{ base: 'column', md: 'row', lg: 'row' }}
-      gap={50}
       justifyContent="center"
       align="center"
     >
       <Flex
-        width="100%"
+        width="full"
         gap={10}
         direction="column"
         justifyContent="space-between"

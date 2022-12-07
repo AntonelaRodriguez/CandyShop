@@ -11,7 +11,47 @@ module.exports = (sequelize) => {
         allowNull: false,
         validate: {
           notEmpty: true,
-        },
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
+      },
+      dni: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      phoneNumber: {
+        type: DataTypes.INTEGER,
+      },
+      address: {
+        type: DataTypes.STRING,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      image:{
+        type:DataTypes.STRING
+      },
+      birthdate:{
+        type: DataTypes.DATEONLY,
+        defaultValue: DataTypes.NOW,
+      },
+      admin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
+      banned: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
       },
     },
     {

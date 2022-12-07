@@ -6,11 +6,12 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 
 import store from './redux/store/store'
+import theme from './theme'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <BrowserRouter>
           <App />
         </BrowserRouter>

@@ -7,15 +7,8 @@ import {
   HStack,
   Image,
   Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Select,
   Stack,
-  Text,
-  VStack
+  Text
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -73,7 +66,7 @@ const ProductDetail = () => {
       </Stack>
       <Stack minHeight="full" width={{ base: '100%', sm: '100%', md: '50%' }}>
         <Flex
-          minH={'full'}
+          minH="full"
           direction={{ base: 'column' }}
           align="flex-start"
           justifyContent="space-between"
@@ -89,7 +82,7 @@ const ProductDetail = () => {
             <Badge colorScheme="red">Ford</Badge>
             <Badge colorScheme="purple">Felford</Badge>
           </Stack>
-          <Stack p={10} direction="row" align="center" justify="flex-start">
+          <Stack direction="row" align="center" justify="flex-start">
             <Flex align="center" justify="center" gap={1.5}>
               <Image src={stars} />
               <Image src={stars} />

@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   Flex,
@@ -6,59 +7,89 @@ import {
   HStack,
   Image,
   Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Select,
   Stack,
   Text,
   VStack
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import stars from '../../assets/starsProductDetail/stars.svg'
 import Taps from '../../Components/Taps/Taps'
 
 const ProductDetail = () => {
-  const [input, setInput] = useState('')
-  const changeMonto = (e) => {
-    setInput(e.target.value)
+  const [cantidad, setCantidad] = useState(0)
+
+  const increment = () => {
+    setCantidad(cantidad + 1)
+  }
+
+  const decrement = () => {
+    cantidad > 0 ? setCantidad(cantidad - 1) : cantidad
   }
   return (
     <Flex
       w="full"
-      minHeight="650px"
-      direction={{ base: 'column', md: 'row', lg: 'row' }}
+      direction={{ base: 'column', sm: 'column', md: 'row', lg: 'row' }}
       justifyContent="space-between"
-      bg="gray.500"
       borderRadius="md"
+      maxW="container.lg"
+      margin="auto"
     >
       <Stack
         borderStartRadius="md"
-        width={{ base: '50%', sm: '100%' }}
+        width={{ base: '100%', sm: '100%', md: '50%' }}
         minHeight="full"
-        bg="gray.300"
+        bg="#E3E5FA"
         align="center"
         justify="center"
+        position="relative"
       >
         <Box
           borderStartRadius="md"
-          backgroundImage="https://s7d2.scene7.com/is/image/hersheysassets/0_34000_56046_2_701_56046_015_Item_Front?fmt=webp-alpha&hei=908&qlt=75"
+          backgroundImage="https://dulcilandia.com.ar/par/wp-content/uploads/sites/4/2020/04/04950085.png"
           backgroundPosition="center center"
           backgroundRepeat="no-repeat"
           bgSize="contain"
           boxSize="md"
+          width="full"
         ></Box>
+        <Link to="/ ">
+          <Button
+            position="absolute"
+            colorScheme="primary"
+            variant="outline"
+            top={15}
+            left={15}
+          >
+            Home
+          </Button>
+        </Link>
       </Stack>
-      <Stack minHeight="full" width={{ base: '50%', sm: '100%' }} bg="whiteAlpha.500" p={15}>
+      <Stack minHeight="full" width={{ base: '100%', sm: '100%', md: '50%' }}>
         <Flex
-          
           minH={'full'}
           direction={{ base: 'column' }}
           align="flex-start"
           justifyContent="space-between"
           p={10}
+          gap={5}
         >
           <Heading as="h2" fontSize={48} fontWeight="bold">
             Product name
           </Heading>
+          <Stack direction="row">
+            <Badge colorScheme="primary">cofler</Badge>
+            <Badge colorScheme="green">Arcor</Badge>
+            <Badge colorScheme="red">Ford</Badge>
+            <Badge colorScheme="purple">Felford</Badge>
+          </Stack>
           <Stack p={10} direction="row" align="center" justify="flex-start">
             <Flex align="center" justify="center" gap={1.5}>
               <Image src={stars} />
@@ -71,17 +102,16 @@ const ProductDetail = () => {
           </Stack>
 
           <Stack>
-            <Taps
-              title="Description"
-              description="Makanan yang lengkap dan seimbang, dengan 41 nutrisi penting.
-            Mengandung antioksidan (vitamin E dan selenium) untuk sistem
-            kekebalan tubuh yang sehat. Mengandung serat untuk memperlancar
-            pencernaan dan meningkatkan kesehatan usus. Diperkaya dengan
-            kalsium, fosfor dan vitamin D untuk tulang yang sehat."
-              title2="marca"
-              description2="Cofler - Oblea - Ford"
-              title3=""
-            />
+            <Text fontWeight={600} fontSize="2xl">
+              Description :
+            </Text>
+            <Text fontWeight={300}>
+              Makanan yang lengkap dan seimbang, dengan 41 nutrisi penting.
+              Mengandung antioksidan (vitamin E dan selenium) untuk sistem
+              kekebalan tubuh yang sehat. Mengandung serat untuk memperlancar
+              pencernaan dan meningkatkan kesehatan usus. Diperkaya dengan
+              kalsium, fosfor dan vitamin D untuk tulang yang sehat.
+            </Text>
           </Stack>
 
           <HStack
@@ -91,17 +121,31 @@ const ProductDetail = () => {
             justify="center"
             width="full"
           >
-            <Stack direction="row" align="center" justify="center">
-              <Text color="whiteAlpha.900" fontWeight="bold" fontSize={20}>
-                Cantidad:
-              </Text>
-              <Select variant="filled" placeholder="Filled">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-              </Select>
-            </Stack>
-            <Button size="lg" bg="primary.300">
+            <HStack align="center" justify="center">
+              <Button
+                colorScheme="primary"
+                variant="outline"
+                onClick={decrement}
+              >
+                -
+              </Button>
+              <Input
+                maxW="50px"
+                textAlign="center"
+                type="email"
+                name=""
+                value={cantidad}
+                id=""
+              />
+              <Button
+                colorScheme="primary"
+                variant="outline"
+                onClick={increment}
+              >
+                +
+              </Button>
+            </HStack>
+            <Button colorScheme="primary" variant="solid" size="lg">
               Add to cart
             </Button>
           </HStack>

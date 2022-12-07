@@ -21,7 +21,6 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import stars from '../../assets/starsProductDetail/stars.svg'
-import Taps from '../../Components/Taps/Taps'
 
 const ProductDetail = () => {
   const [cantidad, setCantidad] = useState(0)

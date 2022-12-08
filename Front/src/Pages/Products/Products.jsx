@@ -11,6 +11,7 @@ import {
   GridItem
 } from '@chakra-ui/react'
 import CardProduct from '../../Components/CardProduct/CardProduct'
+import * as actions from '../../redux/actions/actions'
 import { Link } from 'react-router-dom'
 
 

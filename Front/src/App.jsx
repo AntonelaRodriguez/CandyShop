@@ -11,9 +11,14 @@ import Nav from './Components/Nav/Nav'
 function App() {
   // const { toggleColorMode, colorMode } = useColorMode(); //para el dark y light theme
   return (
-    <Container maxW="container.xl">
-      <Nav>
-      </Nav>
+    <Container
+      maxW="container.lg"
+      height="full"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+    >
+      <Nav />
 
       <Routes>
         <Route exact path="/" element={<Home />} />

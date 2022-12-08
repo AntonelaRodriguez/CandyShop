@@ -10,7 +10,7 @@ import Nav from './Components/Nav/Nav'
 
 function App() {
   return (
-    <Container maxW="container.xl">
+    <Container maxW="container.lg" height="full"  display="flex" flexDirection="column" alignItems="center">
       <Nav />
       <Routes>
         <Route exact path="/" element={<Home />} />

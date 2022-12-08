@@ -31,8 +31,10 @@ const ProductDetail = () => {
       direction={{ base: 'column', sm: 'column', md: 'row', lg: 'row' }}
       justifyContent="space-between"
       borderRadius="md"
-      maxW="container.lg"
+      
+      height="full"
       margin="auto"
+      boxShadow="2xl"
     >
       <Stack
         borderStartRadius="md"
@@ -67,6 +69,7 @@ const ProductDetail = () => {
       <Stack minHeight="full" width={{ base: '100%', sm: '100%', md: '50%' }}>
         <Flex
           minH="full"
+          h="full"
           direction={{ base: 'column' }}
           align="flex-start"
           justifyContent="space-between"
@@ -124,8 +127,10 @@ const ProductDetail = () => {
               <Input
                 maxW="50px"
                 textAlign="center"
-                type="email"
-                name=""
+                type="number"
+                autoCorrect='off'
+                autocapitalize="off"
+                name="cantidad"
                 value={cantidad}
                 id=""
               />

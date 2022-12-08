@@ -1,4 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import Home from './Pages/Home/Home'
 import Cart from './Pages/Cart/Cart'
 import ProductDetail from './Pages/ProductDetail/ProductDetail'
@@ -7,10 +9,19 @@ import SignUp from './Pages/SignUp/SignUp.jsx'
 import SignIn from './Pages/SignIn/SignIn.jsx'
 import { Container, IconButton, useColorMode } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
+import { getAllProducts } from './redux/actions/actions';
+
 
 function App() {
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getAllProducts())
+  }, [dispatch])
+
   // const { toggleColorMode, colorMode } = useColorMode(); //para el dark y light theme
   return (
+
     <Container
       maxW="container.lg"
       height="full"
@@ -19,7 +30,7 @@ function App() {
       alignItems="center"
     >
       <Nav />
-
+      
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />

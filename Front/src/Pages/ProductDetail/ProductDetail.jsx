@@ -58,6 +58,7 @@ const ProductDetail = () => {
         align='center'
         justify='center'
         position='relative'
+        p={5}
       >
         <Box
           borderStartRadius='md'

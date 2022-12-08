@@ -14,10 +14,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
-const CardProduct = ({ image, index }) => {
-  console.log(index)
+const CardProduct = ({ image, id, name, price}) => {
+  // console.log(index)
   return (
-    <Link to={`/product/${index}`}>
+    <Link to={`/product/${id}`}>
       <motion.div whileHover={{ scale: 1.02 }}>
         <Card boxShadow="2xl" bg="gray.200" maxW="sm" minH="full">
           <CardBody>
@@ -27,9 +27,9 @@ const CardProduct = ({ image, index }) => {
               borderRadius="lg"
             />
             <Stack mt="6" spacing="3">
-              <Heading size="md">Living room Sofa</Heading>
+              <Heading size="md">{name}</Heading>
               <Text color="blue.600" fontSize="2xl">
-                $450
+                {`$${price}`}
               </Text>
             </Stack>
           </CardBody>

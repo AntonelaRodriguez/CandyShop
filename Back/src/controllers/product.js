@@ -3,9 +3,9 @@ const { Op } = require("sequelize");
 const { Product, ProdPic, Category } = require('../db.js')
 
 const searchCandy = async (name) => {    //busca products por matcheo parcial
-	if(!name) return res.status(400).json({ msg: "Value is undefined" });
+	if(!name) throw new Error({message:"Value is undefined", status:400});
 	let nameTrimed = name.replace(/^\s+|\s+$/, "");
-	if(!nameTrimed.length) return res.status(400).json({ msg: "Value is empty string!" });
+	if(!nameTrimed.length) throw new Error({message: "Value is empty string!", status:400});
 	let products = await Product.findAll({
       where: { name: { [Op.iLike]: nameTrimed+"%" } },
       include: [
@@ -13,9 +13,10 @@ const searchCandy = async (name) => {    //busca products por matcheo parcial
         { model: ProdPic }
       ]
     });
-	if(!products.length) return res.status(404).json({ msg: `No matches for ${nameTrimed}`})
-	return products
-}
+	if(!products.length) throw new Error({message: `No matches for ${nameTrimed}`, status: 404});
+
+	return products.map((el)=>valuesToReturn(el.toJSON()));
+};
 
 const searchById = async (id) => {    //busca products por id 
 	let product = await Product.findByPk(id, {
@@ -24,9 +25,10 @@ const searchById = async (id) => {    //busca products por id
 		  { model: ProdPic }
 		]
 	  });
-	  if(!product) return res.status(404).json({ msg: `No matches for id: ${id}`})
-	  return product
-}
+	  if(!product) throw new Error({ msg: `No matches for id: ${id}`})
+	  return valuesToReturn(product);
+
+};
 
 const updateProduct = async (body, id) => {   //actualiza data de un producto existente
 	let updateds = await Product.update(
@@ -34,27 +36,84 @@ const updateProduct = async (body, id) => {   //actualiza data de un producto ex
 		{ where: { id: id } }
 	  );
 	return updateds
-}
+};
 
 const deleteProduct = async (id) => {    //elimina un producto 
     let deleted = await Product.destroy({ where: { id: id } });
 	return deleted
-}
+};
 
 const getAllProducts = async () => {    //busca todos los products de la db
 	const allProducts = await Product.findAll({ include: [
 		{ model: Category },
 		{ model: ProdPic }
 	]})
-	return allProducts
+     
+	return allProducts.map((el)=>valuesToReturn(el.toJSON()));
+};
+
+
+const createProduct = async (name,description,price,brand,image,stock,tacc,category)=>{
+    try{
+        if(!name||!description||!price || !brand || !stock) throw new Error("One of the arguments is not defined");
+        
+        if(tacc === null || tacc === undefined) throw new Error("Tacc is required");
+
+        if(isNaN(price) || isNaN(stock)) throw new Error("Argument is not a number");
+    
+        let newName = name.toLowerCase();
+    
+        const result = await Product.findOne({where:{ name: newName }});
+        if(result) throw new Error("The product already exists");
+        
+        const newProduct = await Product.create({
+            name,
+            description,
+            price,
+            availability: stock > 0 ? true : false,
+            image,
+            stock,
+            brand,
+            tacc
+        });     
+
+		   let categoryProduct = await Category.findAll({
+             where:{
+                name: category
+             }
+         });
+        newProduct.addCategory(categoryProduct);
+
+       return newProduct;
+    }catch(error){
+        throw new Error(error.message);
+    }
+};
+
+
+const valuesToReturn = (value) =>{	
+	return {
+		id:value.id,
+		name: value.name,
+		description: value.description,
+		price: value.price,
+		availability: value.availability,
+		image: value.image,
+		stock: value.stock,
+		brand: value.brand,
+		tacc: value.tacc,
+		category: value.Categories.map(el=>el.name) 
+	}
 }
+
 
 module.exports = {
 	getAllProducts,
 	searchById,
 	searchCandy,
 	updateProduct,
-	deleteProduct
+	deleteProduct,
+	createProduct
 };
 
 

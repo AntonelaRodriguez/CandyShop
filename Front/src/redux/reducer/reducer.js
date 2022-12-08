@@ -1,23 +1,29 @@
-import { ALL_PRODUCTS, SEARCH_CANDY, SORT } from "../actions/actions"
+import { ALL_PRODUCTS, SEARCH_CANDY, SORT, DETAILS_PRODUCT } from "../actions/actions"
 
 const initialState = {
-  products: []
+  products: [],
+  productDetail: []
 }
 
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case ALL_PRODUCTS: {
-      return ({
+      return {
         ...state,
         products: payload
-      })
+      }
     }
     case SEARCH_CANDY: {
-      return ({
+      return {
         ...state,
         products: payload
-      })
+      }
     }
+    case DETAILS_PRODUCT:
+      return {
+        ...state,
+        productDetail: payload
+      }
     case SORT:
             if(payload === "A-Z") {
                 return {
@@ -54,7 +60,6 @@ const reducer = (state = initialState, { type, payload }) => {
                     products: state.products
                 }
               }
-
     default:
       return state
   }

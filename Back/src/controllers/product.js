@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { Op } = require("sequelize");
 const { Product, ProdPic, Category } = require('../db.js')
 
-const searchCandy = async (name) => {
+const searchCandy = async (name) => {    //busca products por matcheo parcial
 	if(!name) return res.status(400).json({ msg: "Value is undefined" });
 	let nameTrimed = name.replace(/^\s+|\s+$/, "");
 	if(!nameTrimed.length) return res.status(400).json({ msg: "Value is empty string!" });
@@ -17,7 +17,7 @@ const searchCandy = async (name) => {
 	return products
 }
 
-const searchById = async (id) => {
+const searchById = async (id) => {    //busca products por id 
 	let product = await Product.findByPk(id, {
 		include: [
 		  { model: Category },
@@ -28,7 +28,7 @@ const searchById = async (id) => {
 	  return product
 }
 
-const updateProduct = async (body, id) => {
+const updateProduct = async (body, id) => {   //actualiza data de un producto existente
 	let updateds = await Product.update(
 		{ ...body },
 		{ where: { id: id } }
@@ -36,12 +36,12 @@ const updateProduct = async (body, id) => {
 	return updateds
 }
 
-const deleteProduct = async (id) => {
+const deleteProduct = async (id) => {    //elimina un producto 
     let deleted = await Product.destroy({ where: { id: id } });
 	return deleted
 }
 
-const getAllProducts = async () => {
+const getAllProducts = async () => {    //busca todos los products de la db
 	const allProducts = await Product.findAll({ include: [
 		{ model: Category },
 		{ model: ProdPic }

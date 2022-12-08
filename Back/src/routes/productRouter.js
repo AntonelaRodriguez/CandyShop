@@ -3,7 +3,7 @@ const productRouter = Router()
 const { getAllProducts, searchCandy, searchById, updateProduct, deleteProduct } = require('../controllers/product')
 const { Product, Category } = require('../db.js')
 
-productRouter.get("/", async (req, res, next) => {
+productRouter.get("/", async (req, res, next) => {  //busca todos los products
 	try {
 	  const allProducts = await getAllProducts()
 	  res.json(allProducts);
@@ -12,7 +12,7 @@ productRouter.get("/", async (req, res, next) => {
 	}
 });
 
-productRouter.get("/search", async (req, res, next) => {
+productRouter.get("/search", async (req, res, next) => {  //busca los products por matcheo parcial
 	const { name } = req.query;
 	try {
 		const products = await searchCandy(name)
@@ -22,7 +22,7 @@ productRouter.get("/search", async (req, res, next) => {
 	}
 });
 
-productRouter.get("/categories", async (req, res, next) => {
+productRouter.get("/categories", async (req, res, next) => { //busca todas las categories
 	try {
 	  let categories = await Category.findAll();
 	  return res.status(200).send(categories)
@@ -31,7 +31,7 @@ productRouter.get("/categories", async (req, res, next) => {
 	}
 });
 
-productRouter.get("/:id", async (req, res, next) => {
+productRouter.get("/:id", async (req, res, next) => {   //busca productos por id
 	try {
 	  const product = await searchById(req.params.id)
 	  res.json(product);
@@ -40,7 +40,7 @@ productRouter.get("/:id", async (req, res, next) => {
 	}
 });
 
-productRouter.post("/:idProduct/category/:idCategory", async (req, res, next) => {
+productRouter.post("/:idProduct/category/:idCategory", async (req, res, next) => {   //realiza la relacion entre categoria y producto
 	try {
 	  let category = await Category.findByPk(req.params.idCategory);
 	  let product = await Product.findByPk(req.params.idProduct)
@@ -52,7 +52,7 @@ productRouter.post("/:idProduct/category/:idCategory", async (req, res, next) =>
 });
 
   
-productRouter.post("/category", async (req, res, next) => {
+productRouter.post("/category", async (req, res, next) => {    //busca o agrega una categoria
 	try {
 	  let category = await Category.findOrCreate({
 		where: { name: req.body.name }
@@ -64,7 +64,7 @@ productRouter.post("/category", async (req, res, next) => {
 });
 
 
-productRouter.post("/", async (req, res, next) => {
+productRouter.post("/", async (req, res, next) => {    //crea un product nuevo
 	const {name, description, price, availability, image, stock, brand, tacc} = req.body;
 	try {
 	  const product = await Product.create({ ...req.body });
@@ -75,7 +75,7 @@ productRouter.post("/", async (req, res, next) => {
 });
 
 
-productRouter.put("/:id", async (req, res, next) => {
+productRouter.put("/:id", async (req, res, next) => {    //actualiza data de un producto ya existente
 	try {
 	  const update = updateProduct(req.body, req.params.id)
 	  if (!update) return res.status(404).json({ msg: "There is not Product with that id!" });
@@ -85,7 +85,7 @@ productRouter.put("/:id", async (req, res, next) => {
 	}
 })
 
-productRouter.delete("/:id", async (req, res, next) => {
+productRouter.delete("/:id", async (req, res, next) => {    //elimina un producto de la db
 	try {
 	  const deleted = await deleteProduct(req.params.id)
 	  if (!deleted) return res.status(404).json({ msg: "There is not Product with that id!" });

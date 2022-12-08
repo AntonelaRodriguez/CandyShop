@@ -55,26 +55,6 @@ const Hero = () => {
             brands. So why you are waiting? Just order now!
           </Text>
         </Flex>
-        <Flex bg="primary.200" p={2} borderRadius={'md'}>
-          <Input
-            type="search"
-            outline="none"
-            border={'none'}
-            _focus={{ outline: 'none', border: 'none' }}
-            _placeholder={{ opacity: 1, color: 'whiteAlpha.900' }}
-            name=""
-            placeholder="Find the best brands"
-            id=""
-          />
-          <Button
-            variant="solid"
-            _hover={{ backgroundColor: 'primary.400' }}
-            color="whiteAlpha.900"
-            bg={'primary.300'}
-          >
-            Search
-          </Button>
-        </Flex>
       </Flex>
       <Stack
         display={{ base: 'none', md: 'flex', lg: 'flex' }}

@@ -8,7 +8,8 @@ import {
   Stack,
   Text,
   Grid, 
-  GridItem
+  GridItem,
+  Select
 } from '@chakra-ui/react'
 import CardProduct from '../../Components/CardProduct/CardProduct'
 import * as actions from '../../redux/actions/actions'
@@ -31,7 +32,7 @@ const Products = () => {
     event.preventDefault()
     if(name) {
       dispatch(actions.searchCandy(name))
-      setName('')
+       setName('')
     } else {
       dispatch(actions.getAllProducts())
     }
@@ -44,6 +45,16 @@ const Products = () => {
   const products = useSelector(state => state.products)
   console.log(products);
 
+  const [, setOrder] = useState('');
+
+  const handlerSort = (e) => {
+    setOrder(dispatch(actions.sort(e.target.value)))
+  }
+
+  const handleClear = (e) => {
+    setOrder(dispatch(actions.getAllProducts()))
+    document.querySelectorAll('option').forEach(option => option.selected = false);
+  }
 
   return (
   <Flex 
@@ -81,7 +92,30 @@ const Products = () => {
       </Button>
     </Flex>
   </form>
-
+    <Flex direction='row'
+  justifyContent="center"
+  align="center"
+  p={5}>
+            <Select 
+            placeholder="Sort"
+            bg={'primary.200'}
+            _hover={{ backgroundColor: 'primary.400' }} 
+            onChange={handlerSort}
+            m={2}
+            >
+              <option value="A-Z">A-Z</option>
+              <option value="Z-A">Z-A</option>
+              <option value="Price: Highest">Price: Highest</option>
+              <option value="Price: Lowest">Price: Lowest</option>
+            </Select>
+            <Button 
+            variant="solid"
+            _hover={{ backgroundColor: 'primary.400' }}
+            color="whiteAlpha.900"
+            bg={'primary.300'}
+            onClick={handleClear}
+            >✖</Button>
+            </Flex>
     <Stack gap={3} justify="center" align="center" overflow="hidden">
         <Grid
           p={20}

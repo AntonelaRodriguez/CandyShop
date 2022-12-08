@@ -1,8 +1,11 @@
 import axios from 'axios'
 
+
 export const ALL_PRODUCTS = 'ALL_PRODUCTS'
 export const SEARCH_CANDY = 'SEARCH_CANDY'
+export const SORT = 'SORT';
 export const DETAILS_PRODUCT = 'DETAILS_PRODUCT'
+
 
 export const getAllProducts = () => {
   return async function (dispatch) {
@@ -16,6 +19,10 @@ export const searchCandy = (name) => {
     const searchedProducts = await axios.get(`http://localhost:3001/products/search?name=${name}`)
     return dispatch({ type: SEARCH_CANDY, payload: searchedProducts.data })
   }
+}
+
+export const sort = (payload) => {
+    return {type: SORT, payload}
 }
 
 export const getProductDetails = (id) => {

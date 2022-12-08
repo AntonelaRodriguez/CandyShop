@@ -8,18 +8,33 @@ import {
   Image,
   Input,
   Stack,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
   Text
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useParams } from 'react-router-dom'
+import { ImPriceTag } from 'react-icons/im'
 import stars from '../../assets/starsProductDetail/stars.svg'
+import { getProductDetails } from '../../redux/actions/actions'
 
 const ProductDetail = () => {
   const [cantidad, setCantidad] = useState(0)
 
+  const product = useSelector((state) => state.productDetail)
+
+  const dispatch = useDispatch()
+
+  const { id } = useParams()
+  useEffect(() => {
+    dispatch(getProductDetails(id))
+  }, [dispatch, id])
+
+  console.log(product)
   const increment = () => {
-    setCantidad(cantidad + 1)
+    cantidad < product.stock ? setCantidad(cantidad + 1) : cantidad
   }
 
   const decrement = () => {
@@ -27,122 +42,116 @@ const ProductDetail = () => {
   }
   return (
     <Flex
-      w="full"
+      w='full'
       direction={{ base: 'column', sm: 'column', md: 'row', lg: 'row' }}
-      justifyContent="space-between"
-      borderRadius="md"
-      
-      height="full"
-      margin="auto"
-      boxShadow="2xl"
+      justifyContent='space-between'
+      borderRadius='md'
+      height='full'
+      margin='auto'
+      boxShadow='2xl'
     >
       <Stack
-        borderStartRadius="md"
+        borderStartRadius='md'
         width={{ base: '100%', sm: '100%', md: '50%' }}
-        minHeight="full"
-        bg="#E3E5FA"
-        align="center"
-        justify="center"
-        position="relative"
+        minHeight='full'
+        bg='#E3E5FA'
+        align='center'
+        justify='center'
+        position='relative'
       >
         <Box
-          borderStartRadius="md"
-          backgroundImage="https://dulcilandia.com.ar/par/wp-content/uploads/sites/4/2020/04/04950085.png"
-          backgroundPosition="center center"
-          backgroundRepeat="no-repeat"
-          bgSize="contain"
-          boxSize="md"
-          width="full"
+          borderStartRadius='md'
+          backgroundImage={product.image}
+          backgroundPosition='center center'
+          backgroundRepeat='no-repeat'
+          bgSize='cover'
+          boxSize='md'
+          width='full'
         ></Box>
-        <Link to="/ ">
-          <Button
-            position="absolute"
-            colorScheme="primary"
-            variant="outline"
-            top={15}
-            left={15}
-          >
+        <Link to='/ '>
+          <Button position='absolute' colorScheme='primary' variant='outline' top={15} left={15}>
             Home
           </Button>
         </Link>
       </Stack>
-      <Stack minHeight="full" width={{ base: '100%', sm: '100%', md: '50%' }}>
+      <Stack minHeight='full' width={{ base: '100%', sm: '100%', md: '50%' }}>
         <Flex
-          minH="full"
-          h="full"
+          minH='full'
+          h='full'
           direction={{ base: 'column' }}
-          align="flex-start"
-          justifyContent="space-between"
+          align='flex-start'
+          justifyContent='space-evenly'
           p={10}
-          gap={5}
+          gap={2}
+          bg='gray.200'
         >
-          <Heading as="h2" fontSize={48} fontWeight="bold">
-            Product name
-          </Heading>
-          <Stack direction="row">
-            <Badge colorScheme="primary">cofler</Badge>
-            <Badge colorScheme="green">Arcor</Badge>
-            <Badge colorScheme="red">Ford</Badge>
-            <Badge colorScheme="purple">Felford</Badge>
-          </Stack>
-          <Stack direction="row" align="center" justify="flex-start">
-            <Flex align="center" justify="center" gap={1.5}>
-              <Image src={stars} />
-              <Image src={stars} />
-              <Image src={stars} />
-              <Image src={stars} />
-              <Image src={stars} />
-            </Flex>
-            <Text>246 Reviews</Text>
-          </Stack>
+          <Flex direction='column' align='flex-start' justify='center' gap={2}>
+            <Stack justify='center' align='flex-start' gap={1} w='full' direction='column'>
+              <Heading
+                as='h2'
+                w='full'
+                fontSize={'3xl'}
+                textTransform='capitalize'
+                fontWeight='bold'
+              >
+                {product.name}
+              </Heading>
+              <Tag
+                w='fit-content'
+                cursor='pointer'
+                pointerEvents='none'
+                size='lg'
+                variant='subtle'
+                colorScheme='primary'
+                display='flex'
+                alignItems='center'
+                justifyContent='flex-start'
+              >
+                <TagLeftIcon as={ImPriceTag} />
+                <TagLabel>$ {product.price}</TagLabel>
+              </Tag>
+            </Stack>
+            <Stack direction='row' align='center' justify='flex-start'>
+              <Flex align='center' justify='center'>
+                <Image width='3.5' src={stars} />
+                <Image width='3.5' src={stars} />
+                <Image width='3.5' src={stars} />
+                <Image width='3.5' src={stars} />
+                <Image width='3.5' src={stars} />
+              </Flex>
+              <Text>246 Reviews</Text>
+            </Stack>
+            <Badge colorScheme='pink'>{product.brand}</Badge>
+          </Flex>
 
           <Stack>
-            <Text fontWeight={600} fontSize="2xl">
+            <Text fontWeight={600} fontSize='2xl'>
               Description :
             </Text>
-            <Text fontWeight={300}>
-              Makanan yang lengkap dan seimbang, dengan 41 nutrisi penting.
-              Mengandung antioksidan (vitamin E dan selenium) untuk sistem
-              kekebalan tubuh yang sehat. Mengandung serat untuk memperlancar
-              pencernaan dan meningkatkan kesehatan usus. Diperkaya dengan
-              kalsium, fosfor dan vitamin D untuk tulang yang sehat.
-            </Text>
+            <Text fontWeight={300}>{product.description}</Text>
           </Stack>
 
-          <HStack
-            spacing={10}
-            align="center"
-            direction="row"
-            justify="center"
-            width="full"
-          >
-            <HStack align="center" justify="center">
-              <Button
-                colorScheme="primary"
-                variant="outline"
-                onClick={decrement}
-              >
+          <HStack spacing={10} align='center' direction='row' justify='center' width='full'>
+            <HStack align='center' justify='center'>
+              <Button colorScheme='primary' variant='outline' onClick={decrement}>
                 -
               </Button>
               <Input
-                maxW="50px"
-                textAlign="center"
-                type="number"
+                maxW='50px'
+                textAlign='center'
+                type='number'
+                max={Number(product.stock)}
                 autoCorrect='off'
-                autocapitalize="off"
-                name="cantidad"
+                autocapitalize='off'
+                name='cantidad'
                 value={cantidad}
-                id=""
+                id=''
               />
-              <Button
-                colorScheme="primary"
-                variant="outline"
-                onClick={increment}
-              >
+              <Button colorScheme='primary' variant='outline' onClick={increment}>
                 +
               </Button>
             </HStack>
-            <Button colorScheme="primary" variant="solid" size="lg">
+            <Button colorScheme='primary' variant='solid' size='lg'>
               Add to cart
             </Button>
           </HStack>

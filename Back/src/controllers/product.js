@@ -102,7 +102,8 @@ const valuesToReturn = (value) =>{
 		stock: value.stock,
 		brand: value.brand,
 		tacc: value.tacc,
-		category: value.Categories.map(el=>el.name) 
+		category: value.Categories.map(el=>el.name),
+		prodPic: value.ProdPics.map(el=>el.image)
 	}
 }
 

@@ -31,10 +31,10 @@ const Products = () => {
     event.preventDefault()
     if(name) {
       dispatch(actions.searchCandy(name))
+      setName('')
     } else {
       dispatch(actions.getAllProducts())
     }
-    setName('')
     console.log('prueba')
   }
 

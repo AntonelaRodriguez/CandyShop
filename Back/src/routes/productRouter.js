@@ -13,9 +13,9 @@ productRouter.get("/", async (req, res, next) => {  //busca todos los products
 });
 
 productRouter.get("/search", async (req, res, next) => {  //busca los products por matcheo parcial
-	const { name } = req.query;
+	const { name, category, brand, tacc } = req.query;
 	try {
-		const products = await searchCandy(name)
+		const products = await searchCandy(name,category,tacc,brand)
 		res.json(products);
 	} catch (error) {
 		next(error);

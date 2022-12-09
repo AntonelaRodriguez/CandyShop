@@ -1,0 +1,25 @@
+.page-number {
+	font-size: 16px;
+	font-weight: 600;
+	color: black;
+	background: rgba(255, 255, 255, 0.371);
+	padding: 10px 20px;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.5s ease;
+}
+
+.page-number:hover {
+	color: #fff;
+	background: #FF6B6B;
+}
+
+.active {
+	color: #fff;
+	background: #FF6B6B;
+}
+
+.active:hover {
+	color: #FF6B6B;
+	background: rgba(255, 255, 255, 0.371);
+}

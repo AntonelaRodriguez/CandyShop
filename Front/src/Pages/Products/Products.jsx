@@ -14,6 +14,7 @@ import {
 import CardProduct from '../../Components/CardProduct/CardProduct'
 import * as actions from '../../redux/actions/actions'
 import { useDispatch, useSelector } from 'react-redux'
+import Pagination from '../../Components/Pagination/Pagination'
 // import { Link } from 'react-router-dom'
 
 
@@ -55,6 +56,31 @@ const Products = () => {
     setOrder(dispatch(actions.getAllProducts()))
     document.querySelectorAll('option').forEach(option => option.selected = false);
   }
+
+  //--- pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(9);
+
+  const indexOfLastPost = currentPage * productsPerPage;
+  const indexOfFirstPost = indexOfLastPost - productsPerPage;
+  const currentPosts = products.slice(indexOfFirstPost, indexOfLastPost);
+  
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const prevPage = () => {
+    if (currentPage !== 1) {
+       setCurrentPage(currentPage - 1);
+    }
+ };
+
+ const nextPage = () => {
+    if (currentPage !== Math.ceil(products.length / productsPerPage)) {
+       setCurrentPage(currentPage + 1);
+    }
+ };
+  //----
 
   return (
   <Flex 
@@ -127,7 +153,7 @@ const Products = () => {
           gap={20}
           minW="full"
         >
-          {products.map((product) => {
+          {currentPosts && currentPosts.map((product) => {
             return (
               <GridItem>
                 <CardProduct key={product.id} id={product.id} image={product.image} name={product.name} price={product.price} />
@@ -136,6 +162,14 @@ const Products = () => {
           })}
         </Grid>
       </Stack>
+      <Pagination 
+            productsPerPage={productsPerPage}
+            totalProducts={products.length}
+            currentPage={currentPage}
+            paginate={paginate}
+            prevPage={prevPage}
+            nextPage={nextPage}
+            />
   </Flex>
   )
 }

@@ -2,8 +2,10 @@ const { Router } = require("express");
 const { Op } = require("sequelize");
 const { Product, ProdPic, Category } = require('../db.js')
 
-const searchCandy = async (name) => {    //busca products por matcheo parcial
-	if(!name) throw new Error({message:"Value is undefined", status:400});
+const searchCandy = async (name,category, tacc, brand) => {    //busca products por matcheo parcial
+	let product = []
+	if(name !== "" && typeof name === "string"){
+	// if(!name) throw new Error({message:"Value is undefined", status:400});
 	let nameTrimed = name.replace(/^\s+|\s+$/, "");
 	if(!nameTrimed.length) throw new Error({message: "Value is empty string!", status:400});
 	let products = await Product.findAll({
@@ -15,7 +17,37 @@ const searchCandy = async (name) => {    //busca products por matcheo parcial
     });
 	if(!products.length) throw new Error({message: `No matches for ${nameTrimed}`, status: 404});
 
-	return products.map((el)=>valuesToReturn(el.toJSON()));
+	product = products.map((el)=>valuesToReturn(el.toJSON()));
+	} else {
+		let products = await Product.findAll({
+			include: [
+			  { model: Category },
+			  { model: ProdPic }
+			]
+		  });
+		if(!products.length) throw new Error({message: `No matches for ${nameTrimed}`, status: 404});
+		product = products.map((el)=>valuesToReturn(el.toJSON()));
+	}
+	
+	if(tacc !== "" && typeof tacc === "string"){
+		if(tacc === "noTacc"){
+		product = product.filter(el=>el.tacc === false)
+		}
+
+		if(tacc === "withTacc"){
+		product =product.filter(el=>el.tacc === true)
+		}
+	}
+
+	if(brand !== "" && typeof brand === "string"){
+		product = product.filter(el=>el.brand === brand)
+	}
+
+	if(category !== "" && typeof category === "string"){
+		product = product.filter(el=>el.category.map(c => c).includes(category))
+	}
+
+	return product;
 };
 
 const searchById = async (id) => {    //busca products por id 

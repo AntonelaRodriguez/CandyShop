@@ -74,7 +74,7 @@ let capsEntries = entries.map((entry) => [
 sequelize.models = Object.fromEntries(capsEntries);
 
 // Extraigo cada modelo.
-const { User, Cart, Category, Detail, ProdPic, Product, Review } = sequelize.models;
+const { User, Cart, Category, Detail, Product, Review } = sequelize.models;
 
 // Seteo relaciones entre modelos.
 
@@ -85,10 +85,7 @@ User.hasMany(Cart);
 Cart.belongsTo(User);  
 
 Cart.hasOne(Detail); 
-Detail.belongsTo(Cart);  
-
-Product.hasMany(ProdPic); 
-ProdPic.belongsTo(Product);  
+Detail.belongsTo(Cart);    
 
 Product.hasMany(Review); 
 Review.belongsTo(Product);  

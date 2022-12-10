@@ -1,4 +1,4 @@
-import { ALL_PRODUCTS, SEARCH_CANDY, SORT, DETAILS_PRODUCT } from "../actions/actions"
+import { ALL_PRODUCTS, SEARCH_CANDY, SORT, DETAILS_PRODUCT, POST_PRODUCT } from "../actions/actions"
 
 const initialState = {
   products: [],
@@ -60,6 +60,10 @@ const reducer = (state = initialState, { type, payload }) => {
                     products: state.products
                 }
               }
+      case POST_PRODUCT:
+        return {
+          ...state
+        } 
     default:
       return state
   }

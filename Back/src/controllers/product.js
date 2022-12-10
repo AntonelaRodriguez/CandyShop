@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { Op } = require("sequelize");
-const { Product, ProdPic, Category } = require('../db.js')
+const { Product, Category } = require('../db.js')
 
 const searchCandy = async (name,category, tacc, brand) => {    //busca products por matcheo parcial
 	let product = []
@@ -12,7 +12,6 @@ const searchCandy = async (name,category, tacc, brand) => {    //busca products 
       where: { name: { [Op.iLike]: nameTrimed+"%" } },
       include: [
         { model: Category },
-        { model: ProdPic }
       ]
     });
 	if(!products.length) throw new Error({message: `No matches for ${nameTrimed}`, status: 404});
@@ -22,7 +21,6 @@ const searchCandy = async (name,category, tacc, brand) => {    //busca products 
 		let products = await Product.findAll({
 			include: [
 			  { model: Category },
-			  { model: ProdPic }
 			]
 		  });
 		if(!products.length) throw new Error({message: `No matches for ${nameTrimed}`, status: 404});
@@ -54,7 +52,6 @@ const searchById = async (id) => {    //busca products por id
 	let product = await Product.findByPk(id, {
 		include: [
 		  { model: Category },
-		  { model: ProdPic }
 		]
 	  });
 	  if(!product) throw new Error({ msg: `No matches for id: ${id}`})
@@ -78,7 +75,6 @@ const deleteProduct = async (id) => {    //elimina un producto
 const getAllProducts = async () => {    //busca todos los products de la db
 	const allProducts = await Product.findAll({ include: [
 		{ model: Category },
-		{ model: ProdPic }
 	]})
      
 	return allProducts.map((el)=>valuesToReturn(el.toJSON()));
@@ -135,7 +131,6 @@ const valuesToReturn = (value) =>{
 		brand: value.brand,
 		tacc: value.tacc,
 		category: value.Categories.map(el=>el.name),
-		prodPic: value.ProdPics.map(el=>el.image)
 	}
 }
 

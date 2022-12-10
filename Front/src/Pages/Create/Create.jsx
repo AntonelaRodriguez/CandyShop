@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from 'axios';
 
 import {
   FormControl,
@@ -29,6 +30,22 @@ const Create = () => {
   const [errors, setErrors] = useState({});
   const Category = useSelector((state) => state.Category);
   const brand = useSelector((state) => state.brand);
+
+  // Cloudinary
+  const [image, setImage] = useState("");
+
+  const uploadImage = async (e) => {
+    const files = e.target.files;
+    const data = new FormData();
+
+    data.append("file", files[0]);
+    data.append("upload_preset", "images");
+    const {data:file} = await axios.post("https://api.cloudinary.com/v1_1/dev3snn9g/image/upload", data)
+    
+    setImage(file.secure_url);
+    
+    console.log(file);
+  }
 
   const [input, setInput] = useState({
     name: "",
@@ -97,10 +114,11 @@ const Create = () => {
       Category: input.Category,
       brand: input.brand,
       tacc: input.tacc,
-      img: input.img,
+      img: image,
       price: input.price,
       stock: input.stock,
     };
+    console.log(crear)
   }
 
   return (
@@ -171,16 +189,6 @@ const Create = () => {
         </FormControl>
 
         <FormControl isRequired>
-          <FormLabel>Img URL</FormLabel>
-          <Input
-            type="text"
-            value={input.img}
-            name="img"
-            onChange={handleChange}
-          />
-        </FormControl>
-
-        <FormControl isRequired>
           <FormLabel>Price</FormLabel>
           <Input
             type="number"
@@ -198,6 +206,18 @@ const Create = () => {
             name="stock"
             onChange={handleChange}
           />
+        </FormControl>
+
+        <FormControl isRequired>
+          <FormLabel htmlFor="file">Img URL</FormLabel>
+          <Input
+            id="fileInput"
+            type="file"
+            // value={image}
+            name="file"
+            onChange={(e) => uploadImage(e)}
+          />
+          <img src={image} alt="product pic" />
         </FormControl>
 
         <Button type="submit" colorScheme="primary">

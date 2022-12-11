@@ -1,21 +1,21 @@
 const { Router } = require('express')
 const productRouter = Router()
-const { getAllProducts, searchCandy, searchById, updateProduct, deleteProduct } = require('../controllers/product')
+const { getAllProducts, searchCandy, searchById, updateProduct, deleteProduct, createProduct } = require('../controllers/product')
 const { Product, Category } = require('../db.js')
 
 productRouter.get("/", async (req, res, next) => {  //busca todos los products
 	try {
-	  const allProducts = await getAllProducts()
-	  res.json(allProducts);
+	  const allProducts = await getAllProducts();
+	  res.status(201).json(allProducts);
 	} catch (error) {
 		next(error);
 	}
 });
 
 productRouter.get("/search", async (req, res, next) => {  //busca los products por matcheo parcial
-	const { name } = req.query;
+	const { name, category, brand, tacc } = req.query;
 	try {
-		const products = await searchCandy(name)
+		const products = await searchCandy(name,category,tacc,brand)
 		res.json(products);
 	} catch (error) {
 		next(error);
@@ -40,22 +40,24 @@ productRouter.get("/:id", async (req, res, next) => {   //busca productos por id
 	}
 });
 
-productRouter.post("/:idProduct/category/:idCategory", async (req, res, next) => {   //realiza la relacion entre categoria y producto
-	try {
-	  let category = await Category.findByPk(req.params.idCategory);
-	  let product = await Product.findByPk(req.params.idProduct)
-	  await product.addCategory(category)
-	  return res.send({ msg: "Relation Category-Product estableced!"})
-	} catch (error) {
-	  next(error);
-	}
-});
+// productRouter.post("/:idProduct/category/:idCategory", async (req, res, next) => {   //realiza la relacion entre categoria y producto
+// 	try {
+// 	  let category = await Category.findByPk(req.params.idCategory);
+// 	  let product = await Product.findByPk(req.params.idProduct)
+// 	  await product.addCategory(category)
+// 	  return res.send({ msg: "Relation Category-Product estableced!"})
+// 	} catch (error) {
+// 	  next(error);
+// 	}
+// });
 
   
 productRouter.post("/category", async (req, res, next) => {    //busca o agrega una categoria
 	try {
-	  let category = await Category.findOrCreate({
-		where: { name: req.body.name }
+		const { name } = req.body;
+        let newName = name.toLowerCase();
+	    let category = await Category.findOrCreate({
+		where: { name: newName }
 	  });
 	  return res.status(201).send(category)
 	} catch (error) {
@@ -64,14 +66,24 @@ productRouter.post("/category", async (req, res, next) => {    //busca o agrega 
 });
 
 
-productRouter.post("/", async (req, res, next) => {    //crea un product nuevo
-	const {name, description, price, availability, image, stock, brand, tacc} = req.body;
-	try {
-	  const product = await Product.create({ ...req.body });
-	  res.status(201).json(product);
-	} catch (error) {
-	  next(error);
-	}
+// productRouter.post("/", async (req, res, next) => {    //crea un product nuevo
+// 	const {name, description, price, availability, image, stock, brand, tacc} = req.body;
+// 	try {
+// 	  const product = await Product.create({ ...req.body });
+// 	  res.status(201).json(product);
+// 	} catch (error) {
+// 	  next(error);
+// 	}
+// });
+
+productRouter.post("/", async (req, res, next)=>{
+    try{
+        const {name,description,price,brand,image,stock,tacc, category} = req.body;
+        const result = await createProduct(name,description,price,brand,image,stock,tacc,category);
+        res.status(201).json(result);
+    }catch(error){
+      next(error);
+    }
 });
 
 

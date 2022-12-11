@@ -2,10 +2,11 @@ const { Router } = require("express");
 const { Op } = require("sequelize");
 const { Product, Category } = require('../db.js')
 
-const searchCandy = async (name,category, tacc, brand) => {    //busca products por matcheo parcial
+const searchCandy = async (name) => {    //busca products por matcheo parcial
 	let product = []
 	if(name !== "" && typeof name === "string"){
-	// if(!name) throw new Error({message:"Value is undefined", status:400});
+	if(!name) throw new Error({message:"Value is undefined", status:400});
+	}
 	let nameTrimed = name.replace(/^\s+|\s+$/, "");
 	if(!nameTrimed.length) throw new Error({message: "Value is empty string!", status:400});
 	let products = await Product.findAll({
@@ -17,33 +18,7 @@ const searchCandy = async (name,category, tacc, brand) => {    //busca products 
 	if(!products.length) throw new Error({message: `No matches for ${nameTrimed}`, status: 404});
 
 	product = products.map((el)=>valuesToReturn(el.toJSON()));
-	} else {
-		let products = await Product.findAll({
-			include: [
-			  { model: Category },
-			]
-		  });
-		if(!products.length) throw new Error({message: `No matches for ${nameTrimed}`, status: 404});
-		product = products.map((el)=>valuesToReturn(el.toJSON()));
-	}
-	
-	if(tacc !== "" && typeof tacc === "string"){
-		if(tacc === "noTacc"){
-		product = product.filter(el=>el.tacc === false)
-		}
 
-		if(tacc === "withTacc"){
-		product =product.filter(el=>el.tacc === true)
-		}
-	}
-
-	if(brand !== "" && typeof brand === "string"){
-		product = product.filter(el=>el.brand === brand)
-	}
-
-	if(category !== "" && typeof category === "string"){
-		product = product.filter(el=>el.category.map(c => c).includes(category))
-	}
 
 	return product;
 };
@@ -118,6 +93,21 @@ const createProduct = async (name,description,price,brand,image,stock,tacc,categ
     }
 };
 
+const filteringProducts = async (querys) => {
+	let { tacc, brand, category:categ } = querys;
+	let products = await Product.findAll({
+	  include: [{ model: Category }],
+	});
+	products = products.map((el) => valuesToReturn(el.toJSON()));
+	if(tacc !== 'TACC' ) {
+		  tacc == 'notacc' && (products = products.filter((p) => p.tacc === false))
+		  tacc == 'tacc' && (products = products.filter((p) => p.tacc === true))
+	  }
+	brand !== 'BRAND' && (products = products.filter((p) => p.brand == brand));
+	categ !== 'CATEGORY' && (products = products.filter((p) => p.category.includes(categ)));
+	return products;
+  };
+
 
 const valuesToReturn = (value) =>{	
 	return {
@@ -141,7 +131,8 @@ module.exports = {
 	searchCandy,
 	updateProduct,
 	deleteProduct,
-	createProduct
+	createProduct,
+	filteringProducts
 };
 
 

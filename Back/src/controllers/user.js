@@ -1,22 +1,18 @@
 const { User } = require("../db.js");
 
-async function get_users(req, res, next) {
-  const { name } = req.query;
-  try {
+const getAllUsers = async (name) => {
     if (name) {
       let users = await User.findAll({ where: { name: name } });
       if (!users.length) {
-        return res.status(404).json({ msg: `No matches for ${name}` });
+       throw new Error({msg: `No matches for ${name}`});
       }
-      return res.status(200).json(users);
+      return users;
     }
     let users = await User.findAll();
-    return res.status(200).json(users);
-  } catch (error) {
-    next(error);
-  }
+    if(!users.length) throw new Error({msg : 'No users wre created yet!'})
+    return users
 }
 
 module.exports = {
-  get_users,
+  getAllUsers,
 };

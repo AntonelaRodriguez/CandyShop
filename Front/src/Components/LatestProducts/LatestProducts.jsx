@@ -22,9 +22,8 @@ const LatestProducts = () => {
         >
           {products.map((product) => {
             return (
-              <GridItem>
+              <GridItem key={product.id}>
                 <CardProduct
-                  key={product.id}
                   id={product.id}
                   image={product.image}
                   name={product.name}

@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 export const ALL_PRODUCTS = 'ALL_PRODUCTS'
 export const ALL_CATEGORIES = 'ALL_CATEGORIES'
 export const SEARCH_CANDY = 'SEARCH_CANDY'
@@ -9,6 +10,9 @@ export const POST_PRODUCT = 'POST_PRODUCT'
 export const POST_PIC = 'POST_PIC'
 export const EDIT_PRODUCT = 'EDIT_PRODUCT'
 export const DELETED_PRODUCT = 'DELETED_PRODUCT'
+export const SET_FILTERS = "SET_FILTERS";
+export const APPLY_FILTERS = "APPLY_FILTERS";
+
 
 export const getAllProducts = () => {
   return async function (dispatch) {
@@ -28,6 +32,23 @@ export const searchCandy = (name) => {
   return async function (dispatch) {
     const searchedProducts = await axios.get(`/products/search?name=${name}`)
     return dispatch({ type: SEARCH_CANDY, payload: searchedProducts.data })
+  }
+}
+
+export function setFilters( payload ) { 
+  return {
+    type: SET_FILTERS,
+    payload
+  }
+}
+
+export function applyFilters({ tacc, brand, category }) { 
+  return async function(dispatch) {
+    const { data } = await axios.get(`http://localhost:3001/products/filters?tacc=${tacc || 'TACC' }&brand=${brand || 'BRAND'}&category=${category || 'CATEGORY'}`);
+    return dispatch({
+      type: APPLY_FILTERS,
+      payload: data
+    })
   }
 }
 

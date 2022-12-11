@@ -29,6 +29,16 @@ const Products = () => {
   }
   console.log(name)
   
+  //------filter
+
+  const filters = useSelector((state) => state.filters);
+  function handleFilters(event) {
+    dispatch(actions.setFilters({ ...filters, [event.target.name]: event.target.value }));
+    dispatch(actions.applyFilters({ ...filters, [event.target.name]: event.target.value  }));
+  }
+
+  //--------filter
+
   const handleSumbit = (event) => {
     event.preventDefault()
     if(name) {
@@ -142,6 +152,72 @@ const Products = () => {
             onClick={handleClear}
             >✖</Button>
             </Flex>
+
+    {/* filters */}
+    <Select
+          placeholder="T.A.C.C"
+          name="tacc"
+          value={filters.tacc}
+          bg={'primary.200'}
+          _hover={{ backgroundColor: 'primary.400' }}
+          onChange={handleFilters}
+          m={2}
+        >
+          <option value="tacc">TACC</option>
+          <option value="notacc">NO TACC</option>
+        </Select>
+
+        <Select
+          placeholder="BRAND"
+          name="brand"
+          value={filters.brand}
+          bg={'primary.200'}
+          _hover={{ backgroundColor: 'primary.400' }}
+          onChange={handleFilters}
+          m={2}
+        >
+          <option value="Aguila">Aguila</option>
+          <option value="Arcor">Arcor</option>
+          <option value="Bagley">Bagley</option>
+          <option value="Bon o Bon"option>Bon o Bon</option>
+          <option value="Billiken">Billiken</option>
+          <option value="Bonafide">Bonafide</option>
+          <option value="Cofler">Cofler</option>
+          <option value="Felfort">Felfort</option>
+          <option value="Ferrero">Ferrero</option>
+          <option value="Georgalos">Georgalos</option>
+          <option value="Godet">Godet</option>
+          <option value="Jorgito">Jorgito</option>
+          <option value="Milka">Milka</option>
+          <option value="Mogul">Mogul</option>
+          <option value="Nestle">Nestle</option>
+          <option value="Terrabusi">Terrabusi</option>
+          <option value="Tofi">Tofi</option>
+          <option value="Topline">Topline</option>
+          <option value="Trident">Trident</option>
+          <option value="Unknown">Unknown</option>
+        </Select>
+        <Select
+          placeholder="CATEGORY"
+          value={filters.category}
+          name="category"
+          bg={'primary.200'}
+          _hover={{ backgroundColor: 'primary.400' }}
+          onChange={handleFilters}
+          m={2}
+        >
+          <option value="biscuits">biscuits</option>
+          <option value="bubble gum">bubble gum</option>
+          <option value="caramel cookie">caramel cookie</option>
+          <option value="candy">candy</option>
+          <option value="cerealbars">cerealbars</option>
+          <option value="chocolate">chocolate</option>
+          <option value="gummies">gummies</option>
+          <option value="lollipop">lollipop</option>
+          <option value="tablets">tablets</option>
+          <option value="unknown">unknown</option>
+        </Select>
+        
     <Stack gap={3} justify="center" align="center" overflow="hidden">
         <Grid
           p={20}

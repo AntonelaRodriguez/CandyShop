@@ -5,9 +5,12 @@ import {
   DETAILS_PRODUCT,
   POST_PRODUCT,
   ALL_CATEGORIES,
+ SET_FILTERS,
+  APPLY_FILTERS,
   EDIT_PRODUCT,
   DELETED_PRODUCT
 } from '../actions/actions'
+
 
 const initialState = {
   products: [],
@@ -34,8 +37,10 @@ const initialState = {
     'Trident',
     'Ferrero',
     'Unknown'
-  ]
+  ],
+   filters: { tacc: "TACC", brand: "BRAND", category: "CATEGORY" },
 }
+
 
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -98,6 +103,18 @@ const reducer = (state = initialState, { type, payload }) => {
 
     case DELETED_PRODUCT:
       return { ...state }
+        ...state,
+      };
+      case SET_FILTERS:
+        return {
+          ...state,
+          filters: payload,
+        };
+      case APPLY_FILTERS:
+        return {
+          ...state,
+          products: payload,
+        };
     default:
       return state
   }

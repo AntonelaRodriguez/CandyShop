@@ -7,6 +7,8 @@ export const SORT = "SORT";
 export const DETAILS_PRODUCT = "DETAILS_PRODUCT";
 export const POST_PRODUCT = "POST_PRODUCT";
 export const POST_PIC = "POST_PIC";
+export const SET_FILTERS = "SET_FILTERS";
+export const APPLY_FILTERS = "APPLY_FILTERS";
 
 export const getAllProducts = () => {
   return async function (dispatch) {
@@ -32,6 +34,23 @@ export const searchCandy = (name) => {
     return dispatch({ type: SEARCH_CANDY, payload: searchedProducts.data });
   };
 };
+
+export function setFilters( payload ) { 
+  return {
+    type: SET_FILTERS,
+    payload
+  }
+}
+
+export function applyFilters({ tacc, brand, category }) { 
+  return async function(dispatch) {
+    const { data } = await axios.get(`http://localhost:3001/products/filters?tacc=${tacc || 'TACC' }&brand=${brand || 'BRAND'}&category=${category || 'CATEGORY'}`);
+    return dispatch({
+      type: APPLY_FILTERS,
+      payload: data
+    })
+  }
+}
 
 export const sort = (payload) => {
   return { type: SORT, payload };

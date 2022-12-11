@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const productRouter = Router()
-const { getAllProducts, searchCandy, searchById, updateProduct, deleteProduct, createProduct } = require('../controllers/product')
+const { getAllProducts, searchCandy, searchById, updateProduct, deleteProduct, createProduct, filteringProducts } = require('../controllers/product')
 const { Product, Category } = require('../db.js')
 const dbProducts = require("../../dbProducts.json");
 const dbCategories = require("../../dbCategories.json");
@@ -23,14 +23,23 @@ productRouter.get("/", async (req, res, next) => {  //busca todos los products
 });
 
 productRouter.get("/search", async (req, res, next) => {  //busca los products por matcheo parcial
-	const { name, category, brand, tacc } = req.query;
+	const { name } = req.query;
 	try {
-		const products = await searchCandy(name,category,tacc,brand)
+		const products = await searchCandy(name)
 		res.json(products);
 	} catch (error) {
 		next(error);
 	}
 });
+
+productRouter.get("/filters", async (req, res, next) => {
+	try {
+	  let results = await filteringProducts(req.query);
+	  res.json(results);
+	} catch (error) {
+	  next(error);
+	}
+  });
 
 productRouter.get("/categories", async (req, res, next) => { //busca todas las categories
 	try {

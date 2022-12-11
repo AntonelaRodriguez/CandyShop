@@ -1,7 +1,17 @@
 const { Router } = require("express");
-const { get_users } = require("../controllers/user");
+const { getAllUsers } = require("../controllers/user");
+const userRouter = Router();
+const { User } = require("../db.js");
 
-const router = Router();
-router.get("/", get_users);
+
+userRouter.get("/", async (req, res, next) => {
+	const { name } = req.query;
+  try {
+    const users = getAllUsers(name)
+	return res.status(200).json(users)
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;

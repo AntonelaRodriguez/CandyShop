@@ -45,6 +45,14 @@ module.exports = (sequelize) => {
       },
       brand: {
         type: DataTypes.ENUM([
+          "bonafide",
+          "milka",
+          "jorgito",
+          "trident",
+          "ferrero",
+          "terrabusi",
+          "nestle",
+          "billiken",
           "arcor",
           "felfort",
           "bagley",
@@ -70,14 +78,3 @@ module.exports = (sequelize) => {
     }
   );
 };
-
-
-//brands         
-  // "bonafide",
-  // "milka",
-  // "jorgito",
-  // "trident",
-  // "ferrero",
-  // "terrabusi",
-  // "nestle",
-  // "billiken",

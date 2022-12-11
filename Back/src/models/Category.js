@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
       primaryKey: true
     },
     name: {
-        type: DataTypes.ENUM(["bubble gum", "lollipop", "alfajor", "candy", "chocolate", "gummies","tablets", "biscuits","cereal bars", "caramel cookie", "unknown"]),
+        type: DataTypes.ENUM(["bubble gum", "lollipop", "candy", "chocolate", "gummies","tablets", "biscuits","cereal bars", "caramel cookie", "unknown"]),
         defaultValue: "unknown"
     }
     },

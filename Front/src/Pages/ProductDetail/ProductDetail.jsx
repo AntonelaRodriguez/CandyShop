@@ -11,14 +11,15 @@ import {
   Tag,
   TagLabel,
   TagLeftIcon,
-  Text
+  Text,
+  useToast
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
 import stars from '../../assets/starsProductDetail/stars.svg'
-import { getProductDetails } from '../../redux/actions/actions'
+import { getProductDetails, deleteProduct, getAllProducts } from '../../redux/actions/actions'
 
 const ProductDetail = () => {
   const [cantidad, setCantidad] = useState(0)
@@ -27,12 +28,13 @@ const ProductDetail = () => {
 
   const dispatch = useDispatch()
 
+  const navigate = useNavigate()
+
   const { id } = useParams()
   useEffect(() => {
     dispatch(getProductDetails(id))
   }, [dispatch, id])
 
-  console.log(product)
   const increment = () => {
     cantidad < product.stock ? setCantidad(cantidad + 1) : cantidad
   }
@@ -40,6 +42,14 @@ const ProductDetail = () => {
   const decrement = () => {
     cantidad > 0 ? setCantidad(cantidad - 1) : cantidad
   }
+
+  const handlerDelete = async (e) => {
+    e.preventDefault()
+    await dispatch(deleteProduct(id))
+    await dispatch(getAllProducts())
+    navigate('/products')
+  }
+
   return (
     <Flex
       w='full'
@@ -49,6 +59,7 @@ const ProductDetail = () => {
       height='full'
       margin='auto'
       boxShadow='2xl'
+      position='relative'
     >
       <Stack
         borderStartRadius='md'
@@ -141,9 +152,6 @@ const ProductDetail = () => {
                 maxW='50px'
                 textAlign='center'
                 type='number'
-                max={Number(product.stock)}
-                autoCorrect='off'
-                autocapitalize='off'
                 name='cantidad'
                 value={cantidad}
                 id=''
@@ -157,6 +165,16 @@ const ProductDetail = () => {
             </Button>
           </HStack>
         </Flex>
+      </Stack>
+      <Stack position='absolute' top={15} right={15} direction='row'>
+        <Link to={`/edit/${id}`}>
+          <Button variant='solid' colorScheme='blue'>
+            Editing
+          </Button>
+        </Link>
+        <Button colorScheme='red' onClick={(e) => handlerDelete(e)}>
+          Delete Pokemon
+        </Button>
       </Stack>
     </Flex>
   )

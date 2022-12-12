@@ -74,9 +74,27 @@ let capsEntries = entries.map((entry) => [
 sequelize.models = Object.fromEntries(capsEntries);
 
 // Extraigo cada modelo.
-const { User } = sequelize.models;
+const { User, Cart, Category, Detail, Product, Review } = sequelize.models;
 
 // Seteo relaciones entre modelos.
+
+User.hasMany(Review); 
+Review.belongsTo(User);   
+
+User.hasMany(Cart); 
+Cart.belongsTo(User);  
+
+Cart.hasOne(Detail); 
+Detail.belongsTo(Cart);    
+
+Product.hasMany(Review); 
+Review.belongsTo(Product);  
+
+Cart.belongsToMany(Product,{ through: 'cart_product'}); 
+Product.belongsToMany(Cart,{ through: 'cart_product'});
+
+Product.belongsToMany(Category, {through: 'product_category'}) 
+Category.belongsToMany(Product, {through: 'product_category'})
 
 module.exports = {
   ...sequelize.models,

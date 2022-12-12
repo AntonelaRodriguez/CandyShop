@@ -16,9 +16,10 @@ import {
   Textarea,
   Box,
   Badge,
-  Center
+  Center,
+  Flex
 } from '@chakra-ui/react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const EditProduct = () => {
   const dispatch = useDispatch()
@@ -26,7 +27,7 @@ const EditProduct = () => {
   const category = useSelector((state) => state.categories)
   const productDetail = useSelector((state) => state.productDetail)
   const brand = useSelector((state) => state.brands)
-
+  const navigate = useNavigate()
   // Cloudinary
   const [image, setImage] = useState('')
 
@@ -100,24 +101,26 @@ const EditProduct = () => {
       price: null,
       stock: null
     })
-    alert('Videogame EditProductd succesfully')
+    alert('Producto actualizado EditProductd succesfully')
+    navigate('/products')
   }
   return (
     <Stack direction='row' align='center' justify='center' gap={15}>
       <form action='submit' onSubmit={(e) => handleSubmit(e)}>
         <Stack spacing={2}>
           <FormControl isRequired>
-            <FormLabel>Name</FormLabel>
-            <Input type='text' value={input.name} name='name' onChange={handleChange} />
-            <FormLabel>Description</FormLabel>
+            <FormLabel htmlFor='name'>Name</FormLabel>
+            <Input type='text' id='name' value={input.name} name='name' onChange={handleChange} />
+            <FormLabel htmlFor='desc'>Description</FormLabel>
             <Textarea
+              id='desc'
               placeholder='Type a Description'
               value={input.description}
               name='description'
               onChange={handleChange}
             />
-            <FormLabel>category</FormLabel>
-            <select onChange={(e) => handleSelectCategories(e)}>
+            <FormLabel htmlFor='cat'>category</FormLabel>
+            <select id='cat' onChange={(e) => handleSelectCategories(e)}>
               <option>Select category</option>
               {category?.map((g) => {
                 return (
@@ -128,16 +131,25 @@ const EditProduct = () => {
               })}
             </select>
             {/* DELETE CATEGORY */}
-            {input.category?.map((e, i) => {
-              return (
-                <Stack key={e + i} direction='row' align='center' justify='flex-start'>
-                  <Badge colorScheme='pink'>{e}</Badge>
-                  <Button colorScheme='red' size='xs' onClick={() => handleDeleteCategories(e)}>
-                    X
-                  </Button>
-                </Stack>
-              )
-            })}
+            <Flex p={3} gap={5}>
+              {input.category?.map((e, i) => {
+                return (
+                  <Stack
+                    width='fit-content'
+                    key={e + i}
+                    direction='row'
+                    align='center'
+                    justify='flex-start'
+                  >
+                    <Badge colorScheme='pink'>{e}</Badge>
+                    <Button colorScheme='red' size='xs' onClick={() => handleDeleteCategories(e)}>
+                      X
+                    </Button>
+                  </Stack>
+                )
+              })}
+            </Flex>
+
             <FormLabel>Brand</FormLabel>
             <select name='brand' onChange={(e) => handleChange(e)}>
               <option value={input.brand}>Select Brand</option>
@@ -150,16 +162,18 @@ const EditProduct = () => {
               })}
             </select>
 
-            {input.brand && (
-              <Stack direction='row' align='center' justify='flex-start'>
-                <Badge colorScheme='blue' variant='outline'>
-                  {input.brand}
-                </Badge>
-                <Button colorScheme='red' size='xs' onClick={() => handleDeleteCategories(e)}>
-                  X
-                </Button>
-              </Stack>
-            )}
+            <Flex p={3} gap={5}>
+              {input.brand && (
+                <Stack direction='row' align='center' justify='flex-start'>
+                  <Badge colorScheme='blue' variant='outline'>
+                    {input.brand}
+                  </Badge>
+                  <Button colorScheme='red' size='xs' onClick={() => handleDeleteCategories(e)}>
+                    X
+                  </Button>
+                </Stack>
+              )}
+            </Flex>
 
             <FormLabel as='legend'>Tacc</FormLabel>
             <RadioGroup>
@@ -182,11 +196,15 @@ const EditProduct = () => {
                 </Radio>
               </HStack>
             </RadioGroup>
+
             <FormLabel>Price</FormLabel>
+
             <Input type='number' value={input.price} name='price' onChange={handleChange} />
             <FormLabel>Stock</FormLabel>
+
             <Input type='number' value={input.stock} name='stock' onChange={handleChange} />
             <FormLabel htmlFor='file'>Img URL</FormLabel>
+
             <Input
               id='fileInput'
               type='file'

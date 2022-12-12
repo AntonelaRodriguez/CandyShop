@@ -182,26 +182,26 @@ const Products = () => {
           onChange={handleFilters}
           m={2}
         >
-          <option value="Aguila">Aguila</option>
-          <option value="Arcor">Arcor</option>
-          <option value="Bagley">Bagley</option>
-          <option value="Bon o Bon"option>Bon o Bon</option>
-          <option value="Billiken">Billiken</option>
-          <option value="Bonafide">Bonafide</option>
-          <option value="Cofler">Cofler</option>
-          <option value="Felfort">Felfort</option>
-          <option value="Ferrero">Ferrero</option>
-          <option value="Georgalos">Georgalos</option>
-          <option value="Godet">Godet</option>
-          <option value="Jorgito">Jorgito</option>
-          <option value="Milka">Milka</option>
-          <option value="Mogul">Mogul</option>
-          <option value="Nestle">Nestle</option>
-          <option value="Terrabusi">Terrabusi</option>
-          <option value="Tofi">Tofi</option>
-          <option value="Topline">Topline</option>
-          <option value="Trident">Trident</option>
-          <option value="Unknown">Unknown</option>
+          <option value="aguila">Aguila</option>
+          <option value="arcor">Arcor</option>
+          <option value="bagley">Bagley</option>
+          <option value="bon o bon"option>Bon o Bon</option>
+          <option value="billiken">Billiken</option>
+          <option value="bonafide">Bonafide</option>
+          <option value="cofler">Cofler</option>
+          <option value="felfort">Felfort</option>
+          <option value="ferrero">Ferrero</option>
+          <option value="georgalos">Georgalos</option>
+          <option value="godet">Godet</option>
+          <option value="jorgito">Jorgito</option>
+          <option value="milka">Milka</option>
+          <option value="mogul">Mogul</option>
+          <option value="nestle">Nestle</option>
+          <option value="terrabusi">Terrabusi</option>
+          <option value="tofi">Tofi</option>
+          <option value="topline">Topline</option>
+          <option value="trident">Trident</option>
+          <option value="unknown">Unknown</option>
         </Select>
         <Select
           placeholder="CATEGORY"

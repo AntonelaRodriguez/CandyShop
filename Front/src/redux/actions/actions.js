@@ -12,25 +12,26 @@ export const EDIT_PRODUCT = 'EDIT_PRODUCT'
 export const DELETED_PRODUCT = 'DELETED_PRODUCT'
 export const SET_FILTERS = "SET_FILTERS";
 export const APPLY_FILTERS = "APPLY_FILTERS";
-
+const url = 'https://deploydbcandy-production.up.railway.app'  //usar url para db deployada
+const localhost = 'http://localhost:3001' //para usar la db local poner localhost en vez de url
 
 export const getAllProducts = () => {
   return async function (dispatch) {
-    const allProducts = await axios.get('/products')
+    const allProducts = await axios.get(`${url}/products`)
     return dispatch({ type: ALL_PRODUCTS, payload: allProducts.data })
   }
 }
 
 export const getAllCategories = () => {
   return async function (dispatch) {
-    const allCategories = await axios.get('/products/categories')
+    const allCategories = await axios.get(`${url}/categories`)
     return dispatch({ type: ALL_CATEGORIES, payload: allCategories.data })
   }
 }
 
 export const searchCandy = (name) => {
   return async function (dispatch) {
-    const searchedProducts = await axios.get(`/products/search?name=${name}`)
+    const searchedProducts = await axios.get(`${url}/products/search?name=${name}`)
     return dispatch({ type: SEARCH_CANDY, payload: searchedProducts.data })
   }
 }
@@ -44,13 +45,13 @@ export function setFilters( payload ) {
 
 export function applyFilters({ tacc, brand, category }) { 
   return async function(dispatch) {
-    const { data } = await axios.get(`http://localhost:3001/products/filters?tacc=${tacc || 'TACC' }&brand=${brand || 'BRAND'}&category=${category || 'CATEGORY'}`);
+    const { data } = await axios.get(`${url}/products/filters?tacc=${tacc || 'TACC' }&brand=${brand || 'BRAND'}&category=${category || 'CATEGORY'}`);
     return dispatch({
       type: APPLY_FILTERS,
       payload: data
     })
   }
-}
+}  
 
 export const sort = (payload) => {
   return { type: SORT, payload }
@@ -58,14 +59,14 @@ export const sort = (payload) => {
 
 export const getProductDetails = (id) => {
   return async function (dispatch) {
-    const detailProduct = await axios(`/products/${id}`)
+    const detailProduct = await axios(`${url}/products/${id}`)
     return dispatch({ type: DETAILS_PRODUCT, payload: detailProduct.data })
   }
 }
 
 export const postProduct = (value) => {
   return async function (dispatch) {
-    const result = await axios.post('/products/', value)
+    const result = await axios.post(`${url}/products/`, value)
     return dispatch({
       type: POST_PRODUCT
     })
@@ -75,7 +76,7 @@ export const postProduct = (value) => {
 export function editProduct(id, productEdit) {
   return async function (dispatch) {
     try {
-      await axios.put(`/products/${id}`, productEdit)
+      await axios.put(`${url}/products/${id}`, productEdit)
       return dispatch({
         type: EDIT_PRODUCT
       })
@@ -88,7 +89,7 @@ export function editProduct(id, productEdit) {
 export const deleteProduct = (id) => {
   return async function (dispatch) {
     try {
-      await axios.delete(`/products/${id}`)
+      await axios.delete(`${url}/products/${id}`)
       return dispatch({
         type: DELETED_PRODUCT
       })

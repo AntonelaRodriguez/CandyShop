@@ -41,7 +41,7 @@ const Hero = () => {
             fontWeight="bold"
             color="blackAlpha.900"
           >
-            Discover Most Suitable Watches
+            Discover Most Delicious Candy
           </Heading>
           <Text
             w={'full'}
@@ -50,8 +50,8 @@ const Hero = () => {
             fontSize="-moz-initial"
             color="gray.500"
           >
-            Find the best, reliable, and cheap smart watches here. We focus on
-            product quality. Here you can find smart watches of almost all
+            Find the best and delicious candy here. We focus on
+            product quality. Here you can find candy of almost all
             brands. So why you are waiting? Just order now!
           </Text>
         </Flex>

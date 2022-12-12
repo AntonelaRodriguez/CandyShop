@@ -22,9 +22,8 @@ const LatestProducts = () => {
         >
           {products.map((product) => {
             return (
-              <GridItem>
+              <GridItem key={product.id}>
                 <CardProduct
-                  key={product.id}
                   id={product.id}
                   image={product.image}
                   name={product.name}
@@ -36,8 +35,8 @@ const LatestProducts = () => {
           })}
         </Grid>
 
-        <Button color='whiteAlpha.800' as={'a'} bg='primary.300' w='xs' size='lg'>
-          <Link to='/products'>View More</Link>
+        <Button colorScheme='primary' size='lg'>
+          <Link to='/products'> View More</Link>
         </Button>
       </Stack>
     </>

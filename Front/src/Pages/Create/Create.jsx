@@ -1,6 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import {
+  getAllProducts,
+  postProduct,
+  getAllCategories,
+} from "../../redux/actions/actions";
 
 import {
   FormControl,
@@ -27,22 +33,39 @@ import {
 const Create = () => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
-  const Category = useSelector((state) => state.Category);
-  const brand = useSelector((state) => state.brand);
+  const category = useSelector((state) => state.categories);
+  const brand = useSelector((state) => state.brands);
+  // Cloudinary
+  const [image, setImage] = useState("");
+
+  const uploadImage = async (e) => {
+    const files = e.target.files;
+    const data = new FormData();
+
+    data.append("file", files[0]);
+    data.append("upload_preset", "images");
+    const { data: file } = await axios.post(
+      "https://api.cloudinary.com/v1_1/dev3snn9g/image/upload",
+      data
+    );
+
+    setImage(file.secure_url);
+
+    /* console.log(file); */
+  };
 
   const [input, setInput] = useState({
     name: "",
     description: "",
-    Category: [],
-    brand: [],
-    tacc: false,
-    img: "",
+    category: [],
+    brand: "",
+    tacc: "",
     price: null,
     stock: null,
   });
 
   /* useEffect(() => {
-    dispatch(getCategory());
+    dispatch(getcategory());
     dispatch(getBrand());
   }, []);
  */
@@ -53,39 +76,29 @@ const Create = () => {
     });
   }
 
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, []);
+
   function handleSelectCategories(e) {
-    if (!input.Category.includes(e.target.value)) {
-      setInput({
-        ...input,
-        Category: [...input.Category, e.target.value],
-      });
-      setErrors(
-        validate({
-          ...input,
-          Category: [...input.Category, e.target.value],
-        })
-      );
-    } else {
-      setInput({
-        ...input,
-      });
-    }
+    setInput({
+      ...input,
+      category: [...input.category, e.target.value],
+    });
   }
 
   function handleDeleteCategories(e) {
     setInput({
       ...input,
-      Category: input.Category.filter((param) => param !== e),
+      category: input.category.filter((param) => param !== e),
     });
   }
 
   function handleSelectBrand(e) {
-    if (!input.brand.includes(e.target.value)) {
-      setInput({
-        ...input,
-        brand: [...input.brand, e.target.value],
-      });
-    }
+    setInput({
+      ...input,
+      brand: [...input.brand, e.target.value],
+    });
   }
 
   function handleSubmit(e) {
@@ -94,15 +107,27 @@ const Create = () => {
     let crear = {
       name: input.name,
       description: input.description,
-      Category: input.Category,
+      category: input.category,
       brand: input.brand,
-      tacc: input.tacc,
-      img: input.img,
-      price: input.price,
-      stock: input.stock,
+      tacc: input.tacc === "True" ? true : false,
+      image: image,
+      price: Number(input.price),
+      stock: Number(input.stock),
     };
-  }
 
+    dispatch(postProduct(crear));
+    setInput({
+      name: "",
+      description: "",
+      category: [],
+      brand: "",
+      tacc: false,
+      img: "",
+      price: null,
+      stock: null,
+    });
+    alert("Product created succesfully");
+  }
   return (
     <form action="submit" onSubmit={(e) => handleSubmit(e)}>
       <Stack spacing={2}>
@@ -127,17 +152,16 @@ const Create = () => {
         </FormControl>
 
         <FormControl isRequired>
-          <FormLabel>Category</FormLabel>
+          <FormLabel>category</FormLabel>
           <select onChange={(e) => handleSelectCategories(e)}>
-            <option>Select Category</option>
-            {Category?.map((g) => {
-              console.log(g);
+            <option>Select category</option>
+            {category?.map((g) => {
               return <option value={g.name}>{g.name}</option>;
             })}
           </select>
           <div>
             {/* DELETE CATEGORY */}
-            {input.Category?.map((e) => {
+            {input.category?.map((e) => {
               return (
                 <>
                   <div>
@@ -152,32 +176,30 @@ const Create = () => {
 
         <FormControl isRequired>
           <FormLabel>Brand</FormLabel>
-          <select onChange={(e) => handleSelectBrand(e)}>
+          <select name="brand" onChange={(e) => handleChange(e)}>
             <option>Select Brand</option>
             {brand?.map((g) => {
-              return <option value={g.name}>{g.name}</option>;
+              return <option value={g}>{g}</option>;
             })}
           </select>
         </FormControl>
 
         <FormControl isRequired>
           <FormLabel as="legend">Tacc</FormLabel>
-          <RadioGroup defaultValue="Itachi">
+          <RadioGroup>
             <HStack spacing="24px">
-              <Radio value="Sasuke">Yes</Radio>
-              <Radio value="Nagato">No</Radio>
+              <Radio name="tacc" onChange={(e) => handleChange(e)} value="True">
+                Yes
+              </Radio>
+              <Radio
+                name="tacc"
+                onChange={(e) => handleChange(e)}
+                value="False"
+              >
+                No
+              </Radio>
             </HStack>
           </RadioGroup>
-        </FormControl>
-
-        <FormControl isRequired>
-          <FormLabel>Img URL</FormLabel>
-          <Input
-            type="text"
-            value={input.img}
-            name="img"
-            onChange={handleChange}
-          />
         </FormControl>
 
         <FormControl isRequired>
@@ -198,6 +220,18 @@ const Create = () => {
             name="stock"
             onChange={handleChange}
           />
+        </FormControl>
+
+        <FormControl isRequired>
+          <FormLabel htmlFor="file">Img URL</FormLabel>
+          <Input
+            id="fileInput"
+            type="file"
+            // value={image}
+            name="file"
+            onChange={(e) => uploadImage(e)}
+          />
+          <img src={image} alt="product pic" />
         </FormControl>
 
         <Button type="submit" colorScheme="primary">

@@ -42,8 +42,29 @@ module.exports = (sequelize) => {
         allowNull: false
     },
     brand: {
-        type: DataTypes.ENUM(["arcor", "felfort", "terrabusi", "nestle","billiken", "bagley","georgalos", "bonafide","milka","jorgito", "trident","ferrero", "unknown"]),
-        defaultValue: "unknown"
+      type: DataTypes.ENUM([
+        "arcor",
+        "felfort",
+        "bagley",
+        "georgalos",
+        "mogul",
+        "tofi",
+        "godet",
+        "topline",
+        "aguila",
+        "bon o bon",
+        "cofler",
+        "unknown",
+        "bonafide",
+        "milka",
+        "jorgito",
+        "trident",
+        "ferrero",
+        "terrabusi",
+        "nestle",
+        "billiken",
+      ]),
+      defaultValue: "unknown",
     },
     tacc: {
         type: DataTypes.BOOLEAN,

@@ -33,6 +33,7 @@ const Products = () => {
 
   const filters = useSelector((state) => state.filters);
   function handleFilters(event) {
+    setCurrentPage(1)
     dispatch(actions.setFilters({ ...filters, [event.target.name]: event.target.value }));
     dispatch(actions.applyFilters({ ...filters, [event.target.name]: event.target.value  }));
   }
@@ -42,6 +43,7 @@ const Products = () => {
   const handleSumbit = (event) => {
     event.preventDefault()
     if(name) {
+      setCurrentPage(1)
       dispatch(actions.searchCandy(name))
        setName('')
     } else {
@@ -154,6 +156,10 @@ const Products = () => {
             </Flex>
 
     {/* filters */}
+    <Flex direction='row'
+  justifyContent="center"
+  align="center"
+  p={5}>
     <Select
           placeholder="T.A.C.C"
           name="tacc"
@@ -163,8 +169,8 @@ const Products = () => {
           onChange={handleFilters}
           m={2}
         >
-          <option value="tacc">TACC</option>
-          <option value="notacc">NO TACC</option>
+          <option value="tacc">With TACC</option>
+          <option value="notacc">No TACC</option>
         </Select>
 
         <Select
@@ -217,6 +223,7 @@ const Products = () => {
           <option value="tablets">tablets</option>
           <option value="unknown">unknown</option>
         </Select>
+        </Flex>
         
     <Stack gap={3} justify="center" align="center" overflow="hidden">
         <Grid

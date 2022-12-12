@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
 import stars from '../../assets/starsProductDetail/stars.svg'
 import { getProductDetails, deleteProduct, getAllProducts } from '../../redux/actions/actions'
@@ -27,6 +27,8 @@ const ProductDetail = () => {
   const product = useSelector((state) => state.productDetail)
 
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
 
   const { id } = useParams()
   useEffect(() => {
@@ -41,12 +43,11 @@ const ProductDetail = () => {
     cantidad > 0 ? setCantidad(cantidad - 1) : cantidad
   }
 
-  const handlerDelete = (e) => {
+  const handlerDelete = async (e) => {
     e.preventDefault()
-    dispatch(deleteProduct(id))
-    setTimeout(() => {
-      dispatch(getAllProducts())
-    }, 1000)
+    await dispatch(deleteProduct(id))
+    await dispatch(getAllProducts())
+    navigate('/products')
   }
 
   return (
@@ -79,7 +80,7 @@ const ProductDetail = () => {
           boxSize='md'
           width='full'
         ></Box>
-        <Link to='/ '>
+        <Link to='/products'>
           <Button position='absolute' colorScheme='primary' variant='outline' top={15} left={15}>
             Home
           </Button>
@@ -172,7 +173,7 @@ const ProductDetail = () => {
           </Button>
         </Link>
         <Button colorScheme='red' onClick={(e) => handlerDelete(e)}>
-          Delete Pokemon
+          Delete
         </Button>
       </Stack>
     </Flex>

@@ -126,7 +126,7 @@ const Create = () => {
       price: null,
       stock: null,
     });
-    alert("Videogame created succesfully");
+    alert("Product created succesfully");
   }
   return (
     <form action="submit" onSubmit={(e) => handleSubmit(e)}>

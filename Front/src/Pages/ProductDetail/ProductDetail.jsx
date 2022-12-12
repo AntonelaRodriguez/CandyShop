@@ -80,7 +80,7 @@ const ProductDetail = () => {
           boxSize='md'
           width='full'
         ></Box>
-        <Link to='/ '>
+        <Link to='/products'>
           <Button position='absolute' colorScheme='primary' variant='outline' top={15} left={15}>
             Home
           </Button>
@@ -173,7 +173,7 @@ const ProductDetail = () => {
           </Button>
         </Link>
         <Button colorScheme='red' onClick={(e) => handlerDelete(e)}>
-          Delete Pokemon
+          Delete
         </Button>
       </Stack>
     </Flex>

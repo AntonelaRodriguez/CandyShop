@@ -89,7 +89,7 @@ const MenuLinks = ({ isOpen }) => {
             colorScheme='primary'
             variant='outline'
           >
-            <Link to='/products'>store of products</Link>
+            <Link to='/products'>Store of products</Link>
           </Button>
 
           <Button

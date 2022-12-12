@@ -41,14 +41,6 @@ productRouter.get("/filters", async (req, res, next) => {
 	}
   });
 
-productRouter.get("/categories", async (req, res, next) => { //busca todas las categories
-	try {
-	  let categories = await Category.findAll();
-	  return res.status(200).send(categories)
-	} catch (error) {
-	  next(error);
-	}
-});
 
 productRouter.get("/:id", async (req, res, next) => {   //busca productos por id
 	try {
@@ -69,20 +61,6 @@ productRouter.get("/:id", async (req, res, next) => {   //busca productos por id
 // 	  next(error);
 // 	}
 // });
-
-  
-productRouter.post("/category", async (req, res, next) => {    //busca o agrega una categoria
-	try {
-		const { name } = req.body;
-        let newName = name.toLowerCase();
-	    let category = await Category.findOrCreate({
-		where: { name: newName }
-	  });
-	  return res.status(201).send(category)
-	} catch (error) {
-	  next(error);
-	}
-});
 
 
 // productRouter.post("/", async (req, res, next) => {    //crea un product nuevo

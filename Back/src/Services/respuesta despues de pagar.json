@@ -1,0 +1,14 @@
+
+{
+  "collection_id": 1310840194,
+  "collection_status": "approved",
+  "payment_id": 1310840194,
+  "status": "approved",
+  "external_reference": null,
+  "payment_type": "account_money",
+  "merchant_order_id": 6853918844,
+  "preference_id": "1264128618-f2960cb4-51de-4e54-bce1-50e89c96f01c",
+  "site_id": "MLA",
+  "processing_mode": "aggregator",
+  "merchant_account_id": null
+}

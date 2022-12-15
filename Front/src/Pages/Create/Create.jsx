@@ -18,6 +18,8 @@ import {
   HStack,
   Radio,
   Textarea,
+  Flex,
+  Badge,
 } from "@chakra-ui/react";
 
 //nombre
@@ -129,116 +131,139 @@ const Create = () => {
     alert("Product created succesfully");
   }
   return (
-    <form action="submit" onSubmit={(e) => handleSubmit(e)}>
-      <Stack spacing={2}>
-        <FormControl isRequired>
-          <FormLabel>Name</FormLabel>
-          <Input
-            type="text"
-            value={input.name}
-            name="name"
-            onChange={handleChange}
-          />
-        </FormControl>
+    <Stack direction="row" align="center" justify="center" gap={15}>
+      <form action="submit" onSubmit={(e) => handleSubmit(e)}>
+        <Stack spacing={2}>
+          <FormControl isRequired>
+            <FormLabel>Name</FormLabel>
+            <Input
+              type="text"
+              value={input.name}
+              name="name"
+              onChange={handleChange}
+            />
+          </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel>Description</FormLabel>
-          <Textarea
-            placeholder="Type a Description"
-            value={input.description}
-            name="description"
-            onChange={handleChange}
-          />
-        </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Description</FormLabel>
+            <Textarea
+              placeholder="Type a Description"
+              value={input.description}
+              name="description"
+              onChange={handleChange}
+            />
+          </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel>category</FormLabel>
-          <select onChange={(e) => handleSelectCategories(e)}>
-            <option>Select category</option>
-            {category?.map((g) => {
-              return <option value={g.name}>{g.name}</option>;
-            })}
-          </select>
-          <div>
+          <FormControl isRequired>
+            <FormLabel>Category</FormLabel>
+            <select onChange={(e) => handleSelectCategories(e)}>
+              <option>Select category</option>
+              {category?.map((g) => {
+                return <option value={g.name}>{g.name}</option>;
+              })}
+            </select>
             {/* DELETE CATEGORY */}
-            {input.category?.map((e) => {
-              return (
-                <>
-                  <div>
-                    <div>{e}</div>
-                    <button onClick={() => handleDeleteCategories(e)}>X</button>
-                  </div>
-                </>
-              );
-            })}{" "}
-          </div>
-        </FormControl>
+            <Flex p={3} gap={5}>
+              {input.category?.map((e, i) => {
+                return (
+                  <Stack
+                    width="fit-content"
+                    key={e + i}
+                    direction="row"
+                    align="center"
+                    justify="flex-start"
+                  >
+                    <Badge colorScheme="pink">{e}</Badge>
+                    <Button
+                      colorScheme="red"
+                      size="xs"
+                      onClick={() => handleDeleteCategories(e)}
+                    >
+                      X
+                    </Button>
+                  </Stack>
+                );
+              })}
+            </Flex>
+          </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel>Brand</FormLabel>
-          <select name="brand" onChange={(e) => handleChange(e)}>
-            <option>Select Brand</option>
-            {brand?.map((g) => {
-              return <option value={g}>{g}</option>;
-            })}
-          </select>
-        </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Brand</FormLabel>
+            <select name="brand" onChange={(e) => handleChange(e)}>
+              <option>Select Brand</option>
+              {brand?.map((g) => {
+                return <option value={g}>{g}</option>;
+              })}
+            </select>
+            {input.brand && (
+              <Stack direction="row" align="center" justify="flex-start">
+                <Badge colorScheme="blue" variant="outline">
+                  {input.brand}
+                </Badge>
+              </Stack>
+            )}
+          </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel as="legend">Tacc</FormLabel>
-          <RadioGroup>
-            <HStack spacing="24px">
-              <Radio name="tacc" onChange={(e) => handleChange(e)} value="True">
-                Yes
-              </Radio>
-              <Radio
-                name="tacc"
-                onChange={(e) => handleChange(e)}
-                value="False"
-              >
-                No
-              </Radio>
-            </HStack>
-          </RadioGroup>
-        </FormControl>
+          <FormControl isRequired>
+            <FormLabel as="legend">Tacc</FormLabel>
+            <RadioGroup>
+              <HStack spacing="24px">
+                <Radio
+                  name="tacc"
+                  onChange={(e) => handleChange(e)}
+                  value="True"
+                >
+                  Yes
+                </Radio>
+                <Radio
+                  name="tacc"
+                  onChange={(e) => handleChange(e)}
+                  value="False"
+                >
+                  No
+                </Radio>
+              </HStack>
+            </RadioGroup>
+          </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel>Price</FormLabel>
-          <Input
-            type="number"
-            value={input.price}
-            name="price"
-            onChange={handleChange}
-          />
-        </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Price</FormLabel>
+            <Input
+              type="number"
+              value={input.price}
+              name="price"
+              onChange={handleChange}
+            />
+          </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel>Stock</FormLabel>
-          <Input
-            type="number"
-            value={input.stock}
-            name="stock"
-            onChange={handleChange}
-          />
-        </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Stock</FormLabel>
+            <Input
+              type="number"
+              value={input.stock}
+              name="stock"
+              onChange={handleChange}
+            />
+          </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel htmlFor="file">Img URL</FormLabel>
-          <Input
-            id="fileInput"
-            type="file"
-            // value={image}
-            name="file"
-            onChange={(e) => uploadImage(e)}
-          />
-          <img src={image} alt="product pic" />
-        </FormControl>
+          <FormControl isRequired>
+            <FormLabel htmlFor="file">Img URL</FormLabel>
+            <Input
+              id="fileInput"
+              type="file"
+              // value={image}
+              name="file"
+              onChange={(e) => uploadImage(e)}
+            />
+            <img src={image} alt="product pic" />
+          </FormControl>
 
-        <Button type="submit" colorScheme="primary">
-          Submit
-        </Button>
-      </Stack>
-    </form>
+          <Button type="submit" colorScheme="primary">
+            Submit
+          </Button>
+        </Stack>
+      </form>
+    </Stack>
   );
 };
 

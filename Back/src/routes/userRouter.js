@@ -16,9 +16,10 @@ userRouter.get("/", async (req, res, next) => {
 
 userRouter.post("/", async (req, res, next) => {
   const {name, lastName, dni, phoneNumber, address, email, password, image, birthdate, admin} = req.body;
+  console.log(dni);
   try {
-    const newUser = await createUser(name, lastName, dni, phoneNumber, address, email, password, image, birthdate, admin)
-    return res.status(200).json(newUser)
+    const user = await createUser(name, lastName, dni, phoneNumber, address, email, password, image, birthdate, admin)
+    return res.status(200).json(user)
   } catch (error) {
     next(error);
   }

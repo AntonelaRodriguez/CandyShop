@@ -11,7 +11,8 @@ module.exports = (sequelize) => {
         allowNull: false,
         validate: {
           notEmpty: true,
-      },
+      }
+    },
       lastName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -53,7 +54,6 @@ module.exports = (sequelize) => {
         defaultValue: false
       },
       },
-    },
     {
       // tableName: "users",
       timestamps: false,

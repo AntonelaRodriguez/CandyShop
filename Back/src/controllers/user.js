@@ -1,22 +1,39 @@
 const { User } = require("../db.js");
 
-async function get_users(req, res, next) {
-  const { name } = req.query;
-  try {
-    if (name) {
-      let users = await User.findAll({ where: { name: name } });
+const getAllUsers = async (email) => {
+    if (email) {
+      let users = await User.findAll({ where: { email: email } });
       if (!users.length) {
-        return res.status(404).json({ msg: `No matches for ${name}` });
+       throw new Error({msg: `No matches for ${email}`});
       }
-      return res.status(200).json(users);
+      return users;
     }
     let users = await User.findAll();
-    return res.status(200).json(users);
-  } catch (error) {
-    next(error);
+    if(!users.length) throw new Error({msg : 'No users wre created yet!'})
+    return users
+}
+
+const createUser = async ({name, lastName, dni, phoneNumber, address, email, password, image, birthdate, admin}) => {
+  if (dni) {
+    const userExists = await User.findAll({where: {dni: dni}});
+    if (userExists) throw new Error ({msg: "this User already exists"});
+    const newUser = await User.create({
+      name, 
+      lastName, 
+      dni, 
+      phoneNumber, 
+      address, 
+      email, 
+      password, 
+      image, 
+      birthdate, 
+      admin
+    })
+    return newUser;
   }
 }
 
 module.exports = {
-  get_users,
+  getAllUsers,
+  createUser,
 };

@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const productRouter = Router()
-const { getAllProducts, searchCandy, searchById, updateProduct, deleteProduct, createProduct } = require('../controllers/product')
+const { getAllProducts, searchCandy, searchById, updateProduct, deleteProduct, createProduct, filteringProducts } = require('../controllers/product')
 const { Product, Category } = require('../db.js')
 const dbProducts = require("../../dbProducts.json");
 const dbCategories = require("../../dbCategories.json");
@@ -23,23 +23,24 @@ productRouter.get("/", async (req, res, next) => {  //busca todos los products
 });
 
 productRouter.get("/search", async (req, res, next) => {  //busca los products por matcheo parcial
-	const { name, category, brand, tacc } = req.query;
+	const { name } = req.query;
 	try {
-		const products = await searchCandy(name,category,tacc,brand)
+		const products = await searchCandy(name)
 		res.json(products);
 	} catch (error) {
 		next(error);
 	}
 });
 
-productRouter.get("/categories", async (req, res, next) => { //busca todas las categories
+productRouter.get("/filters", async (req, res, next) => {
 	try {
-	  let categories = await Category.findAll();
-	  return res.status(200).send(categories)
+	  let results = await filteringProducts(req.query);
+	  res.json(results);
 	} catch (error) {
 	  next(error);
 	}
-});
+  });
+
 
 productRouter.get("/:id", async (req, res, next) => {   //busca productos por id
 	try {
@@ -60,20 +61,6 @@ productRouter.get("/:id", async (req, res, next) => {   //busca productos por id
 // 	  next(error);
 // 	}
 // });
-
-  
-productRouter.post("/category", async (req, res, next) => {    //busca o agrega una categoria
-	try {
-		const { name } = req.body;
-        let newName = name.toLowerCase();
-	    let category = await Category.findOrCreate({
-		where: { name: newName }
-	  });
-	  return res.status(201).send(category)
-	} catch (error) {
-	  next(error);
-	}
-});
 
 
 // productRouter.post("/", async (req, res, next) => {    //crea un product nuevo

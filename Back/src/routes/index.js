@@ -3,16 +3,15 @@ const userRouter = require('./userRouter.js')
 const productRouter = require('./productRouter.js')
 const categoryRouter = require('./categoryRouter')
 const router = Router()
-const PaymentController = require('../Controllers/PaymentController')
+/* const PaymentController = require('../Controllers/PaymentController')
 const PaymentService = require('../services/PaymentService')
-const PaymentInstance = new PaymentController(new PaymentService())
+const PaymentInstance = new PaymentController(new PaymentService()) */
+const mercadoPago = require('../controllers/mercadopago')
 
 router.use('/users', userRouter)
 router.use('/products', productRouter)
 router.use('/categories', categoryRouter)
 //mercado pago get de info del producto
-router.post('/payment', function (req, res, next) {
-  PaymentInstance.getPaymentLink(req, res)
-})
+router.use('/mercadopago', mercadoPago)
 
 module.exports = router

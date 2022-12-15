@@ -15,6 +15,7 @@ import CardProduct from '../../Components/CardProduct/CardProduct'
 import * as actions from '../../redux/actions/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import Pagination from '../../Components/Pagination/Pagination'
+import Footer from '../../Components/Footer/Footer'
 // import { Link } from 'react-router-dom'
 
 
@@ -253,6 +254,7 @@ const Products = () => {
             prevPage={prevPage}
             nextPage={nextPage}
             />
+      <Footer/>
   </Flex>
   )
 }

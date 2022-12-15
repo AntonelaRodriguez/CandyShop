@@ -113,7 +113,12 @@ export const addProductCart = (product) => {
 
 export const paymentToCart = (detailsProduct) => {
   return async function (dispatch) {
-    const result = await axios.post(`${url}/payment/`, detailsProduct)
+    let data = {
+      cartItems: detailsProduct,
+      userId: '10asd1q23',
+      cartID: 'aeasd255'
+    }
+    const result = await axios.post(`${url}/mercadopago`, data)
     console.log(result.data)
     return dispatch({
       type: PAYMENT_TO_CART,

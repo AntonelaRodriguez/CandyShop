@@ -1,28 +1,31 @@
-const { Router } = require("express");
 const { Op } = require("sequelize");
-const { Product, ProdPic, Category } = require('../db.js')
+const { Product, Category } = require('../db.js')
 
 const searchCandy = async (name) => {    //busca products por matcheo parcial
+	let product = []
+	if(name !== "" && typeof name === "string"){
 	if(!name) throw new Error({message:"Value is undefined", status:400});
+	}
 	let nameTrimed = name.replace(/^\s+|\s+$/, "");
 	if(!nameTrimed.length) throw new Error({message: "Value is empty string!", status:400});
 	let products = await Product.findAll({
       where: { name: { [Op.iLike]: nameTrimed+"%" } },
       include: [
         { model: Category },
-        { model: ProdPic }
       ]
     });
 	if(!products.length) throw new Error({message: `No matches for ${nameTrimed}`, status: 404});
 
-	return products.map((el)=>valuesToReturn(el.toJSON()));
+	product = products.map((el)=>valuesToReturn(el.toJSON()));
+
+
+	return product;
 };
 
 const searchById = async (id) => {    //busca products por id 
 	let product = await Product.findByPk(id, {
 		include: [
 		  { model: Category },
-		  { model: ProdPic }
 		]
 	  });
 	  if(!product) throw new Error({ msg: `No matches for id: ${id}`})
@@ -46,7 +49,6 @@ const deleteProduct = async (id) => {    //elimina un producto
 const getAllProducts = async () => {    //busca todos los products de la db
 	const allProducts = await Product.findAll({ include: [
 		{ model: Category },
-		{ model: ProdPic }
 	]})
      
 	return allProducts.map((el)=>valuesToReturn(el.toJSON()));
@@ -90,6 +92,21 @@ const createProduct = async (name,description,price,brand,image,stock,tacc,categ
     }
 };
 
+const filteringProducts = async (querys) => {
+	let { tacc, brand, category:categ } = querys;
+	let products = await Product.findAll({
+	  include: [{ model: Category }],
+	});
+	products = products.map((el) => valuesToReturn(el.toJSON()));
+	if(tacc !== 'TACC' ) {
+		  tacc == 'notacc' && (products = products.filter((p) => p.tacc === false))
+		  tacc == 'tacc' && (products = products.filter((p) => p.tacc === true))
+	  }
+	brand !== 'BRAND' && (products = products.filter((p) => p.brand == brand));
+	categ !== 'CATEGORY' && (products = products.filter((p) => p.category.includes(categ)));
+	return products;
+  };
+
 
 const valuesToReturn = (value) =>{	
 	return {
@@ -103,7 +120,6 @@ const valuesToReturn = (value) =>{
 		brand: value.brand,
 		tacc: value.tacc,
 		category: value.Categories.map(el=>el.name),
-		prodPic: value.ProdPics.map(el=>el.image)
 	}
 }
 
@@ -114,7 +130,8 @@ module.exports = {
 	searchCandy,
 	updateProduct,
 	deleteProduct,
-	createProduct
+	createProduct,
+	filteringProducts
 };
 
 

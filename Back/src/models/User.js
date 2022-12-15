@@ -54,7 +54,6 @@ module.exports = (sequelize) => {
         defaultValue: false
       }
     },
-
     {
       // tableName: "users",
       timestamps: false,

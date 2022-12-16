@@ -8,7 +8,10 @@ import {
   SET_FILTERS,
   APPLY_FILTERS,
   EDIT_PRODUCT,
-  DELETED_PRODUCT
+  DELETED_PRODUCT,
+  ADD_CART,
+  PAYMENT_TO_CART,
+  POST_USER
 } from '../actions/actions'
 
 const initialState = {
@@ -37,7 +40,8 @@ const initialState = {
     'ferrero',
     'unknown'
   ],
-  filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' }
+  filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
+  cart: []
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -112,6 +116,15 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state,
         products: payload
       }
+    case ADD_CART:
+      return { ...state, cart: [...state.cart, payload] }
+    case PAYMENT_TO_CART:
+      return { ...state }
+
+    case POST_USER: 
+    return {
+      ...state
+    }
     default:
       return state
   }

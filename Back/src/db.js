@@ -9,6 +9,7 @@ const {
   dbPort,
 } = require("./utils/config");
 
+
 // Defino los parametros de conexión con la base de datos mediante una instancia de Sequelize
 let sequelize =
   process.env.NODE_ENV === "production"
@@ -74,7 +75,7 @@ let capsEntries = entries.map((entry) => [
 sequelize.models = Object.fromEntries(capsEntries);
 
 // Extraigo cada modelo.
-const { User, Cart, Category, Detail, Product, Review } = sequelize.models;
+const { User, Cart, Category, Detail, Product, Review, UserDetail } = sequelize.models;
 
 // Seteo relaciones entre modelos.
 
@@ -89,6 +90,10 @@ Detail.belongsTo(Cart);
 
 Product.hasMany(Review); 
 Review.belongsTo(Product);  
+
+User.hasOne(UserDetail);
+UserDetail.belongsTo(User);
+
 
 Cart.belongsToMany(Product,{ through: 'cart_product'}); 
 Product.belongsToMany(Cart,{ through: 'cart_product'});

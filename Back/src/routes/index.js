@@ -7,11 +7,11 @@ const router = Router()
 const PaymentService = require('../services/PaymentService')
 const PaymentInstance = new PaymentController(new PaymentService()) */
 const mercadoPago = require('../controllers/mercadopago')
-
+const mercadoPagoRouter = require('./mercadoPagoRouter')
 router.use('/users', userRouter)
 router.use('/products', productRouter)
 router.use('/categories', categoryRouter)
 //mercado pago get de info del producto
-router.use('/mercadopago', mercadoPago)
+router.use('/mercadopago', mercadoPagoRouter)
 
 module.exports = router

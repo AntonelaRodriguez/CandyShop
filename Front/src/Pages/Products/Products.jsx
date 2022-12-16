@@ -28,7 +28,7 @@ const Products = () => {
   const handleChange = event => {
     setName (event.target.value)
   }
-  console.log(name)
+  
   
   //------filter
 
@@ -50,14 +50,14 @@ const Products = () => {
     } else {
       dispatch(actions.getAllProducts())
     }
-    console.log('prueba')
+    
   }
 
   const dispatch = useDispatch()
  
 
   const products = useSelector(state => state.products)
-  console.log(products);
+  
 
   const [, setOrder] = useState('');
 

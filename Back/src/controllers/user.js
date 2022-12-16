@@ -1,39 +1,70 @@
-const { User } = require("../db.js");
+const { User, UserDetail } = require("../db.js");
 
-const getAllUsers = async (email) => {
-    if (email) {
-      let users = await User.findAll({ where: { email: email } });
-      if (!users.length) {
-       throw new Error({msg: `No matches for ${email}`});
+
+
+
+
+const postUser = async (email, admin) =>{
+
+    const result = await User.findOrCreate({
+      where: {
+        email: email},
+      defaults:{
+        email: email,
+        admin: admin
       }
-      return users;
-    }
-    let users = await User.findAll();
-    if(!users.length) throw new Error({msg : 'No users wre created yet!'})
-    return users
+    });
+
+    return result;
+
 }
 
-const createUser = async ({name, lastName, dni, phoneNumber, address, email, password, image, birthdate, admin}) => {
-  if (dni) {
-    const userExists = await User.findAll({where: {dni: dni}});
-    if (userExists) throw new Error ({msg: "this User already exists"});
-    const newUser = await User.create({
-      name, 
-      lastName, 
-      dni, 
-      phoneNumber, 
-      address, 
-      email, 
-      password, 
-      image, 
-      birthdate, 
-      admin
-    })
-    return newUser;
-  }
+const getUser = async (email)=>{
+  const user = await User.findByPk(email, {
+    include: [{model: UserDetail}]
+  })
+  if(!user) throw new Error("User not found");
+  return user;
 }
+
+
+// const getAllUsers = async (name) => {
+//     if (name) {
+//       let users = await User.findAll({ where: { name: name } });
+//       if (!users.length) {
+//        throw new Error(`No matches for ${name}`);
+//       }
+//       return users;
+//     }
+//     let allUsers = await User.findAll();
+//     console.log(allUsers);
+//     if(!allUsers.length) throw Error({message : 'No users wre created yet!'})
+//     return allUsers
+// }
+
+const createUserDetail = async (email,name, lastName, phoneNumber, address, image, companyName) => {
+ 
+    if(!email || !name || !lastName || !phoneNumber || !address || !image || !companyName) throw new Error("All arguments are require");
+    
+    const newUser = await UserDetail.findOrCreate({where:{
+      UserEmail: email},
+      defaults: {
+        name,
+        lastName,
+        phoneNumber,
+        address,
+        image,
+        companyName
+      }
+    })
+        return newUser;     
+}
+
+
 
 module.exports = {
-  getAllUsers,
-  createUser,
+  // getAllUsers,
+  createUserDetail,
+  postUser,
+  getUser
 };

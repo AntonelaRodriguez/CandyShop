@@ -6,44 +6,10 @@ module.exports = (sequelize) => {
   sequelize.define(
     'User',
     {
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: true
-        }
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: true
-        }
-      },
-      dni: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      phoneNumber: {
-        type: DataTypes.INTEGER
-      },
-      address: {
-        type: DataTypes.STRING
-      },
       email: {
         type: DataTypes.STRING,
-        allowNull: false
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      image: {
-        type: DataTypes.STRING
-      },
-      birthdate: {
-        type: DataTypes.DATEONLY,
-        defaultValue: DataTypes.NOW
+        allowNull: false,
+        primaryKey: true
       },
       admin: {
         type: DataTypes.BOOLEAN,

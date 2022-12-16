@@ -13,6 +13,7 @@ export const SET_FILTERS = 'SET_FILTERS'
 export const APPLY_FILTERS = 'APPLY_FILTERS'
 export const ADD_CART = 'ADD_CART'
 export const PAYMENT_TO_CART = 'PAYMENT_TO_CART'
+export const POST_USER = "POST_USER"
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 const url = 'http://localhost:3001' //para usar la db local poner localhost en vez de url
@@ -124,5 +125,14 @@ export const paymentToCart = (detailsProduct) => {
       type: PAYMENT_TO_CART,
       payload: result
     })
+  }
+}
+
+//Users
+
+export const postUser = (data) =>{
+  return async function(dispatch){
+    const result = await axios.post(`${url}/users`, data);
+    return dispatch({type: POST_USER})
   }
 }

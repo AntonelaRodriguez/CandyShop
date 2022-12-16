@@ -15,6 +15,7 @@ import CardProduct from '../../Components/CardProduct/CardProduct'
 import * as actions from '../../redux/actions/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import Pagination from '../../Components/Pagination/Pagination'
+import Footer from '../../Components/Footer/Footer'
 // import { Link } from 'react-router-dom'
 
 
@@ -27,7 +28,7 @@ const Products = () => {
   const handleChange = event => {
     setName (event.target.value)
   }
-  console.log(name)
+  
   
   //------filter
 
@@ -49,14 +50,14 @@ const Products = () => {
     } else {
       dispatch(actions.getAllProducts())
     }
-    console.log('prueba')
+    
   }
 
   const dispatch = useDispatch()
  
 
   const products = useSelector(state => state.products)
-  console.log(products);
+  
 
   const [, setOrder] = useState('');
 
@@ -253,6 +254,7 @@ const Products = () => {
             prevPage={prevPage}
             nextPage={nextPage}
             />
+      <Footer/>
   </Flex>
   )
 }

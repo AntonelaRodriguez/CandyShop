@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-
 export const ALL_PRODUCTS = 'ALL_PRODUCTS'
 export const ALL_CATEGORIES = 'ALL_CATEGORIES'
 export const SEARCH_CANDY = 'SEARCH_CANDY'
@@ -10,10 +9,14 @@ export const POST_PRODUCT = 'POST_PRODUCT'
 export const POST_PIC = 'POST_PIC'
 export const EDIT_PRODUCT = 'EDIT_PRODUCT'
 export const DELETED_PRODUCT = 'DELETED_PRODUCT'
-export const SET_FILTERS = "SET_FILTERS";
-export const APPLY_FILTERS = "APPLY_FILTERS";
-const url = 'https://deploydbcandy-production.up.railway.app'  //usar url para db deployada
-const localhost = 'http://localhost:3001' //para usar la db local poner localhost en vez de url
+export const SET_FILTERS = 'SET_FILTERS'
+export const APPLY_FILTERS = 'APPLY_FILTERS'
+export const ADD_CART = 'ADD_CART'
+export const PAYMENT_TO_CART = 'PAYMENT_TO_CART'
+export const POST_USER = "POST_USER"
+
+/* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
+const url = 'http://localhost:3001' //para usar la db local poner localhost en vez de url
 
 export const getAllProducts = () => {
   return async function (dispatch) {
@@ -36,22 +39,26 @@ export const searchCandy = (name) => {
   }
 }
 
-export function setFilters( payload ) { 
+export function setFilters(payload) {
   return {
     type: SET_FILTERS,
     payload
   }
 }
 
-export function applyFilters({ tacc, brand, category }) { 
-  return async function(dispatch) {
-    const { data } = await axios.get(`${url}/products/filters?tacc=${tacc || 'TACC' }&brand=${brand || 'BRAND'}&category=${category || 'CATEGORY'}`);
+export function applyFilters({ tacc, brand, category }) {
+  return async function (dispatch) {
+    const { data } = await axios.get(
+      `${url}/products/filters?tacc=${tacc || 'TACC'}&brand=${brand || 'BRAND'}&category=${
+        category || 'CATEGORY'
+      }`
+    )
     return dispatch({
       type: APPLY_FILTERS,
       payload: data
     })
   }
-}  
+}
 
 export const sort = (payload) => {
   return { type: SORT, payload }
@@ -96,5 +103,36 @@ export const deleteProduct = (id) => {
     } catch (error) {
       console.log(error)
     }
+  }
+}
+
+/* CART */
+
+export const addProductCart = (product) => {
+  return { type: ADD_CART, payload: product }
+}
+
+export const paymentToCart = (detailsProduct) => {
+  return async function (dispatch) {
+    let data = {
+      cartItems: detailsProduct,
+      userId: '10asd1q23',
+      cartID: 'aeasd255'
+    }
+    const result = await axios.post(`${url}/mercadopago`, data)
+    console.log(result.data)
+    return dispatch({
+      type: PAYMENT_TO_CART,
+      payload: result
+    })
+  }
+}
+
+//Users
+
+export const postUser = (data) =>{
+  return async function(dispatch){
+    const result = await axios.post(`${url}/users`, data);
+    return dispatch({type: POST_USER})
   }
 }

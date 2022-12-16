@@ -1,8 +1,30 @@
 import React from 'react'
-import { Box, Flex, Text, Button, Stack, Icon } from '@chakra-ui/react'
+import { Box, Flex, Text, Button, Stack, Icon, Image, Avatar } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import img from '../../assets/candy_logo.svg'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
+import { HiOutlineUserCircle } from "react-icons/hi";
+import { postUser } from '../../redux/actions/actions'
+import {useDispatch} from "react-redux"
+
+
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+  Portal
+} from '@chakra-ui/react'
+
+
+//auth0 
+import {useAuth0} from "@auth0/auth0-react"
+
 
 const Nav = (props) => {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -53,6 +75,37 @@ const MenuItem = ({ children, isLast, to = '/', ...rest }) => {
 }
 
 const MenuLinks = ({ isOpen }) => {
+ 
+  
+  const dispatch = useDispatch();
+
+  //auth0
+  const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
+  console.log(user)
+   
+  let infoUser = {}
+
+ if(isAuthenticated){ 
+
+   if(user.email === "lala@gmail.com"){
+    infoUser = {
+      email: user.email,
+      admin: true
+    } 
+   }else{
+     infoUser = {
+      email: user.email ,
+      admin: false
+     }
+   }
+  
+  dispatch(postUser(infoUser));
+}
+
+
+
+console.log(infoUser)
+
   return (
     <Box
       width='100%'
@@ -92,7 +145,7 @@ const MenuLinks = ({ isOpen }) => {
             <Link to='/products'>Store of products</Link>
           </Button>
 
-          <Button
+          {/* <Button
             _hover={{
               color: '#000'
             }}
@@ -110,7 +163,7 @@ const MenuLinks = ({ isOpen }) => {
             variant='outline'
           >
             <Link to='/signup'>Sign Up</Link>
-          </Button>
+          </Button> */}
 
           <Button
             _hover={{
@@ -123,7 +176,76 @@ const MenuLinks = ({ isOpen }) => {
           </Button>
         </Flex>
 
-        <Flex align='center'>
+
+        <Flex align='center' justifyContent='space-between' gap={5}>
+          {
+            isAuthenticated 
+            ? 
+              <Popover >
+                <PopoverTrigger>
+                  <Button w='2em' borderRadius="2em">                  
+                    <Avatar name={user.name} boxSize='2em' src={user.picture} />
+                  </Button>
+                </PopoverTrigger>
+                <Portal>
+                  <PopoverContent 
+                    boxShadow='2xl' 
+                    p='6' 
+                    rounded='md' 
+                    bg='white'
+                    _hover={{ color: '#000'}}
+                  >
+                    <PopoverHeader borderColor='primary.600'>
+                      <PopoverArrow/>
+                      <Flex
+                        direction='column'
+                        mt='1em'
+                        mb='1em'
+                        gap={3}
+                        align='center'
+                        justifyContent='center'
+                        display='flex'
+                      >
+                        <Avatar name={user.name} size='xl' src={user.picture} />
+                        <Text fontSize='1.7em' fontWeight='600' textTransform='capitalize'>{user.given_name}</Text>
+                        <Text color='gray.600'>{user.email}</Text>
+                      </Flex>
+
+                    </PopoverHeader>
+                    <PopoverBody                
+                      align='center'
+                      justifyContent='center'
+                      display='flex'
+                    >
+                      <Button 
+                        mt='1em'
+                        _hover={{ color: '#000' }} 
+                        colorScheme='primary' 
+                        variant='outline'
+                        h='2em'
+                        onClick={() => logout({ returnTo: window.location.origin })}
+                      > Log Out
+                      </Button>
+                    </PopoverBody>
+                  </PopoverContent>
+                </Portal>
+              </Popover>
+            : <Button 
+                _hover={{ color: '#000' }} 
+                colorScheme='primary' 
+                variant='outline'
+                display='flex'
+                alignItems='center'
+                justifyContent="space-between"
+                w='6.5em'
+                onClick={() => loginWithRedirect() }
+              > 
+                Log In  
+                <Icon boxSize={6} as={HiOutlineUserCircle} />
+              </Button>
+          }
+
+       
           <Button
             colorScheme='primary'
             display='flex'

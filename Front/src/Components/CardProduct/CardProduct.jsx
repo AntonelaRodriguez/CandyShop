@@ -13,14 +13,21 @@ import {
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useDispatch, useSelector } from 'react-redux'
+import { addProductCart } from '../../redux/actions/actions'
 
 const CardProduct = ({ image, id, name, price }) => {
-  // console.log(index)
+  const dispatch = useDispatch()
+  const products = useSelector((state) => state.products)
+  const handleAddCart = (id) => {
+    const prod = products.filter((p) => p.id === id)
+    dispatch(addProductCart(prod[0]))
+  }
   return (
-    <Link to={`/product/${id}`}>
-      <motion.div whileHover={{ scale: 1.02 }}>
-        <Card h={450}  boxShadow='2xl' bg='gray.300' maxW='sm' minH='full'>
-          <CardBody>
+    <motion.div whileHover={{ scale: 1.02 }}>
+      <Card h={450} boxShadow='2xl' bg='gray.300' maxW='sm' minH='full'>
+        <CardBody>
+          <Link to={`/product/${id}`}>
             <Image
               w={'full'}
               h={200}
@@ -28,27 +35,27 @@ const CardProduct = ({ image, id, name, price }) => {
               alt='Green double couch with wooden legs'
               borderRadius='lg'
             />
-            <Stack mt='6' spacing='3'>
-              <Heading size='md'>{name}</Heading>
-              <Text color='blue.600' fontSize='2xl'>
-                {`$${price}`}
-              </Text>
-            </Stack>
-          </CardBody>
-          <Divider />
-          <CardFooter>
-            <ButtonGroup spacing='2'>
-              <Button variant='solid' bg='primary.100'>
-                Buy now
-              </Button>
-              <Button variant='ghost' bg='primary.300'>
-                Add to cart
-              </Button>
-            </ButtonGroup>
-          </CardFooter>
-        </Card>
-      </motion.div>
-    </Link>
+          </Link>
+          <Stack mt='6' spacing='3'>
+            <Heading size='md'>{name}</Heading>
+            <Text color='blue.600' fontSize='2xl'>
+              {`$${price}`}
+            </Text>
+          </Stack>
+        </CardBody>
+        <Divider />
+        <CardFooter>
+          <ButtonGroup spacing='2'>
+            <Button variant='solid' bg='primary.100'>
+              Buy now
+            </Button>
+            <Button onClick={() => handleAddCart(id)} variant='ghost' bg='primary.300'>
+              Add to cart
+            </Button>
+          </ButtonGroup>
+        </CardFooter>
+      </Card>
+    </motion.div>
   )
 }
 

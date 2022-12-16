@@ -19,12 +19,22 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
 import stars from '../../assets/starsProductDetail/stars.svg'
-import { getProductDetails, deleteProduct, getAllProducts } from '../../redux/actions/actions'
+import { getProductDetails, deleteProduct, getAllProducts,getUser } from '../../redux/actions/actions'
+import {useAuth0} from "@auth0/auth0-react"
+
+
 
 const ProductDetail = () => {
   const [cantidad, setCantidad] = useState(0)
+  
+  //const [userActual, setUserActual] = useState({});
 
-  const product = useSelector((state) => state.productDetail)
+  const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
+
+  const product = useSelector((state) => state.productDetail);
+  const actualUser = useSelector((state) => state.user);
+
+  console.log(actualUser)
 
   const dispatch = useDispatch()
 
@@ -33,6 +43,11 @@ const ProductDetail = () => {
   const { id } = useParams()
   useEffect(() => {
     dispatch(getProductDetails(id))
+  
+    if(isAuthenticated){
+      dispatch(getUser(user.email));
+    }
+
   }, [dispatch, id])
 
   const increment = () => {
@@ -166,7 +181,9 @@ const ProductDetail = () => {
           </HStack>
         </Flex>
       </Stack>
-      <Stack position='absolute' top={15} right={15} direction='row'>
+      {
+        actualUser && actualUser.admin === true ? 
+        <Stack position='absolute' top={15} right={15} direction='row'>
         <Link to={`/edit/${id}`}>
           <Button variant='solid' colorScheme='blue'>
             Editing
@@ -175,7 +192,11 @@ const ProductDetail = () => {
         <Button colorScheme='red' onClick={(e) => handlerDelete(e)}>
           Delete
         </Button>
-      </Stack>
+       </Stack> :
+          <></>
+      }
+
+   
     </Flex>
   )
 }

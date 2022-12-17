@@ -6,7 +6,6 @@ const router = Router()
 /* const PaymentController = require('../Controllers/PaymentController')
 const PaymentService = require('../services/PaymentService')
 const PaymentInstance = new PaymentController(new PaymentService()) */
-const mercadoPago = require('../controllers/mercadopago')
 const mercadoPagoRouter = require('./mercadoPagoRouter')
 router.use('/users', userRouter)
 router.use('/products', productRouter)

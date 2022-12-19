@@ -29,8 +29,6 @@ const Cart = () => {
     }
   }, [cart])
 
- console.log(storedValue, 'stored')
-
   useEffect(() => {
     storedValue.length &&
       (async () => {

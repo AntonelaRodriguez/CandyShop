@@ -140,9 +140,7 @@ const reducer = (state = initialState, { type, payload }) => {
         user: payload
       }
     case DELETE_FROM_CART:
-      console.log(payload)
       const filteredCart = state.cart.filter(i => i.id !== payload)
-      console.log(filteredCart, 'filteredCart')
       return{
         ...state,
         cart: filteredCart

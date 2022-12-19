@@ -15,6 +15,8 @@ export const ADD_CART = 'ADD_CART'
 export const PAYMENT_TO_CART = 'PAYMENT_TO_CART'
 export const POST_USER = "POST_USER"
 export const POST_USER_DETAIL = "POST_USER_DETAIL"
+export const GET_USER = "GET_USER"
+
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 const url = 'http://localhost:3001' //para usar la db local poner localhost en vez de url
@@ -142,5 +144,11 @@ export const postUserDetail = (data) =>{
   return async function(dispatch){
     const result = await axios.post(`${url}/users/userDetail`, data);
     return dispatch({type: POST_USER_DETAIL})
+  }
+}
+export const getUser = (email)=>{
+  return async function(dispatch){
+    const user = await axios.get(`${url}/users/${email}`);
+    return dispatch({type: GET_USER, payload: user.data})
   }
 }

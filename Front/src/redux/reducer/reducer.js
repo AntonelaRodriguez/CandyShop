@@ -12,7 +12,8 @@ import {
   ADD_CART,
   PAYMENT_TO_CART,
   POST_USER,
-  POST_USER_DETAIL
+  POST_USER_DETAIL,
+  GET_USER
 } from '../actions/actions'
 
 const initialState = {
@@ -42,7 +43,8 @@ const initialState = {
     'unknown'
   ],
   filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
-  cart: []
+  cart: [],
+  user: {}
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -129,6 +131,11 @@ const reducer = (state = initialState, { type, payload }) => {
     case POST_USER_DETAIL:
       return {
         ...state
+      }
+    case GET_USER:
+      return{
+        ...state,
+        user: payload
       }
     default:
       return state

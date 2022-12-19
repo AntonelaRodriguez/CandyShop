@@ -12,22 +12,26 @@ import EditProduct from './Pages/Edit/EditProduct.jsx'
 import { Container, IconButton, useColorMode } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
 import { getAllProducts } from './redux/actions/actions'
+import Admin from "./Pages/Admin/Admin";
+import ProductsAdmin from "./Pages/Admin/ProductsAdmin";
+import UsersAdmin from "./Pages/Admin/UsersAdmin";
+import OrdersAdmin from "./Pages/Admin/OrdersAdmin";
 import UserDetails from './Pages/UserDetails/UserDetails'
 
 function App() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllProducts())
-  }, [dispatch])
+    dispatch(getAllProducts());
+  }, [dispatch]);
 
   // const { toggleColorMode, colorMode } = useColorMode(); //para el dark y light theme
   return (
     <Container
-      maxW='container.lg'
-      height='full'
-      display='flex'
-      flexDirection='column'
-      alignItems='center'
+      maxW="container.xl"
+      height="full"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
     >
       <Nav />
 
@@ -40,6 +44,10 @@ function App() {
         <Route path='/signup' element={<SignUp />} />
         <Route path='/signin' element={<SignIn />} />
         <Route path='/create' element={<Create />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/usersadmin" element={<UsersAdmin />} />
+        <Route path="/admin/productsadmin" element={<ProductsAdmin />} />
+        <Route path="/admin/ordersadmin" element={<OrdersAdmin />} />
         <Route path='/userDetails' element={<UserDetails />} />
         {/*  */}
       </Routes>
@@ -54,7 +62,7 @@ function App() {
         // icon={colorMode === "dark" ? <FaSun /> : <FaMoon />} // para light y dark icons (agregarlos a dependencias en el futuro)
       />  */}
     </Container>
-  )
+  );
 }
 
-export default App
+export default App;

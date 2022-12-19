@@ -27,21 +27,32 @@ const getUser = async (email)=>{
   return user;
 }
 
+//-------Admin User
+const getAllUsers = async () => {
+    let allUsers = await User.findAll();
+    if(!allUsers.length) throw Error('No users');
+    return allUsers;
+}
 
-// const getAllUsers = async (name) => {
-//     if (name) {
-//       let users = await User.findAll({ where: { name: name } });
-//       if (!users.length) {
-//        throw new Error(`No matches for ${name}`);
-//       }
-//       return users;
-//     }
-//     let allUsers = await User.findAll();
-//     console.log(allUsers);
-//     if(!allUsers.length) throw Error({message : 'No users wre created yet!'})
-//     return allUsers
-// }
+const updateUser = async (email, banned, admin) => {
+  if(!email || !banned || !admin) throw new Error("All arguments are require");
 
+  await User.update({
+    banned,
+    admin
+},{
+where: {
+    email: email 
+  }
+})
+}
+
+const deleteUser = async (email) => {
+  if(!email)throw new Error("All arguments are require");
+  await User.destroy({where:{email: email}});
+};
+
+//-----------Normal User
 const createUserDetail = async (email,name, lastName, phoneNumber, address, image, companyName) => {
  
     if(!email || !name || !lastName || !phoneNumber || !address || !image || !companyName) throw new Error("All arguments are require");
@@ -60,11 +71,30 @@ const createUserDetail = async (email,name, lastName, phoneNumber, address, imag
         return newUser;     
 }
 
-
+const updateUserDetail = async (email,name, lastName, phoneNumber, address, image, companyName) => {
+ 
+  if(!email || !name || !lastName || !phoneNumber || !address || !image || !companyName) throw new Error("All arguments are require");
+  
+  await UserDetail.update({
+        name,
+        lastName,
+        phoneNumber,
+        address,
+        image,
+        companyName
+  },{
+    where: {
+        UserEmail: email
+    }
+})  
+};
 
 module.exports = {
-  // getAllUsers,
+  getAllUsers,
   createUserDetail,
   postUser,
-  getUser
+  getUser,
+  updateUserDetail,
+  updateUser,
+  deleteUser
 };

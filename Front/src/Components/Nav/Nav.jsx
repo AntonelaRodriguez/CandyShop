@@ -13,8 +13,9 @@ import { Link } from "react-router-dom";
 import img from "../../assets/candy_logo.svg";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { HiOutlineUserCircle } from "react-icons/hi";
-import { postUser } from "../../redux/actions/actions";
-import { useDispatch } from "react-redux";
+import { postUser } from '../../redux/actions/actions'
+import {useDispatch} from "react-redux"
+import { useLocalStorage } from '../useLocalStorage/useLocalStorage';
 
 import {
   Popover,
@@ -26,8 +27,13 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverAnchor,
-  Portal,
-} from "@chakra-ui/react";
+  Portal
+} from '@chakra-ui/react'
+
+
+//auth0 
+import {useAuth0} from "@auth0/auth0-react"
+import { useState } from 'react'
 
 //auth0
 import { useAuth0 } from "@auth0/auth0-react";
@@ -86,26 +92,34 @@ const MenuItem = ({ children, isLast, to = "/", ...rest }) => {
 };
 
 const MenuLinks = ({ isOpen }) => {
+ 
+
+  const [token, setToken] = useLocalStorage("token","");
+  
   const dispatch = useDispatch();
 
   //auth0
-  const { loginWithRedirect, isAuthenticated, user, logout } = useAuth0();
-  console.log(user);
-
-  let infoUser = {};
-
-  if (isAuthenticated) {
-    if (user.email === "lala@gmail.com") {
-      infoUser = {
-        email: user.email,
-        admin: true,
-      };
-    } else {
-      infoUser = {
-        email: user.email,
-        admin: false,
-      };
-    }
+  const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
+  
+  let infoUser = {}
+  
+  if(isAuthenticated){ 
+    
+    console.log(user.sub)
+    if(user.email === "lala@gmail.com"){
+    infoUser = {
+      email: user.email,
+      admin: true
+    } 
+   }else{
+     infoUser = {
+      email: user.email ,
+      admin: false
+     }
+   }
+  dispatch(postUser(infoUser));
+  //setToken(user.sub)
+}
 
     dispatch(postUser(infoUser));
   }

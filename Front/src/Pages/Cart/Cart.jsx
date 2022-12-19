@@ -11,41 +11,45 @@ import { useLocalStorage } from '../../Components/useLocalStorage/useLocalStorag
 const Cart = () => {
   const dispatch = useDispatch()
   const cart = useSelector((state) => state.cart)
-
-  const priceTotal = cart?.reduce((acc, curr) => {
+  const [storedValue, setStoredValue] = useLocalStorage('cart', [])
+  const priceTotal = storedValue?.reduce((acc, curr) => {
     return Number(acc) + Number(curr.price)
   }, 0)
 
-  const [storageCart, setStorageCart] = useLocalStorage('storageCart', [])
-
   useEffect(() => {
-    if(!storageCart) {
-      setStorageCart(cart)
-    } else {
-      setStorageCart(cart.concat(storageCart))
+    if (!storedValue.length) {
+      return setStoredValue(cart)
+    }
+    if (storedValue.length && cart.length) {
+      setStoredValue(storedValue.concat(cart))
     }
   }, [cart])
 
+  console.log(storedValue)
+
   useEffect(() => {
-    cart.length && (async () => {
-      let { data: { id } } = await axios.post(`http://localhost:3001/mercadopago`, {
-        cartId: "2",
-        userId: "33",
-        cartItems: cart
-      })
-      const script = document.createElement('script');
-      const attr_data_preference = document.createAttribute('data-preference-id');
-      attr_data_preference.value = id;
-      script.src = "https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js";
-      script.setAttributeNode(attr_data_preference);
-      document.getElementById('form1').appendChild(script)
-    })()
-  }, []);
+    storedValue.length &&
+      (async () => {
+        let {
+          data: { id }
+        } = await axios.post(`http://localhost:3001/mercadopago`, {
+          cartId: '2', // volveerlo dinakico
+          userId: '33', // volveerlo dinakico
+          cartItems: storedValue
+        })
+        const script = document.createElement('script')
+        const attr_data_preference = document.createAttribute('data-preference-id')
+        attr_data_preference.value = id
+        script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js'
+        script.setAttributeNode(attr_data_preference)
+        document.getElementById('form1').appendChild(script)
+      })()
+  }, [])
 
   return (
     <Stack width='full' spacing={5} h='full' justifyContent='space-between' flexDirection='row'>
       <Stack width='full'>
-        {storageCart?.map((p) => (
+        {storedValue?.map((p) => (
           <CardProductCart
             key={p.id}
             id={p.id}
@@ -67,7 +71,7 @@ const Cart = () => {
         {/* <Button onClick={paymentCart} colorScheme='primary' variant='solid' w='full'>
           Pay full cart
         </Button> */}
-        <form id='form1' > </form>
+        <form id='form1'> </form>
       </Stack>
     </Stack>
   )

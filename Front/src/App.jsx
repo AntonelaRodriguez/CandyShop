@@ -12,6 +12,7 @@ import EditProduct from './Pages/Edit/EditProduct.jsx'
 import { Container, IconButton, useColorMode } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
 import { getAllProducts } from './redux/actions/actions'
+import UserDetails from './Pages/UserDetails/UserDetails'
 
 function App() {
   const dispatch = useDispatch()
@@ -39,6 +40,7 @@ function App() {
         <Route path='/signup' element={<SignUp />} />
         <Route path='/signin' element={<SignIn />} />
         <Route path='/create' element={<Create />} />
+        <Route path='/userDetails' element={<UserDetails />} />
         {/*  */}
       </Routes>
       {/* <IconButton // para light y dark theme (crear un componente para esto asi no queda desprolijo en app)

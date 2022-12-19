@@ -11,7 +11,8 @@ import {
   DELETED_PRODUCT,
   ADD_CART,
   PAYMENT_TO_CART,
-  POST_USER
+  POST_USER,
+  POST_USER_DETAIL
 } from '../actions/actions'
 
 const initialState = {
@@ -125,6 +126,10 @@ const reducer = (state = initialState, { type, payload }) => {
     return {
       ...state
     }
+    case POST_USER_DETAIL:
+      return {
+        ...state
+      }
     default:
       return state
   }

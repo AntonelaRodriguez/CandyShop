@@ -217,6 +217,19 @@ console.log(infoUser)
                       justifyContent='center'
                       display='flex'
                     >
+                      <Link to="/userDetails">
+
+                      <Button
+                      mt='1em'
+                      _hover={{ color: '#000' }} 
+                      colorScheme='primary' 
+                      variant='outline'
+                      h='2em'
+                      marginRight='5px'
+                      >
+                        Edit Account
+                      </Button>
+                      </Link>
                       <Button 
                         mt='1em'
                         _hover={{ color: '#000' }} 

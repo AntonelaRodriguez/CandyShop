@@ -22,6 +22,7 @@ const CardProductCart = ({ name, description, price, id, image }) => {
   const handleDelete = (id) => {
       dispatch(deleteFromCart(id))
   }
+
   return (
     <Card
       direction={{ base: 'column', lg: 'row' }}

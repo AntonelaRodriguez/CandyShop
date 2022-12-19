@@ -20,12 +20,16 @@ const Cart = () => {
     if (!storedValue.length) {
       return setStoredValue(cart)
     }
+
     if (storedValue.length && cart.length) {
-      setStoredValue(storedValue.concat(cart))
+      return setStoredValue(cart)
+    }
+    if(cart.length === 0){
+      return setStoredValue([])
     }
   }, [cart])
 
-  console.log(storedValue)
+ console.log(storedValue, 'stored')
 
   useEffect(() => {
     storedValue.length &&

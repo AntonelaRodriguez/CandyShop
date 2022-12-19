@@ -14,7 +14,8 @@ import {
   PAYMENT_TO_CART,
   POST_USER,
   GET_USER,
-  DELETE_FROM_CART
+  DELETE_FROM_CART,
+  POST_USER_DETAIL
 } from '../actions/actions'
 
 const initialState = {
@@ -129,6 +130,10 @@ const reducer = (state = initialState, { type, payload }) => {
     return {
       ...state
     }
+    case POST_USER_DETAIL:
+      return {
+        ...state
+      }
     case GET_USER:
       return{
         ...state,

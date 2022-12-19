@@ -6,6 +6,7 @@ import CardProductCart from '../../Components/CardProductCart/CardProductCart'
 import axios from 'axios'
 
 import { paymentToCart } from '../../redux/actions/actions'
+import { useLocalStorage } from '../../Components/useLocalStorage/useLocalStorage'
 
 const Cart = () => {
   const dispatch = useDispatch()
@@ -14,6 +15,16 @@ const Cart = () => {
   const priceTotal = cart?.reduce((acc, curr) => {
     return Number(acc) + Number(curr.price)
   }, 0)
+
+  const [storageCart, setStorageCart] = useLocalStorage('storageCart', [])
+
+  useEffect(() => {
+    if(!storageCart) {
+      setStorageCart(cart)
+    } else {
+      setStorageCart(cart.concat(storageCart))
+    }
+  }, [cart])
 
   useEffect(() => {
     cart.length && (async () => {
@@ -34,7 +45,7 @@ const Cart = () => {
   return (
     <Stack width='full' spacing={5} h='full' justifyContent='space-between' flexDirection='row'>
       <Stack width='full'>
-        {cart?.map((p) => (
+        {storageCart?.map((p) => (
           <CardProductCart
             key={p.id}
             id={p.id}
@@ -48,7 +59,7 @@ const Cart = () => {
       <Stack height='full' w='40%' p={15} spacing={15} justifyContent='center' align='center'>
         <Heading>Payment</Heading>
         <Stack direction='row' align='center'>
-          <Text>Total:</Text>
+          <Text>Order Total:</Text>
           <Tag size='lg' variant='subtle' colorScheme='primary'>
             <TagLabel>$ {priceTotal}</TagLabel>
           </Tag>

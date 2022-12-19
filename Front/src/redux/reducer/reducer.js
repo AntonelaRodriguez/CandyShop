@@ -12,7 +12,8 @@ import {
   ADD_CART,
   PAYMENT_TO_CART,
   POST_USER,
-  GET_USER
+  GET_USER,
+  DELETE_FROM_CART
 } from '../actions/actions'
 
 const initialState = {
@@ -131,6 +132,12 @@ const reducer = (state = initialState, { type, payload }) => {
       return{
         ...state,
         user: payload
+      }
+    case DELETE_FROM_CART: 
+      const filteredCart = state.cart.filter(i => i.id !== payload)
+      return{
+        ...state,
+        cart: filteredCart
       }
     default:
       return state

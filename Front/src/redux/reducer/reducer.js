@@ -1,3 +1,4 @@
+import { filter } from '@chakra-ui/react'
 import {
   ALL_PRODUCTS,
   SEARCH_CANDY,
@@ -12,7 +13,9 @@ import {
   ADD_CART,
   PAYMENT_TO_CART,
   POST_USER,
-  GET_USER
+  GET_USER,
+  DELETE_FROM_CART,
+  POST_USER_DETAIL
 } from '../actions/actions'
 
 const initialState = {
@@ -127,10 +130,20 @@ const reducer = (state = initialState, { type, payload }) => {
     return {
       ...state
     }
+    case POST_USER_DETAIL:
+      return {
+        ...state
+      }
     case GET_USER:
       return{
         ...state,
         user: payload
+      }
+    case DELETE_FROM_CART:
+      const filteredCart = state.cart.filter(i => i.id !== payload)
+      return{
+        ...state,
+        cart: filteredCart
       }
     default:
       return state

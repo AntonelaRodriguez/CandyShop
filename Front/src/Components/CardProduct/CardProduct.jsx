@@ -15,10 +15,12 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
 import { addProductCart } from '../../redux/actions/actions'
+import { useState } from 'react'
 
 const CardProduct = ({ image, id, name, price }) => {
   const dispatch = useDispatch()
   const products = useSelector((state) => state.products)
+  const [count, setCount] = useState(0)
   const handleAddCart = (id) => {
     const prod = products.filter((p) => p.id === id)
     dispatch(addProductCart(prod[0]))
@@ -49,6 +51,9 @@ const CardProduct = ({ image, id, name, price }) => {
             <Button variant='solid' bg='primary.100'>
               Buy now
             </Button>
+            <Button onClick={()=> setCount(count - 1)} disabled={count <= 0}>-</Button>
+            <Text>{count}</Text>
+            <Button onClick={() => setCount(count + 1)}>+</Button>
             <Button onClick={() => handleAddCart(id)} variant='ghost' bg='primary.300'>
               Add to cart
             </Button>

@@ -20,12 +20,14 @@ const Cart = () => {
     if (!storedValue.length) {
       return setStoredValue(cart)
     }
+
     if (storedValue.length && cart.length) {
-      setStoredValue(storedValue.concat(cart))
+      return setStoredValue(cart)
+    }
+    if(cart.length === 0){
+      return setStoredValue([])
     }
   }, [cart])
-
-  console.log(storedValue)
 
   useEffect(() => {
     storedValue.length &&
@@ -63,7 +65,7 @@ const Cart = () => {
       <Stack height='full' w='40%' p={15} spacing={15} justifyContent='center' align='center'>
         <Heading>Payment</Heading>
         <Stack direction='row' align='center'>
-          <Text>Total:</Text>
+          <Text>Order Total:</Text>
           <Tag size='lg' variant='subtle' colorScheme='primary'>
             <TagLabel>$ {priceTotal}</TagLabel>
           </Tag>

@@ -16,6 +16,8 @@ import * as actions from '../../redux/actions/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import Pagination from '../../Components/Pagination/Pagination'
 import Footer from '../../Components/Footer/Footer'
+import { BsSearch } from 'react-icons/bs'
+import { ImCross } from 'react-icons/im'
 // import { Link } from 'react-router-dom'
 
 
@@ -127,7 +129,7 @@ const Products = () => {
       color="whiteAlpha.900"
       bg={'primary.300'}
       >
-      <img src="src\assets\magnifying_glass_search_logo.svg" width="15px" height="15px"/>
+      <BsSearch/>
       </Button>
     </Flex>
   </form>
@@ -153,7 +155,9 @@ const Products = () => {
             color="whiteAlpha.900"
             bg={'primary.300'}
             onClick={handleClear}
-            >✖</Button>
+            >
+              <ImCross/>
+            </Button>
             </Flex>
 
     {/* filters */}

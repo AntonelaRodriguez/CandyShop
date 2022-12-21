@@ -45,7 +45,9 @@ const initialState = {
     'unknown'
   ],
   filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
-  cart: [],
+  cart: localStorage.getItem("cart")
+  ? JSON.parse(localStorage.getItem("cart"))
+  :  [],
   user: {}
 }
 

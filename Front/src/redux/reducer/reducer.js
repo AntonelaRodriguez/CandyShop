@@ -1,3 +1,4 @@
+import { filter } from '@chakra-ui/react'
 import {
   ALL_PRODUCTS,
   SEARCH_CANDY,
@@ -12,8 +13,11 @@ import {
   ADD_CART,
   PAYMENT_TO_CART,
   POST_USER,
+  GET_USER,
+  DELETE_FROM_CART,
   POST_USER_DETAIL,
-  GET_USER
+  GET_USER_CART,
+  POST_CART,
 } from '../actions/actions'
 
 const initialState = {
@@ -43,8 +47,11 @@ const initialState = {
     'unknown'
   ],
   filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
-  cart: [],
-  user: {}
+  cart: localStorage.getItem("cart")
+  ? JSON.parse(localStorage.getItem("cart"))
+  :  [],
+  user: {},
+  userCart: null
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -120,10 +127,29 @@ const reducer = (state = initialState, { type, payload }) => {
         products: payload
       }
     case ADD_CART:
-      return { ...state, cart: [...state.cart, payload] }
+      return { 
+        ...state, 
+        cart: [...state.cart, payload] 
+      }
     case PAYMENT_TO_CART:
-      return { ...state }
-
+      return { 
+        ...state 
+      }
+    case DELETE_FROM_CART:
+      const filteredCart = state.cart.filter(i => i.id !== payload)
+      return{
+        ...state,
+        cart: filteredCart
+      }
+    case GET_USER_CART:
+      return{
+        ...state,
+        userCart: payload
+      }
+    case POST_CART:
+      return{
+        ...state,
+      }
     case POST_USER: 
     return {
       ...state

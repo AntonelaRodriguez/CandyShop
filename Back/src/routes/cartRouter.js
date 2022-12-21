@@ -5,8 +5,8 @@ const { Cart } = require('../db.js');
 
 cartRouter.post("/", async (req, res, next) => {
     try{
-        const {email, orderN, totalPrice} = req.body;
-        const newCart = await postCart(email, orderN, totalPrice);
+        const {email,totalPrice} = req.body;
+        const newCart = await postCart(email,totalPrice);
         res.status(201).json(newCart);
     }catch(error){
         next(error);
@@ -34,8 +34,8 @@ cartRouter.get("/", async (req, res, next) => {
 
 cartRouter.put("/", async (req, res, next) => {
     try {
-        const {orderN, state} = req.body;
-        const updatedCart = await updateCart(orderN,state);
+        const {orderN, state,totalPrice,date} = req.body;
+        const updatedCart = await updateCart(orderN,state,totalPrice,date);
         res.status(201).send("Cart succesfully updated!");
     }catch(error){
         next(error);

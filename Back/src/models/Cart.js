@@ -4,8 +4,10 @@ module.exports = (sequelize) => {
     "Cart",
     {
       orderN:{
-        type: DataTypes.STRING,
-        primaryKey: true,            
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        primaryKey: true,         
       },
       date:{
       type: DataTypes.DATEONLY,

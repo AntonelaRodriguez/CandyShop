@@ -17,6 +17,8 @@ export const POST_USER = "POST_USER"
 export const POST_USER_DETAIL = "POST_USER_DETAIL"
 export const GET_USER = "GET_USER"
 export const DELETE_FROM_CART = "DELETE_FROM_CART"
+export const GET_USER_CART = "GET_USER_CART"
+export const POST_CART = "POST_CART"
 
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
@@ -135,6 +137,20 @@ export const paymentToCart = (detailsProduct) => {
 export const deleteFromCart = (id)=>{
   return async function(dispatch){
     return dispatch({type: DELETE_FROM_CART, payload: id})
+  }
+}
+
+export const getUserCart = (email) => {
+  return async function(dispatch){
+    const userCart = await axios(`${url}/cart/${email}`)
+    return dispatch({type: GET_USER_CART, payload: userCart.data})
+  }
+}
+
+export const postCart = (cart) => {
+  return async function(dispatch){
+    const userCart = await axios.post(`${url}/cart/`, cart)
+    return dispatch({type: POST_CART})
   }
 }
 //Users

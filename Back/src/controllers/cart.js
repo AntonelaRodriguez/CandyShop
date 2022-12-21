@@ -1,11 +1,10 @@
 const { Cart } = require('../db.js')
 
-const postCart = async (email, orderN, totalPrice) => {
+const postCart = async (email, totalPrice) => {
     if(!email) throw new Error({message:"Email is required", status:400});
 
     let order = {
         UserEmail: email,
-        orderN: orderN,
         totalPrice: totalPrice
     }
     let newOrder = await Cart.create(order);
@@ -28,8 +27,12 @@ const getAllCarts = async () => {
     return allOrders;
 }
 
-const updateCart = async (orderN, state) => {
-    await Cart.update({ state: state }, {
+const updateCart = async (orderN, state, totalPrice, date) => {
+    await Cart.update({ 
+        state: state,
+        totalPrice: totalPrice,
+        date: date
+    }, {
         where: {
             orderN: orderN
         }

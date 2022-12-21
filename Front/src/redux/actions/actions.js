@@ -19,6 +19,7 @@ export const GET_USER = "GET_USER"
 export const DELETE_FROM_CART = "DELETE_FROM_CART"
 export const GET_USER_CART = "GET_USER_CART"
 export const POST_CART = "POST_CART"
+export const EDIT_CART = "EDIT_CART"
 
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
@@ -116,6 +117,9 @@ export const deleteProduct = (id) => {
 
 export const addProductCart = (product) => {
   return { type: ADD_CART, payload: product }
+}
+export const editProductCart = (cart) => {
+  return { type: EDIT_CART, payload: cart }
 }
 
 export const paymentToCart = (detailsProduct) => {

@@ -22,6 +22,15 @@ const getCart = async (email) => {
     return order;
 }
 
+const getCartByOrder = async (order) => {
+    if(!order) throw new Error({message:"Order is required", status:400});
+
+      
+    let cart = await Cart.findOne({where: {orderN : order}});
+    console.log("cart", cart)
+    return cart;
+}
+
 const getAllCarts = async () => {
     let allOrders = await Cart.findAll();
     return allOrders;
@@ -43,5 +52,6 @@ module.exports = {
 	postCart,
     getCart,
     getAllCarts,
-    updateCart
+    updateCart,
+    getCartByOrder
 };

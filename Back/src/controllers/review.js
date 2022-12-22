@@ -1,11 +1,12 @@
 const { Review } = require('../db.js');
 
-const postReview = async (product, author, title, description, rating) => {
-  // if(!product) throw new Error ("Review needs to belong to a product")
-  const newReview = await Review.findOrCreate({
-    where: {
-      ProductId: product
-    },
+const postReview = async (email, product, author, title, description, rating) => {
+
+  // if(!product || !author || !description || !rating) throw new Error ("Fill in all arguments");
+
+  const newReview = await Review.findOrCreate({where:{
+    ProductId: product,
+    UserEmail: email},
     default: {
       author, 
       title, 

@@ -19,6 +19,8 @@ import OrdersAdmin from './Pages/Admin/OrdersAdmin'
 import UserDetails from './Pages/UserDetails/UserDetails'
 import { useAuth0 } from '@auth0/auth0-react'
 import NotFound from './Pages/NotFound/NotFound'
+import Reviews from './Pages/Reviews/Reviews'
+
 
 function App() {
   const usuario = useSelector((state) => state.user)

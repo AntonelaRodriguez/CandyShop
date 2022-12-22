@@ -6,7 +6,7 @@ const { User, UserDetail } = require("../db.js");
 
 const postUser = async (email, admin) =>{
 
-    const result = await User.findOrCreate({
+    const [result, created] = await User.findOrCreate({
       where: {
         email: email},
       defaults:{

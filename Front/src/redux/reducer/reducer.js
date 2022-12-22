@@ -15,7 +15,11 @@ import {
   POST_USER,
   GET_USER,
   DELETE_FROM_CART,
-  POST_USER_DETAIL
+  POST_USER_DETAIL,
+  GET_USER_CART,
+  POST_CART,
+  EDIT_CART,
+  GET_CART_BY_PK
 } from '../actions/actions'
 
 const initialState = {
@@ -45,8 +49,12 @@ const initialState = {
     'unknown'
   ],
   filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
-  cart: [],
-  user: {}
+  cart: localStorage.getItem("cart")
+  ? JSON.parse(localStorage.getItem("cart"))
+  :  [],
+  user: {},
+  userCart: null,
+  cartByPk: []
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -122,10 +130,39 @@ const reducer = (state = initialState, { type, payload }) => {
         products: payload
       }
     case ADD_CART:
-      return { ...state, cart: [...state.cart, payload] }
+      return { 
+        ...state, 
+        cart: [...state.cart, payload] 
+      }
+    case EDIT_CART: 
+      return {
+        ...state,
+        cart: payload
+      }
     case PAYMENT_TO_CART:
-      return { ...state }
-
+      return { 
+        ...state 
+      }
+    case DELETE_FROM_CART:
+      const filteredCart = state.cart.filter(i => i.id !== payload)
+      return{
+        ...state,
+        cart: filteredCart
+      }
+    case GET_USER_CART:
+      return{
+        ...state,
+        userCart: payload
+      }
+    case GET_CART_BY_PK: 
+    return{
+      ...state,
+       cartByPk: payload
+    }  
+    case POST_CART:
+      return{
+        ...state,
+      }
     case POST_USER: 
     return {
       ...state
@@ -138,12 +175,6 @@ const reducer = (state = initialState, { type, payload }) => {
       return{
         ...state,
         user: payload
-      }
-    case DELETE_FROM_CART:
-      const filteredCart = state.cart.filter(i => i.id !== payload)
-      return{
-        ...state,
-        cart: filteredCart
       }
     default:
       return state

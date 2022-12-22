@@ -95,8 +95,8 @@ User.hasOne(UserDetail);
 UserDetail.belongsTo(User);
 
 
-Cart.belongsToMany(Product,{ through: 'cart_product'}); 
-Product.belongsToMany(Cart,{ through: 'cart_product'});
+Product.hasMany(Detail);
+Detail.belongsTo(Product)
 
 Product.belongsToMany(Category, {through: 'product_category'}) 
 Category.belongsToMany(Product, {through: 'product_category'})

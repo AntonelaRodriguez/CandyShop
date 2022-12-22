@@ -17,7 +17,10 @@ export const POST_USER = "POST_USER"
 export const POST_USER_DETAIL = "POST_USER_DETAIL"
 export const GET_USER = "GET_USER"
 export const DELETE_FROM_CART = "DELETE_FROM_CART"
-
+export const GET_USER_CART = "GET_USER_CART"
+export const POST_CART = "POST_CART"
+export const EDIT_CART = "EDIT_CART"
+export const GET_CART_BY_PK = "GET_CART_BY_PK"
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 const url = 'http://localhost:3001' //para usar la db local poner localhost en vez de url
@@ -115,6 +118,9 @@ export const deleteProduct = (id) => {
 export const addProductCart = (product) => {
   return { type: ADD_CART, payload: product }
 }
+export const editProductCart = (cart) => {
+  return { type: EDIT_CART, payload: cart }
+}
 
 export const paymentToCart = (detailsProduct) => {
   return async function (dispatch) {
@@ -137,6 +143,28 @@ export const deleteFromCart = (id)=>{
     return dispatch({type: DELETE_FROM_CART, payload: id})
   }
 }
+
+export const getUserCart = (email) => {
+  return async function(dispatch){
+    const userCart = await axios(`${url}/cart/${email}`)
+    return dispatch({type: GET_USER_CART, payload: userCart.data})
+  }
+}
+
+export const postCart = (cart) => {
+  return async function(dispatch){
+    const userCart = await axios.post(`${url}/cart/`, cart)
+    return dispatch({type: POST_CART})
+  }
+}
+
+export const getCartByPk = (order) =>{
+  return async function(dispatch){
+    const cart = await axios.get(`${url}/cart/byPk/${order}`)
+    return dispatch({type: GET_CART_BY_PK, payload: cart.data});
+  }
+}
+
 //Users
 
 export const postUser = (data) =>{

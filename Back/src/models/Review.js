@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
 			},
 			author: {
 				type: DataTypes.STRING,
-				allowNull: false,
+				allowNull: false
 			},
 			title: {
 				type: DataTypes.STRING,
@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
 			},
 			description: {
 				type: DataTypes.STRING(150),
-				allowNull: false,
+				allowNull: false
 			},
 			date: {
 				type: DataTypes.DATE,
@@ -28,7 +28,7 @@ module.exports = (sequelize) => {
 			rating: {
 				type: DataTypes.INTEGER,
 				allowNull: false
-			},
+			}
 		}, { timestamps: false, createdAt: false }
 	)
 }

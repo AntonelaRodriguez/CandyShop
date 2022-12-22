@@ -13,9 +13,9 @@ import { Link } from "react-router-dom";
 import img from "../../assets/candy_logo.svg";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { HiOutlineUserCircle } from "react-icons/hi";
-import { postUser } from '../../redux/actions/actions'
-import {useDispatch} from "react-redux"
-import { useLocalStorage } from '../useLocalStorage/useLocalStorage';
+import { postUser } from "../../redux/actions/actions";
+import { useDispatch } from "react-redux";
+import { useLocalStorage } from "../useLocalStorage/useLocalStorage";
 
 import {
   Popover,
@@ -27,16 +27,12 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverAnchor,
-  Portal
-} from '@chakra-ui/react'
-
-
-//auth0 
-import {useAuth0} from "@auth0/auth0-react"
-import { useState } from 'react'
+  Portal,
+} from "@chakra-ui/react";
 
 //auth0
 import { useAuth0 } from "@auth0/auth0-react";
+import { useState } from "react";
 
 const Nav = (props) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -92,36 +88,30 @@ const MenuItem = ({ children, isLast, to = "/", ...rest }) => {
 };
 
 const MenuLinks = ({ isOpen }) => {
- 
+  const [token, setToken] = useLocalStorage("token", "");
 
-  const [token, setToken] = useLocalStorage("token","");
-  
   const dispatch = useDispatch();
 
   //auth0
-  const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
-  
-  let infoUser = {}
-  
-  if(isAuthenticated){ 
-    
-    console.log(user.sub)
-    if(user.email === "lala@gmail.com"){
-    infoUser = {
-      email: user.email,
-      admin: true
-    } 
-   }else{
-     infoUser = {
-      email: user.email ,
-      admin: false
-     }
-   }
-  dispatch(postUser(infoUser));
-  //setToken(user.sub)
-}
+  const { loginWithRedirect, isAuthenticated, user, logout } = useAuth0();
 
+  let infoUser = {};
+
+  if (isAuthenticated) {
+    console.log(user.sub);
+    if (user.email === "lala@gmail.com") {
+      infoUser = {
+        email: user.email,
+        admin: true,
+      };
+    } else {
+      infoUser = {
+        email: user.email,
+        admin: false,
+      };
+    }
     dispatch(postUser(infoUser));
+    //setToken(user.sub)
   }
 
   console.log(infoUser);
@@ -276,7 +266,6 @@ const MenuLinks = ({ isOpen }) => {
               <Icon boxSize={6} as={HiOutlineUserCircle} />
             </Button>
           )}
-
           <Button
             colorScheme="primary"
             display="flex"
@@ -286,11 +275,11 @@ const MenuLinks = ({ isOpen }) => {
             _hover={{
               color: "#000",
             }}
-          >
-            <Link to="/cart">
-              <Icon boxSize={6} as={AiOutlineShoppingCart} />
-            </Link>
-          </Button>
+          />
+          <Link to="/cart">
+            <Icon boxSize={6} as={AiOutlineShoppingCart} />
+          </Link>
+          )}
         </Flex>
       </Stack>
     </Box>
@@ -318,11 +307,9 @@ const NavBarContainer = ({ children, ...props }) => {
 export default Nav;
 
 /* import React from 'react'
-
 const Nav = () => {
   return (
     <div>Nav</div>
   )
 }
-
 export default Nav */

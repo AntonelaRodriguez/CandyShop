@@ -17,10 +17,6 @@ module.exports = (sequelize) => {
           isFloat: true
         }
       },
-      date: {
-        type: Sequelize.DATEONLY,
-        defaultValue: Sequelize.NOW
-      }
     },
     {
       timestamps: false,

@@ -18,6 +18,8 @@ import {
   POST_USER_DETAIL,
   GET_USER_CART,
   POST_CART,
+  EDIT_CART,
+  GET_CART_BY_PK
 } from '../actions/actions'
 
 const initialState = {
@@ -51,7 +53,8 @@ const initialState = {
   ? JSON.parse(localStorage.getItem("cart"))
   :  [],
   user: {},
-  userCart: null
+  userCart: null,
+  cartByPk: []
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -131,6 +134,11 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state, 
         cart: [...state.cart, payload] 
       }
+    case EDIT_CART: 
+      return {
+        ...state,
+        cart: payload
+      }
     case PAYMENT_TO_CART:
       return { 
         ...state 
@@ -146,6 +154,11 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state,
         userCart: payload
       }
+    case GET_CART_BY_PK: 
+    return{
+      ...state,
+       cartByPk: payload
+    }  
     case POST_CART:
       return{
         ...state,

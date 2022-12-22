@@ -119,6 +119,7 @@ const valuesToReturn = (value) =>{
 		stock: value.stock,
 		brand: value.brand,
 		tacc: value.tacc,
+		quantity: 1,
 		category: value.Categories.map(el=>el.name),
 	}
 }

@@ -21,6 +21,7 @@ import { ImPriceTag } from 'react-icons/im'
 import stars from '../../assets/starsProductDetail/stars.svg'
 import { getProductDetails, deleteProduct, getAllProducts,getUser } from '../../redux/actions/actions'
 import {useAuth0} from "@auth0/auth0-react"
+import Reviews from '../Reviews/Reviews'
 
 
 
@@ -66,6 +67,7 @@ const ProductDetail = () => {
   }
 
   return (
+  <>
     <Flex
       w='full'
       direction={{ base: 'column', sm: 'column', md: 'row', lg: 'row' }}
@@ -198,6 +200,10 @@ const ProductDetail = () => {
 
    
     </Flex>
+    <Stack>
+      <Reviews/>
+    </Stack>
+  </>
   )
 }
 

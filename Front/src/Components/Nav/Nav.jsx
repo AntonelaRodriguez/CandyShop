@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 import img from '../../assets/candy_logo.svg'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
 import { HiOutlineUserCircle } from "react-icons/hi";
-import { postUser } from '../../redux/actions/actions'
-import {useDispatch} from "react-redux"
+import { postUser, getUserCart, postCart } from '../../redux/actions/actions'
+import {useDispatch, useSelector} from "react-redux"
 import { useLocalStorage } from '../useLocalStorage/useLocalStorage';
 
 import {
@@ -25,6 +25,7 @@ import {
 //auth0 
 import {useAuth0} from "@auth0/auth0-react"
 import { useState } from 'react'
+import { useEffect } from 'react'
 
 
 const Nav = (props) => {
@@ -76,15 +77,15 @@ const MenuItem = ({ children, isLast, to = '/', ...rest }) => {
 }
 
 const MenuLinks = ({ isOpen }) => {
- 
-
-  const [token, setToken] = useLocalStorage("token","");
   
   const dispatch = useDispatch();
+  const userCarts = useSelector(state => state.userCart);
+
 
   //auth0
   const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
-  
+
+  useEffect(()=>{
   let infoUser = {}
   
   if(isAuthenticated){ 
@@ -100,14 +101,32 @@ const MenuLinks = ({ isOpen }) => {
       email: user.email ,
       admin: false
      }
+     dispatch(getUserCart(user.email))
    }
   dispatch(postUser(infoUser));
-  //setToken(user.sub)
+  }
+  },[isAuthenticated])
+  
+  
+  console.log("userCarts", userCarts)
+if(isAuthenticated){
+  if(userCarts !== null){
+    if(userCarts.length === 0){
+      dispatch(postCart({
+            email: user.email,
+            totalPrice: 0
+      }))
+    }
+    if(userCarts.length > 0){
+      if(userCarts[userCarts.length - 1].state === "completed" || userCarts[userCarts.length - 1].state === "cancelled"){
+        dispatch(postCart({
+          email: user.email, 
+          totalPrice: 0
+        }))
+      }
+    }
+  }
 }
-
-
-
-console.log(infoUser)
 
   return (
     <Box
@@ -220,6 +239,19 @@ console.log(infoUser)
                       justifyContent='center'
                       display='flex'
                     >
+                      <Link to="/userDetails">
+
+                      <Button
+                      mt='1em'
+                      _hover={{ color: '#000' }} 
+                      colorScheme='primary' 
+                      variant='outline'
+                      h='2em'
+                      marginRight='5px'
+                      >
+                        Edit Account
+                      </Button>
+                      </Link>
                       <Button 
                         mt='1em'
                         _hover={{ color: '#000' }} 

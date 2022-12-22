@@ -5,6 +5,7 @@ import {
   CardBody,
   CardFooter,
   Divider,
+  Flex,
   Heading,
   Image,
   Stack,
@@ -14,14 +15,27 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
-import { addProductCart } from '../../redux/actions/actions'
+import { addProductCart, editProductCart } from '../../redux/actions/actions'
+import { useState } from 'react'
 
 const CardProduct = ({ image, id, name, price }) => {
   const dispatch = useDispatch()
   const products = useSelector((state) => state.products)
+  const cart = useSelector((state) => state.cart.slice());
+  const [count, setCount] = useState(1)
   const handleAddCart = (id) => {
-    const prod = products.filter((p) => p.id === id)
-    dispatch(addProductCart(prod[0]))
+    let prod = products.find((p) => p.id === id);
+    if(prod) prod.quantity = count;
+    let indexOfCart = -1;
+    for (let i = 0; i < cart.length; i++) {
+      if(cart[i].id === id) {
+        indexOfCart = i;
+        break;
+      }
+    };
+    if(indexOfCart === -1) return dispatch(addProductCart(prod));
+    cart[indexOfCart] = prod;
+    dispatch(editProductCart(cart))
   }
   return (
     <motion.div whileHover={{ scale: 1.02 }}>
@@ -44,15 +58,14 @@ const CardProduct = ({ image, id, name, price }) => {
           </Stack>
         </CardBody>
         <Divider />
-        <CardFooter>
-          <ButtonGroup spacing='2'>
-            <Button variant='solid' bg='primary.100'>
-              Buy now
-            </Button>
-            <Button onClick={() => handleAddCart(id)} variant='ghost' bg='primary.300'>
-              Add to cart
-            </Button>
-          </ButtonGroup>
+        <CardFooter justifyContent="center" >
+            <Flex width="100%" alignItems="center" justifyContent="space-between" size='md'>
+              <Button variant='solid' bg='primary.100'> Buy now </Button>
+              <Button onClick={()=> setCount(count - 1)} disabled={count <= 1}>-</Button>
+              <Text fontWeight="600">{count}</Text>
+              <Button onClick={() => setCount(count + 1)}>+</Button>
+              <Button onClick={() => handleAddCart(id)} variant='ghost' bg='primary.300'> Add to cart </Button>
+            </Flex>
         </CardFooter>
       </Card>
     </motion.div>

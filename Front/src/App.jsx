@@ -17,6 +17,7 @@ import ProductsAdmin from "./Pages/Admin/ProductsAdmin";
 import UsersAdmin from "./Pages/Admin/UsersAdmin";
 import OrdersAdmin from "./Pages/Admin/OrdersAdmin";
 import UserDetails from './Pages/UserDetails/UserDetails'
+import Reviews from './Pages/Reviews/Reviews'
 
 function App() {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ function App() {
         <Route path="/admin/productsadmin" element={<ProductsAdmin />} />
         <Route path="/admin/ordersadmin" element={<OrdersAdmin />} />
         <Route path='/userDetails' element={<UserDetails />} />
+        <Route path='/reviews/:id' element={<Reviews/>} />
         {/*  */}
       </Routes>
       {/* <IconButton // para light y dark theme (crear un componente para esto asi no queda desprolijo en app)

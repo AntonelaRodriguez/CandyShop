@@ -78,7 +78,7 @@ const MenuLinks = ({ isOpen }) => {
   const dispatch = useDispatch()
   const userCarts = useSelector((state) => state.userCart)
   const usuario = useSelector((state) => state.user)
-  console.log(usuario)
+  // console.log(usuario)
 
   //auth0
   const { loginWithRedirect, isAuthenticated, user, logout } = useAuth0()

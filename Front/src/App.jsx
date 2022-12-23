@@ -7,9 +7,9 @@ import ProductDetail from './Pages/ProductDetail/ProductDetail'
 import Products from './Pages/Products/Products.jsx'
 import SignUp from './Pages/SignUp/SignUp.jsx'
 import SignIn from './Pages/SignIn/SignIn.jsx'
-import Create from './Pages/Create/Create.jsx'
+
 import EditProduct from './Pages/Edit/EditProduct.jsx'
-import { Alert, AlertDescription, AlertTitle, Container } from '@chakra-ui/react'
+import { Container } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
 import { getAllProducts, getUser, postUser } from './redux/actions/actions'
 import Admin from './Pages/Admin/Admin'
@@ -20,7 +20,7 @@ import UserDetails from './Pages/UserDetails/UserDetails'
 import { useAuth0 } from '@auth0/auth0-react'
 import NotFound from './Pages/NotFound/NotFound'
 import Reviews from './Pages/Reviews/Reviews'
-
+import Create from './Pages/Admin/Create/Create'
 
 function App() {
   const usuario = useSelector((state) => state.user)

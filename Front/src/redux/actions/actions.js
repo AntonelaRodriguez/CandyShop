@@ -21,9 +21,10 @@ export const GET_USER_CART = "GET_USER_CART"
 export const POST_CART = "POST_CART"
 export const EDIT_CART = "EDIT_CART"
 export const GET_CART_BY_PK = "GET_CART_BY_PK"
-export const GET_ALL_REVIEWS = "GET_ALL_REVIEWS"
+export const GET_REVIEWS = "GET_REVIEWS"
 export const POST_REVIEW = "POST_REVIEW"
 export const CLEAN_REVIEWS = "CLEAN_REVIEWS"
+export const GET_RATINGS = "GET_RATINGS"
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 const url = 'http://localhost:3001' //para usar la db local poner localhost en vez de url
@@ -190,10 +191,12 @@ export const getUser = (email)=>{
   }
 }
 
-export const getAllReviews = (productId) => {
+
+//Reviews
+export const getReviews = (productId) => {
   return async function(dispatch) {
     const reviews = await axios.get(`${url}/reviews/${productId}`);
-    return dispatch({type: GET_ALL_REVIEWS, payload: reviews.data})
+    return dispatch({type: GET_REVIEWS, payload: reviews.data})
   }
 }
 
@@ -205,6 +208,14 @@ export const postReview = (data) => {
   return async function(dispatch) {
     const newReview = await axios.post(`${url}/reviews/${data.productId}/${data.email}`, data);
     return dispatch({type: POST_REVIEW});
+  }
+}
+
+export const getRatings = (data) => {
+  console.log(data.productId)
+  return async function (dispatch) {
+    const ratings = await axios.get(`${url}/reviews/ratings/${data.productId}`)
+    return dispatch({type: REVIEWS_AVG, payload: ratings.data})
   }
 }
 

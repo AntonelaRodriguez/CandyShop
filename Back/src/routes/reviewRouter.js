@@ -3,6 +3,19 @@ const { getAllReviews, postReview } = require('../controllers/review');
 const reviewRouter = Router();
 
 
+reviewRouter.get("/ratings/:productId", async (req, res, next) => {
+  const {productId} = req.params;
+  try {
+    const reviews = await getAllReviews(productId);
+    console.log(reviews)
+    const ratings = reviews.rating
+    console.log(ratings)
+    res.status(200).json(ratings)
+  } catch (error) {
+    next(error)
+  }
+})
+
 reviewRouter.post("/:productId/:email", async (req, res, next) => {
   const { author, title, description, rating} = req.body;
   const { productId, email } = req.params
@@ -17,7 +30,7 @@ reviewRouter.post("/:productId/:email", async (req, res, next) => {
 reviewRouter.get("/:productId", async (req, res, next) => {
   const {productId} = req.params;
   try {
-    const reviews = await getAllReviews(productId);
+    const reviews = await getAllReviews(productId)
     res.status(200).json(reviews);
   } catch (error) {
     next(error);

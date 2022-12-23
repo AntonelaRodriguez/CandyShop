@@ -14,8 +14,11 @@ const postReview = async (productId, email, author, title, description, rating) 
   return newReview;
 }
 
-const getAllReviews = async () => {
-  const allReviews = await Review.findAll()
+const getAllReviews = async (productId) => {
+  if(!productId) throw new Error('Must provide a product ID')
+  const allReviews = await Review.findAll({where: {
+    ProductId: productId
+  }})
   return allReviews;
 }
 

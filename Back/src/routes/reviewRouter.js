@@ -14,10 +14,10 @@ reviewRouter.post("/:productId/:email", async (req, res, next) => {
     next(error)
   }
 });
-reviewRouter.get("/", async (req, res, next) => {
-  // const {product} = req.params;
+reviewRouter.get("/:productId", async (req, res, next) => {
+  const {productId} = req.params;
   try {
-    const reviews = await getAllReviews();
+    const reviews = await getAllReviews(productId);
     res.status(200).json(reviews);
   } catch (error) {
     next(error);

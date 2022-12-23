@@ -19,7 +19,8 @@ import OrdersAdmin from './Pages/Admin/OrdersAdmin'
 import UserDetails from './Pages/UserDetails/UserDetails'
 import { useAuth0 } from '@auth0/auth0-react'
 import NotFound from './Pages/NotFound/NotFound'
-import Reviews from './Pages/Reviews/Reviews'
+import ReviewForm from './Pages/Reviews/ReviewForm'
+// import Reviews from './Pages/Reviews/Reviews'
 
 
 function App() {
@@ -89,10 +90,11 @@ function App() {
           element={usuario.admin ? <OrdersAdmin /> : <Navigate to='/' />}
         />
         <Route
-          path='/admin/userDetails'
-          element={usuario.admin ? <UserDetails /> : <Navigate to='/' />}
+          path='/userDetails'
+          element={<UserDetails />}
         />
         <Route path='/*' element={<NotFound />} />
+        <Route path="/reviews/:id" element={<ReviewForm />} />
       </Routes>
     </Container>
   )

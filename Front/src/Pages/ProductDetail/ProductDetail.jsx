@@ -22,7 +22,8 @@ import { ImPriceTag } from 'react-icons/im'
 import stars from '../../assets/starsProductDetail/stars.svg'
 import { getProductDetails, deleteProduct, getAllProducts,getUser } from '../../redux/actions/actions'
 import {useAuth0} from "@auth0/auth0-react"
-import Reviews from '../Reviews/Reviews'
+import ReviewForm from '../Reviews/ReviewForm'
+import ReviewCard from '../Reviews/ReviewCard'
 
 
 
@@ -36,7 +37,7 @@ const ProductDetail = () => {
   const product = useSelector((state) => state.productDetail);
   const actualUser = useSelector((state) => state.user);
 
-  console.log(actualUser)
+  // console.log(product)
 
   const dispatch = useDispatch()
 
@@ -202,7 +203,8 @@ const ProductDetail = () => {
    
     </Flex>
    <Stack>
-    <Reviews />
+    <ReviewForm />
+    <ReviewCard />
     <Link to={`/reviews/${id}`}>View more</Link>
    </Stack>
   </>

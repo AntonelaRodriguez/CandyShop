@@ -19,8 +19,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <ChakraProvider theme={theme}>
       <BrowserRouter>
-      <Auth0Provider domain='dev-mk55pfi0jjgc0xzc.us.auth0.com' 
-      clientId='Uh36veOXsDCEJPug8FRHAnVF2NSH7y0g'
+      <Auth0Provider domain='dev-5x324ab1t35kga07.us.auth0.com' 
+      clientId='GetC2rzak3aH4xlGcPFkFZjot8MBg48f'
       redirectUri={window.location.origin}
       useRefreshTokens={true}
       cacheLocation="localstorage"

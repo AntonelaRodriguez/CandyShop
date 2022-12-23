@@ -2,7 +2,12 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import { editProduct, getAllCategories, getProductDetails } from '../../redux/actions/actions'
+import {
+  editProduct,
+  getAllCategories,
+  getAllProducts,
+  getProductDetails
+} from '../../redux/actions/actions'
 
 import {
   FormControl,
@@ -20,6 +25,7 @@ import {
   Flex
 } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom'
+import CardProductAdmin from '../Admin/CardProductAdmin/CardProductAdmin'
 
 const EditProduct = () => {
   const dispatch = useDispatch()
@@ -102,23 +108,28 @@ const EditProduct = () => {
       stock: null
     })
     alert('Producto actualizado EditProductd succesfully')
-    navigate('/products')
+    dispatch(getAllProducts())
+    navigate('/admin/ProductsAdmin')
   }
   return (
-    <Stack direction='row' align='center' justify='center' gap={15}>
+    <Stack direction='row' p={15} w='full' align='center' justify='center' gap={15}>
       <form action='submit' onSubmit={(e) => handleSubmit(e)}>
         <Stack spacing={2}>
-          <FormControl isRequired>
-            <FormLabel htmlFor='name'>Name</FormLabel>
-            <Input type='text' id='name' value={input.name} name='name' onChange={handleChange} />
-            <FormLabel htmlFor='desc'>Description</FormLabel>
-            <Textarea
-              id='desc'
-              placeholder='Type a Description'
-              value={input.description}
-              name='description'
-              onChange={handleChange}
-            />
+          <FormControl>
+            <Stack>
+              <FormLabel htmlFor='name'>Name</FormLabel>
+              <Input type='text' id='name' value={input.name} name='name' onChange={handleChange} />
+            </Stack>
+            <Stack>
+              <FormLabel htmlFor='desc'>Description</FormLabel>
+              <Textarea
+                id='desc'
+                placeholder='Type a Description'
+                value={input.description}
+                name='description'
+                onChange={handleChange}
+              />
+            </Stack>
             <FormLabel htmlFor='cat'>category</FormLabel>
             <select id='cat' onChange={(e) => handleSelectCategories(e)}>
               <option>Select category</option>
@@ -214,13 +225,19 @@ const EditProduct = () => {
             />
 
             <Button type='submit' colorScheme='primary'>
-              Submit
+              Editar
             </Button>
           </FormControl>
         </Stack>
       </form>
-      <Stack width={250}>
-        <img src={image} alt='product pic' />
+      <Stack width='50%'>
+        <CardProductAdmin
+          name={input.name}
+          description={input.description}
+          image={image}
+          id={input.id}
+          price={input.price}
+        />
       </Stack>
     </Stack>
   )

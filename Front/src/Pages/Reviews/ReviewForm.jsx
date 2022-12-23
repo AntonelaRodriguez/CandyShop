@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getProductDetails, postReview } from '../../redux/actions/actions';   
+import { getReviews, getProductDetails, postReview } from '../../redux/actions/actions';   
 
 
 
@@ -49,9 +49,10 @@ const ReviewForm = (props) => {
     setInput({
       title: "",
       description: "", 
-      rating: null,
+      rating: "",
     })
     alert("Review posted successfully")
+    dispatch(getReviews(id))
   }
 
   return (

@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
 import stars from '../../assets/starsProductDetail/stars.svg'
-import { getProductDetails, deleteProduct, getAllProducts,getUser } from '../../redux/actions/actions'
+import { getProductDetails, deleteProduct, getAllProducts,getUser, getRatings } from '../../redux/actions/actions'
 import {useAuth0} from "@auth0/auth0-react"
 import ReviewForm from '../Reviews/ReviewForm'
 import ReviewCard from '../Reviews/ReviewCard'
@@ -36,23 +36,33 @@ const ProductDetail = () => {
 
   const product = useSelector((state) => state.productDetail);
   const actualUser = useSelector((state) => state.user);
-
-  // console.log(product)
-
+  const reviews = useSelector((state) => state.reviews)
+ const ratings = useSelector((state) => state.ratings)
+  console.log(ratings)
+  
   const dispatch = useDispatch()
-
+  
   const navigate = useNavigate()
-
+  
   const { id } = useParams()
+  // console.log(id)
   useEffect(() => {
     dispatch(getProductDetails(id))
-  
+    dispatch(getRatings(id))
     if(isAuthenticated){
       dispatch(getUser(user.email));
     }
 
   }, [dispatch, id])
-
+  
+  // const reviewAvg = () => {
+  //   const ratingReduce = ratings.reduce(function(current, last){
+  //       return current + last;
+  //   })
+  //   const totalAvg = ratingReduce / ratings.length;
+  //   return totalAvg;
+  // }
+  // // console.log(reviewAvg())
   const increment = () => {
     cantidad < product.stock ? setCantidad(cantidad + 1) : cantidad
   }
@@ -61,12 +71,15 @@ const ProductDetail = () => {
     cantidad > 0 ? setCantidad(cantidad - 1) : cantidad
   }
 
-  const handlerDelete = async (e) => {
+  const handlerDelete = (e) => {
     e.preventDefault()
-    await dispatch(deleteProduct(id))
-    await dispatch(getAllProducts())
+    dispatch(deleteProduct(id))
+    dispatch(getAllProducts())
     navigate('/products')
   }
+
+
+  
 
   return (
   <>
@@ -144,13 +157,14 @@ const ProductDetail = () => {
             </Stack>
             <Stack direction='row' align='center' justify='flex-start'>
               <Flex align='center' justify='center'>
+                {/* <Image width='3.5' src={stars} />
                 <Image width='3.5' src={stars} />
                 <Image width='3.5' src={stars} />
                 <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
+                <Image width='3.5' src={stars} /> */}
+                {/* {reviewAvg()} */}
               </Flex>
-              <Link to={`/reviews/${id}`}>246 Reviews</Link>
+              <Link to={`/reviews/${id}`}>{reviews.length} Reviews</Link>
             </Stack>
             <Badge colorScheme='pink'>{product.brand}</Badge>
           </Flex>

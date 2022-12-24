@@ -3,10 +3,10 @@ import { Box, Flex, Text, Button, Stack, Icon, Image, Avatar } from '@chakra-ui/
 import { Link } from 'react-router-dom'
 import img from '../../assets/candy_logo.svg'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
-import { HiOutlineUserCircle } from "react-icons/hi";
-import { postUser, getUserCart, postCart } from '../../redux/actions/actions'
-import {useDispatch, useSelector} from "react-redux"
-import { useLocalStorage } from '../useLocalStorage/useLocalStorage';
+import { HiOutlineUserCircle } from 'react-icons/hi'
+import { postUser, getUserCart, postCart, getUser } from '../../redux/actions/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocalStorage } from '../useLocalStorage/useLocalStorage'
 
 import {
   Popover,
@@ -21,12 +21,10 @@ import {
   Portal
 } from '@chakra-ui/react'
 
-
-//auth0 
-import {useAuth0} from "@auth0/auth0-react"
+//auth0
+import { useAuth0 } from '@auth0/auth0-react'
 import { useState } from 'react'
 import { useEffect } from 'react'
-
 
 const Nav = (props) => {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -77,56 +75,15 @@ const MenuItem = ({ children, isLast, to = '/', ...rest }) => {
 }
 
 const MenuLinks = ({ isOpen }) => {
-  
-  const dispatch = useDispatch();
-  const userCarts = useSelector(state => state.userCart);
-
+  const dispatch = useDispatch()
+  const userCarts = useSelector((state) => state.userCart)
+  const usuario = useSelector((state) => state.user)
+  console.log(usuario)
 
   //auth0
-  const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, user, logout } = useAuth0()
 
-  useEffect(()=>{
-  let infoUser = {}
-  
-  if(isAuthenticated){ 
-    
-    console.log(user.sub)
-    if(user.email === "lala@gmail.com"){
-    infoUser = {
-      email: user.email,
-      admin: true
-    } 
-   }else{
-     infoUser = {
-      email: user.email ,
-      admin: false
-     }
-     dispatch(getUserCart(user.email))
-   }
-  dispatch(postUser(infoUser));
-  }
-  },[isAuthenticated])
-  
-  
-  console.log("userCarts", userCarts)
-if(isAuthenticated){
-  if(userCarts !== null){
-    if(userCarts.length === 0){
-      dispatch(postCart({
-            email: user.email,
-            totalPrice: 0
-      }))
-    }
-    if(userCarts.length > 0){
-      if(userCarts[userCarts.length - 1].state === "completed" || userCarts[userCarts.length - 1].state === "cancelled"){
-        dispatch(postCart({
-          email: user.email, 
-          totalPrice: 0
-        }))
-      }
-    }
-  }
-}
+
 
   return (
     <Box
@@ -167,134 +124,102 @@ if(isAuthenticated){
             <Link to='/products'>Store of products</Link>
           </Button>
 
-          {/* <Button
-            _hover={{
-              color: '#000'
-            }}
-            colorScheme='primary'
-            variant='outline'
-          >
-            <Link to='/signin'>Sign In</Link>
-          </Button>
-
-          <Button
-            _hover={{
-              color: '#000'
-            }}
-            colorScheme='primary'
-            variant='outline'
-          >
-            <Link to='/signup'>Sign Up</Link>
-          </Button> */}
-
-          <Button
-            _hover={{
-              color: '#000'
-            }}
-            colorScheme='primary'
-            variant='outline'
-          >
-            <Link to='/create'>Create</Link>
-          </Button>
+          {usuario?.admin && (
+            <Button
+              _hover={{
+                color: '#000'
+              }}
+              colorScheme='primary'
+              variant='outline'
+            >
+              <Link to='/admin'>Admin Panel</Link>
+            </Button>
+          )}
         </Flex>
 
-
         <Flex align='center' justifyContent='space-between' gap={5}>
-          {
-            isAuthenticated 
-            ? 
-              <Popover >
-                <PopoverTrigger>
-                  <Button w='2em' borderRadius="2em">                  
-                    <Avatar name={user.name} boxSize='2em' src={user.picture} />
-                  </Button>
-                </PopoverTrigger>
-                <Portal>
-                  <PopoverContent 
-                    boxShadow='2xl' 
-                    p='6' 
-                    rounded='md' 
-                    bg='white'
-                    _hover={{ color: '#000'}}
-                  >
-                    <PopoverHeader borderColor='primary.600'>
-                      <PopoverArrow/>
-                      <Flex
-                        direction='column'
-                        mt='1em'
-                        mb='1em'
-                        gap={3}
-                        align='center'
-                        justifyContent='center'
-                        display='flex'
-                      >
-                        <Avatar name={user.name} size='xl' src={user.picture} />
-                        <Text fontSize='1.7em' fontWeight='600' textTransform='capitalize'>{user.given_name}</Text>
-                        <Text color='gray.600'>{user.email}</Text>
-                      </Flex>
-
-                    </PopoverHeader>
-                    <PopoverBody                
+          {isAuthenticated ? (
+            <Popover>
+              <PopoverTrigger>
+                <Button w='2em' borderRadius='2em'>
+                  <Avatar name={user.name} boxSize='2em' src={user.picture} />
+                </Button>
+              </PopoverTrigger>
+              <Portal>
+                <PopoverContent
+                  boxShadow='2xl'
+                  p='6'
+                  rounded='md'
+                  bg='white'
+                  _hover={{ color: '#000' }}
+                >
+                  <PopoverHeader borderColor='primary.600'>
+                    <PopoverArrow />
+                    <Flex
+                      direction='column'
+                      mt='1em'
+                      mb='1em'
+                      gap={3}
                       align='center'
                       justifyContent='center'
                       display='flex'
                     >
-                      <Link to="/userDetails">
-
+                      <Avatar name={user.name} size='xl' src={user.picture} />
+                      <Text fontSize='1.7em' fontWeight='600' textTransform='capitalize'>
+                        {user.given_name}
+                      </Text>
+                      <Text color='gray.600'>{user.email}</Text>
+                    </Flex>
+                  </PopoverHeader>
+                  <PopoverBody align='center' justifyContent='center' display='flex'>
+                    <Link to='/userDetails'>
                       <Button
-                      mt='1em'
-                      _hover={{ color: '#000' }} 
-                      colorScheme='primary' 
-                      variant='outline'
-                      h='2em'
-                      marginRight='5px'
+                        mt='1em'
+                        _hover={{ color: '#000' }}
+                        colorScheme='primary'
+                        variant='outline'
+                        h='2em'
+                        marginRight='5px'
                       >
                         Edit Account
                       </Button>
-                      </Link>
-                      <Button 
-                        mt='1em'
-                        _hover={{ color: '#000' }} 
-                        colorScheme='primary' 
-                        variant='outline'
-                        h='2em'
-                        onClick={() => logout({ returnTo: window.location.origin })}
-                      > Log Out
-                      </Button>
-                    </PopoverBody>
-                  </PopoverContent>
-                </Portal>
-              </Popover>
-            : <Button 
-                _hover={{ color: '#000' }} 
-                colorScheme='primary' 
-                variant='outline'
-                display='flex'
-                alignItems='center'
-                justifyContent="space-between"
-                w='6.5em'
-                onClick={() => loginWithRedirect() }
-              > 
-                Log In  
-                <Icon boxSize={6} as={HiOutlineUserCircle} />
-              </Button>
-          }
+                    </Link>
+                    <Button
+                      mt='1em'
+                      _hover={{ color: '#000' }}
+                      colorScheme='primary'
+                      variant='outline'
+                      h='2em'
+                      onClick={() => logout({ returnTo: window.location.origin })}
+                    >
+                      {' '}
+                      Log Out
+                    </Button>
+                  </PopoverBody>
+                </PopoverContent>
+              </Portal>
+            </Popover>
+          ) : (
+            <Button
+              _hover={{ color: '#000' }}
+              colorScheme='primary'
+              variant='outline'
+              display='flex'
+              alignItems='center'
+              justifyContent='space-between'
+              w='6.5em'
+              onClick={() => loginWithRedirect()}
+            >
+              Log In
+              <Icon boxSize={6} as={HiOutlineUserCircle} />
+            </Button>
+          )}
 
-       
-          <Button
-            colorScheme='primary'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-            variant="outline"
-            _hover={{
-              color: '#000'
-            }}
-          >
+          {usuario.admin !== true && (
             <Link to='/cart'>
-              <Icon boxSize={6} as={AiOutlineShoppingCart} />
+              <Icon boxSize={8} as={AiOutlineShoppingCart} />
             </Link>
-          </Button>
+          )}
         </Flex>
       </Stack>
     </Box>

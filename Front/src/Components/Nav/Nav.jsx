@@ -123,9 +123,6 @@ const MenuLinks = ({ isOpen }) => {
           >
             <Link to='/products'>Store</Link>
           </Button>
-          <Button onClick={()=> history(-1)}>
-            Go Back
-          </Button>
           {usuario?.admin && (
             <Button
               _hover={{

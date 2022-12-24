@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Flex, Text, Button, Stack, Icon, Image, Avatar } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import img from '../../assets/candy_logo.svg'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
 import { HiOutlineUserCircle } from 'react-icons/hi'
@@ -82,7 +82,7 @@ const MenuLinks = ({ isOpen }) => {
 
   //auth0
   const { loginWithRedirect, isAuthenticated, user, logout } = useAuth0()
-
+  const history = useNavigate()
 
 
   return (
@@ -121,9 +121,11 @@ const MenuLinks = ({ isOpen }) => {
             colorScheme='primary'
             variant='outline'
           >
-            <Link to='/products'>Store of products</Link>
+            <Link to='/products'>Store</Link>
           </Button>
-
+          <Button onClick={()=> history(-1)}>
+            Go Back
+          </Button>
           {usuario?.admin && (
             <Button
               _hover={{

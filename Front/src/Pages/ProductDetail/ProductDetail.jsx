@@ -27,10 +27,9 @@ import ReviewCard from '../Reviews/ReviewCard'
 
 
 
+
 const ProductDetail = () => {
   const [cantidad, setCantidad] = useState(0)
-  
-  //const [userActual, setUserActual] = useState({});
 
   const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
 
@@ -44,7 +43,7 @@ const ProductDetail = () => {
  const navigate = useNavigate()
  
  const { id } = useParams()
- // console.log(id)
+  
  useEffect(() => {
    dispatch(getProductDetails(id))
    if(isAuthenticated){
@@ -58,7 +57,7 @@ const ProductDetail = () => {
   }
   const ratingReduce = ratings.reduce(sum, 0)
   const totalAvg = ratingReduce / ratings.length;
-  
+ 
   const increment = () => {
     cantidad < product.stock ? setCantidad(cantidad + 1) : cantidad
   }
@@ -153,17 +152,7 @@ const ProductDetail = () => {
             </Stack>
             <Stack direction='row' align='center' justify='flex-start'>
               <Flex align='center' justify='center'>
-                {/* <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} /> */}
-                {/* al .5 mas cercano hacia abajo */}
-                {/* {(Math.floor(totalAvg*2)/2)} */}
-                {/* al decimal */}
-                {/* {(Math.floor(totalAvg*10)/10)} */}
-                {/* al entero */}
-                {Math.floor(totalAvg)}
+                {isNaN(totalAvg)? 0 : Math.floor(totalAvg)}
 
                 
               </Flex>
@@ -222,7 +211,6 @@ const ProductDetail = () => {
    <Stack>
     <ReviewForm />
     <ReviewCard />
-    <Link to={`/reviews/${id}`}>View more</Link>
    </Stack>
   </>
   )

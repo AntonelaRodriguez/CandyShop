@@ -20,6 +20,7 @@ import UserDetails from './Pages/UserDetails/UserDetails'
 import { useAuth0 } from '@auth0/auth0-react'
 import NotFound from './Pages/NotFound/NotFound'
 import ReviewForm from './Pages/Reviews/ReviewForm'
+import ReviewCard from './Pages/Reviews/ReviewCard'
 // import Reviews from './Pages/Reviews/Reviews'
 
 
@@ -94,7 +95,7 @@ function App() {
           element={<UserDetails />}
         />
         <Route path='/*' element={<NotFound />} />
-        <Route path="/reviews/:id" element={<ReviewForm />} />
+        <Route path="/reviews/:id" element={<ReviewCard />} />
       </Routes>
     </Container>
   )

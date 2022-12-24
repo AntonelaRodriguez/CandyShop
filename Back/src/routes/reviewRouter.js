@@ -13,8 +13,8 @@ reviewRouter.get("/:product", async (req, res, next) => {
 });
 
 reviewRouter.post("/", async (req, res, next) => {
+  const {product, author, title, description, rating} = req.body;
   try {
-    const {product, author, title, description, rating} = req.body;
     // if (!product) res.status(400).json("Review has to belong to a product");
     const newReview = await postReview(product, author, title, description, rating)
     res.status(200).json(newReview);

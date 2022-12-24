@@ -23,7 +23,7 @@ import {
   GET_REVIEWS,
   POST_REVIEW,
   CLEAN_REVIEWS,
-  GET_RATINGS
+
 } from '../actions/actions'
 
 const initialState = {
@@ -195,11 +195,6 @@ const reducer = (state = initialState, { type, payload }) => {
       return{
         ...state,
         reviews:[]
-      }
-    case GET_RATINGS:
-      return {
-        ...state,
-        ratings: payload
       }
     default:
       return state

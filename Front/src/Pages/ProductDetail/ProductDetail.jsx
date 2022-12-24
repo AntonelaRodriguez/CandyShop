@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
 import stars from '../../assets/starsProductDetail/stars.svg'
-import { getProductDetails, deleteProduct, getAllProducts,getUser, getRatings } from '../../redux/actions/actions'
+import { getProductDetails, deleteProduct, getAllProducts, getUser } from '../../redux/actions/actions'
 import {useAuth0} from "@auth0/auth0-react"
 import ReviewForm from '../Reviews/ReviewForm'
 import ReviewCard from '../Reviews/ReviewCard'
@@ -37,32 +37,28 @@ const ProductDetail = () => {
   const product = useSelector((state) => state.productDetail);
   const actualUser = useSelector((state) => state.user);
   const reviews = useSelector((state) => state.reviews)
- const ratings = useSelector((state) => state.ratings)
-  console.log(ratings)
-  
-  const dispatch = useDispatch()
-  
-  const navigate = useNavigate()
-  
-  const { id } = useParams()
-  // console.log(id)
-  useEffect(() => {
-    dispatch(getProductDetails(id))
-    dispatch(getRatings(id))
-    if(isAuthenticated){
-      dispatch(getUser(user.email));
+  const ratings = reviews && reviews.map(r => r.rating)
+ 
+ const dispatch = useDispatch()
+ 
+ const navigate = useNavigate()
+ 
+ const { id } = useParams()
+ // console.log(id)
+ useEffect(() => {
+   dispatch(getProductDetails(id))
+   if(isAuthenticated){
+     dispatch(getUser(user.email));
     }
-
+    
   }, [dispatch, id])
   
-  // const reviewAvg = () => {
-  //   const ratingReduce = ratings.reduce(function(current, last){
-  //       return current + last;
-  //   })
-  //   const totalAvg = ratingReduce / ratings.length;
-  //   return totalAvg;
-  // }
-  // // console.log(reviewAvg())
+  const sum = (current, last) => {
+    return current + last
+  }
+  const ratingReduce = ratings.reduce(sum, 0)
+  const totalAvg = ratingReduce / ratings.length;
+  
   const increment = () => {
     cantidad < product.stock ? setCantidad(cantidad + 1) : cantidad
   }
@@ -162,7 +158,14 @@ const ProductDetail = () => {
                 <Image width='3.5' src={stars} />
                 <Image width='3.5' src={stars} />
                 <Image width='3.5' src={stars} /> */}
-                {/* {reviewAvg()} */}
+                {/* al .5 mas cercano hacia abajo */}
+                {/* {(Math.floor(totalAvg*2)/2)} */}
+                {/* al decimal */}
+                {/* {(Math.floor(totalAvg*10)/10)} */}
+                {/* al entero */}
+                {Math.floor(totalAvg)}
+
+                
               </Flex>
               <Link to={`/reviews/${id}`}>{reviews.length} Reviews</Link>
             </Stack>

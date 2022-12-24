@@ -2,12 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import {
-  editProduct,
-  getAllCategories,
-  getAllProducts,
-  getProductDetails
-} from '../../redux/actions/actions'
+import { getAllProducts, postProduct, getAllCategories } from '../../../redux/actions/actions'
 
 import {
   FormControl,
@@ -19,21 +14,30 @@ import {
   HStack,
   Radio,
   Textarea,
-  Box,
+  Flex,
   Badge,
-  Center,
-  Flex
+  Box,
+  SkeletonCircle,
+  SkeletonText,
+  Skeleton
 } from '@chakra-ui/react'
-import { useNavigate, useParams } from 'react-router-dom'
-import CardProductAdmin from '../Admin/CardProductAdmin/CardProductAdmin'
+import CardProductAdmin from '../CardProductAdmin/CardProductAdmin'
 
-const EditProduct = () => {
+//nombre
+//descripción
+//categoría
+//marca
+//tac
+//imagen
+//precio
+//stock
+//disponibilidad
+
+const Create = () => {
   const dispatch = useDispatch()
-  const { id } = useParams()
+  const [errors, setErrors] = useState({})
   const category = useSelector((state) => state.categories)
-  const productDetail = useSelector((state) => state.productDetail)
   const brand = useSelector((state) => state.brands)
-  const navigate = useNavigate()
   // Cloudinary
   const [image, setImage] = useState('')
 
@@ -49,6 +53,8 @@ const EditProduct = () => {
     )
 
     setImage(file.secure_url)
+
+    /* console.log(file); */
   }
 
   const [input, setInput] = useState({
@@ -61,6 +67,11 @@ const EditProduct = () => {
     stock: null
   })
 
+  /* useEffect(() => {
+    dispatch(getcategory());
+    dispatch(getBrand());
+  }, []);
+ */
   function handleChange(e) {
     setInput({
       ...input,
@@ -69,16 +80,8 @@ const EditProduct = () => {
   }
 
   useEffect(() => {
-    dispatch(getProductDetails(id))
     dispatch(getAllCategories())
-  }, [dispatch, id])
-
-  useEffect(() => {
-    if (productDetail) {
-      setImage(productDetail.image)
-      setInput(productDetail)
-    }
-  }, [productDetail])
+  }, [])
 
   function handleSelectCategories(e) {
     setInput({
@@ -93,10 +96,29 @@ const EditProduct = () => {
       category: input.category.filter((param) => param !== e)
     })
   }
-  console.log(input)
+
+  function handleSelectBrand(e) {
+    setInput({
+      ...input,
+      brand: [...input.brand, e.target.value]
+    })
+  }
+
   function handleSubmit(e) {
+    console.log(input)
     e.preventDefault()
-    dispatch(editProduct(id, input))
+    let crear = {
+      name: input.name,
+      description: input.description,
+      category: input.category,
+      brand: input.brand,
+      tacc: input.tacc === 'True' ? true : false,
+      image: image,
+      price: Number(input.price),
+      stock: Number(input.stock)
+    }
+
+    dispatch(postProduct(crear))
     setInput({
       name: '',
       description: '',
@@ -107,38 +129,33 @@ const EditProduct = () => {
       price: null,
       stock: null
     })
-    alert('Producto actualizado EditProductd succesfully')
-    dispatch(getAllProducts())
-    navigate('/admin/ProductsAdmin')
+    alert('Product created succesfully')
   }
   return (
     <Stack direction='row' p={15} w='full' align='center' justify='center' gap={15}>
       <form action='submit' onSubmit={(e) => handleSubmit(e)}>
         <Stack spacing={2}>
-          <FormControl>
-            <Stack>
-              <FormLabel htmlFor='name'>Name</FormLabel>
-              <Input type='text' id='name' value={input.name} name='name' onChange={handleChange} />
-            </Stack>
-            <Stack>
-              <FormLabel htmlFor='desc'>Description</FormLabel>
-              <Textarea
-                id='desc'
-                placeholder='Type a Description'
-                value={input.description}
-                name='description'
-                onChange={handleChange}
-              />
-            </Stack>
-            <FormLabel htmlFor='cat'>category</FormLabel>
-            <select id='cat' onChange={(e) => handleSelectCategories(e)}>
+          <FormControl isRequired>
+            <FormLabel>Name</FormLabel>
+            <Input type='text' value={input.name} name='name' onChange={handleChange} />
+          </FormControl>
+
+          <FormControl isRequired>
+            <FormLabel>Description</FormLabel>
+            <Textarea
+              placeholder='Type a Description'
+              value={input.description}
+              name='description'
+              onChange={handleChange}
+            />
+          </FormControl>
+
+          <FormControl isRequired>
+            <FormLabel>Category</FormLabel>
+            <select onChange={(e) => handleSelectCategories(e)}>
               <option>Select category</option>
               {category?.map((g) => {
-                return (
-                  <option key={g.id + g.name} value={g.name}>
-                    {g.name}
-                  </option>
-                )
+                return <option value={g.name}>{g.name}</option>
               })}
             </select>
             {/* DELETE CATEGORY */}
@@ -160,62 +177,51 @@ const EditProduct = () => {
                 )
               })}
             </Flex>
+          </FormControl>
 
+          <FormControl isRequired>
             <FormLabel>Brand</FormLabel>
             <select name='brand' onChange={(e) => handleChange(e)}>
-              <option value={input.brand}>Select Brand</option>
-              {brand?.map((g, i) => {
-                return (
-                  <option key={g + i} value={g}>
-                    {g}
-                  </option>
-                )
+              <option>Select Brand</option>
+              {brand?.map((g) => {
+                return <option value={g}>{g}</option>
               })}
             </select>
+            {input.brand && (
+              <Stack direction='row' align='center' justify='flex-start'>
+                <Badge colorScheme='blue' variant='outline'>
+                  {input.brand}
+                </Badge>
+              </Stack>
+            )}
+          </FormControl>
 
-            <Flex p={3} gap={5}>
-              {input.brand && (
-                <Stack direction='row' align='center' justify='flex-start'>
-                  <Badge colorScheme='blue' variant='outline'>
-                    {input.brand}
-                  </Badge>
-                  <Button colorScheme='red' size='xs' onClick={() => handleDeleteCategories(e)}>
-                    X
-                  </Button>
-                </Stack>
-              )}
-            </Flex>
-
+          <FormControl isRequired>
             <FormLabel as='legend'>Tacc</FormLabel>
             <RadioGroup>
               <HStack spacing='24px'>
-                <Radio
-                  onChange={(e) => handleChange(e)}
-                  defaultValue={input.tacc}
-                  name='tacc'
-                  value='True'
-                >
+                <Radio name='tacc' onChange={(e) => handleChange(e)} value='True'>
                   Yes
                 </Radio>
-                <Radio
-                  onChange={(e) => handleChange(e)}
-                  defaultValue={input.tacc}
-                  name='tacc'
-                  value='False'
-                >
+                <Radio name='tacc' onChange={(e) => handleChange(e)} value='False'>
                   No
                 </Radio>
               </HStack>
             </RadioGroup>
+          </FormControl>
 
+          <FormControl isRequired>
             <FormLabel>Price</FormLabel>
-
             <Input type='number' value={input.price} name='price' onChange={handleChange} />
+          </FormControl>
+
+          <FormControl isRequired>
             <FormLabel>Stock</FormLabel>
-
             <Input type='number' value={input.stock} name='stock' onChange={handleChange} />
-            <FormLabel htmlFor='file'>Img URL</FormLabel>
+          </FormControl>
 
+          <FormControl isRequired>
+            <FormLabel htmlFor='file'>Img URL</FormLabel>
             <Input
               id='fileInput'
               type='file'
@@ -223,24 +229,29 @@ const EditProduct = () => {
               name='file'
               onChange={(e) => uploadImage(e)}
             />
-
-            <Button type='submit' colorScheme='primary'>
-              Editar
-            </Button>
           </FormControl>
+
+          <Button type='submit' colorScheme='primary'>
+            Crear
+          </Button>
         </Stack>
-      </form>
-      <Stack width='50%'>
-        <CardProductAdmin
-          name={input.name}
-          description={input.description}
-          image={image}
-          id={input.id}
-          price={input.price}
-        />
+      </form>{' '}
+      <Stack width='50%' bg='red.500'>
+        {console.log(image.length)}
+        {image ? (
+          <CardProductAdmin
+            name={input.name}
+            description={input.description}
+            image={image}
+            id={input.id}
+            price={input.price}
+          />
+        ) : (
+          <Skeleton />
+        )}
       </Stack>
     </Stack>
   )
 }
 
-export default EditProduct
+export default Create

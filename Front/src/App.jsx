@@ -11,7 +11,7 @@ import SignIn from './Pages/SignIn/SignIn.jsx'
 import EditProduct from './Pages/Edit/EditProduct.jsx'
 import { Container } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
-import { getAllProducts, getUser, postUser } from './redux/actions/actions'
+import { getAllProducts, getUser, postUser, getUserCart, postCart } from './redux/actions/actions'
 import Admin from './Pages/Admin/Admin'
 import ProductsAdmin from './Pages/Admin/ProductsAdmin'
 import UsersAdmin from './Pages/Admin/UsersAdmin'
@@ -21,16 +21,18 @@ import { useAuth0 } from '@auth0/auth0-react'
 import NotFound from './Pages/NotFound/NotFound'
 import Reviews from './Pages/Reviews/Reviews'
 import Create from './Pages/Admin/Create/Create'
+import { FaGlassMartiniAlt } from 'react-icons/fa'
 
 function App() {
   const usuario = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const { isAuthenticated, user } = useAuth0()
+  const userCarts = useSelector(state => state.userCart);
 
   let infoUser = {}
   useEffect(() => {
     if (isAuthenticated) {
-      if (user.email === 'bongiovanniivaan@gmail.com') {
+      if (user.email === 'bongiovanniivaan@gmail.com' || user.email === "pepo@gmail.com") {
         infoUser = {
           email: user.email,
           admin: true
@@ -40,10 +42,31 @@ function App() {
           email: user.email,
           admin: false
         }
+        dispatch(getUserCart(user.email))
       }
       dispatch(postUser(infoUser))
     }
   }, [isAuthenticated])
+
+  console.log("userCarts", userCarts)
+if(isAuthenticated){
+  if(userCarts !== null){
+    if(userCarts.length === 0){
+      dispatch(postCart({
+            email: user.email,
+            totalPrice: 0
+      }))
+    }
+    if(userCarts.length > 0){
+      if(userCarts[userCarts.length - 1].state === "completed" || userCarts[userCarts.length - 1].state === "cancelled"){
+        dispatch(postCart({
+          email: user.email, 
+          totalPrice: 0
+        }))
+      }
+    }
+  }
+}
 
   useEffect(() => {
     if (isAuthenticated) {

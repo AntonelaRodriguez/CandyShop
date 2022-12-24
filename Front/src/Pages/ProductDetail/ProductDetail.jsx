@@ -118,7 +118,7 @@ const ProductDetail = () => {
           minH='full'
           h='full'
           direction={{ base: 'column' }}
-          align='flex-start'
+          align='center'
           justifyContent='space-evenly'
           p={10}
           gap={2}
@@ -208,9 +208,12 @@ const ProductDetail = () => {
 
    
     </Flex>
-   <Stack>
+   <Flex alignItems='flex-start'>
     <ReviewForm />
     <ReviewCard />
+   </Flex>
+   <Stack  marginBottom='1rem'>
+	<Link to={`/reviews/${id}`}  marginBottom='1rem'>View more</Link>
    </Stack>
   </>
   )

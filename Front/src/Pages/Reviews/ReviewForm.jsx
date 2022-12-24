@@ -57,21 +57,19 @@ const ReviewForm = () => {
 
   return (
     <Flex
-      w='full'
       direction={{ base: 'column', sm: 'column', md: 'row', lg: 'row' }}
-      justifyContent='space-between'
+      justifyContent='space-around'
       borderRadius='md'
       height='full'
-      margin='auto'
-      boxShadow='2xl'
+      w='25rem'
       position='relative'
     >
-      <Stack direction='column' align='center' justify='center' gap={15}>
-        <Heading >
-        Leave a Review
-        </Heading>
+      <Stack marginTop='3rem' direction='column' align='center' justify='center'>
         <form action='submit' onSubmit={(e) => handleSubmit(e)}>
           <Stack spacing={2}>
+            <Heading  marginBottom='2rem'>
+            Leave a Review
+            </Heading>
             <FormControl isRequired>
             <FormLabel>Title</FormLabel>
               <Input 
@@ -79,6 +77,7 @@ const ReviewForm = () => {
               value={input.title}
               name="title"
               onChange={handleChange}
+               marginBottom='2rem'
               />
 
             <FormLabel>Description</FormLabel>
@@ -87,6 +86,7 @@ const ReviewForm = () => {
               value={input.description}
               name="description"
               onChange={handleChange}
+              marginBottom='2rem'
               />
 
               <FormLabel>Rating</FormLabel>
@@ -94,7 +94,8 @@ const ReviewForm = () => {
               placeholder="..." 
               value={input.rating}
               name="rating"
-              onChange={handleChange}>
+              onChange={handleChange}
+              marginBottom='2rem'>
               <option value='1'>1</option>
               <option value='2'>2</option>
               <option value='3'>3</option>
@@ -107,7 +108,6 @@ const ReviewForm = () => {
             </Button>
           </Stack>
         </form>
-        <Link to={`/reviews/${id}`}>View more</Link>
       </Stack>
     </Flex>
   )

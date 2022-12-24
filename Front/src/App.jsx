@@ -21,7 +21,6 @@ import { useAuth0 } from '@auth0/auth0-react'
 import NotFound from './Pages/NotFound/NotFound'
 import ReviewCard from './Pages/Reviews/ReviewCard'
 // import Reviews from './Pages/Reviews/Reviews'
-import Reviews from './Pages/Reviews/Reviews'
 import Create from './Pages/Admin/Create/Create'
 import { FaGlassMartiniAlt } from 'react-icons/fa'
 

@@ -6,7 +6,10 @@ import { getReviews, cleanReviews } from '../../redux/actions/actions';
 
 const ReviewCard = () => {
     const product = useSelector((state) => state.productDetail);
-    const reviews = useSelector((state) => state.reviews)
+    let reviews = useSelector((state) => state.reviews)
+    if(window.location.pathname === `/product/${product.id}`){
+      reviews = reviews.slice(0,3)
+    }
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(getReviews(product.id))
@@ -37,7 +40,7 @@ const ReviewCard = () => {
                   </Text>
                 </Stack>
             </CardBody>
-          </Card>).slice(0,3)} 
+          </Card>)} 
         </Stack>
     )
 }

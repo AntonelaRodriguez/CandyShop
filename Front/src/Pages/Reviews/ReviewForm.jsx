@@ -4,14 +4,14 @@ import { Button, Flex, FormControl, FormLabel, Heading, Input, Select, Stack, Te
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getReviews, getProductDetails, postReview } from '../../redux/actions/actions';   
 
 
 
-const ReviewForm = (props) => {
+
+const ReviewForm = () => {
   const dispatch = useDispatch();
-  // const userDetail = useSelector((state) => {state.userDetails})
   const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
   const { id } = useParams();
   useEffect(() => {
@@ -56,48 +56,60 @@ const ReviewForm = (props) => {
   }
 
   return (
-    <Stack direction='row' align='center' justify='center' gap={15}>
-      <Heading >
-      Leave a Review
-      </Heading>
-      <form action='submit' onSubmit={(e) => handleSubmit(e)}>
-        <Stack spacing={2}>
-          <FormControl isRequired>
-          <FormLabel>Title</FormLabel>
-            <Input 
-            type="text"
-            value={input.title}
-            name="title"
-            onChange={handleChange}
-            />
+    <Flex
+      w='full'
+      direction={{ base: 'column', sm: 'column', md: 'row', lg: 'row' }}
+      justifyContent='space-between'
+      borderRadius='md'
+      height='full'
+      margin='auto'
+      boxShadow='2xl'
+      position='relative'
+    >
+      <Stack direction='column' align='center' justify='center' gap={15}>
+        <Heading >
+        Leave a Review
+        </Heading>
+        <form action='submit' onSubmit={(e) => handleSubmit(e)}>
+          <Stack spacing={2}>
+            <FormControl isRequired>
+            <FormLabel>Title</FormLabel>
+              <Input 
+              type="text"
+              value={input.title}
+              name="title"
+              onChange={handleChange}
+              />
 
-          <FormLabel>Description</FormLabel>
-            <Textarea 
-            placeholder='Description...'
-            value={input.description}
-            name="description"
-            onChange={handleChange}
-            />
+            <FormLabel>Description</FormLabel>
+              <Textarea 
+              placeholder='Description...'
+              value={input.description}
+              name="description"
+              onChange={handleChange}
+              />
 
-            <FormLabel>Rating</FormLabel>
-            <Select 
-            placeholder="Rating" 
-            value={input.rating}
-            name="rating"
-            onChange={handleChange}>
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
-            <option value='4'>4</option>
-            <option value='5'>5</option>
-            </Select>
-          </FormControl>
-          <Button type="submit" colorScheme="primary">
-            Submit review
-          </Button>
-        </Stack>
-      </form>
-    </Stack>
+              <FormLabel>Rating</FormLabel>
+              <Select 
+              placeholder="..." 
+              value={input.rating}
+              name="rating"
+              onChange={handleChange}>
+              <option value='1'>1</option>
+              <option value='2'>2</option>
+              <option value='3'>3</option>
+              <option value='4'>4</option>
+              <option value='5'>5</option>
+              </Select>
+            </FormControl>
+            <Button type="submit" colorScheme="primary">
+              Submit review
+            </Button>
+          </Stack>
+        </form>
+        <Link to={`/reviews/${id}`}>View more</Link>
+      </Stack>
+    </Flex>
   )
 }
 

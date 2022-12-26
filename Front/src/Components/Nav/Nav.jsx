@@ -13,8 +13,13 @@ import { Link } from "react-router-dom";
 import img from "../../assets/candy_logo.svg";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { HiOutlineUserCircle } from "react-icons/hi";
-import { postUser } from "../../redux/actions/actions";
-import { useDispatch } from "react-redux";
+import {
+  postUser,
+  getUserCart,
+  postCart,
+  getUser,
+} from "../../redux/actions/actions";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocalStorage } from "../useLocalStorage/useLocalStorage";
 
 import {
@@ -88,33 +93,14 @@ const MenuItem = ({ children, isLast, to = "/", ...rest }) => {
 };
 
 const MenuLinks = ({ isOpen }) => {
-  const [token, setToken] = useLocalStorage("token", "");
-
   const dispatch = useDispatch();
+  const userCarts = useSelector((state) => state.userCart);
+  const usuario = useSelector((state) => state.user);
+  // console.log(usuario)
 
   //auth0
   const { loginWithRedirect, isAuthenticated, user, logout } = useAuth0();
-
-  let infoUser = {};
-
-  if (isAuthenticated) {
-    console.log(user.sub);
-    if (user.email === "lala@gmail.com") {
-      infoUser = {
-        email: user.email,
-        admin: true,
-      };
-    } else {
-      infoUser = {
-        email: user.email,
-        admin: false,
-      };
-    }
-    dispatch(postUser(infoUser));
-    //setToken(user.sub)
-  }
-
-  console.log(infoUser);
+  const history = useNavigate();
 
   return (
     <Box
@@ -157,38 +143,19 @@ const MenuLinks = ({ isOpen }) => {
             colorScheme="primary"
             variant="outline"
           >
-            <Link to="/products">Store of products</Link>
+            <Link to="/products">Store</Link>
           </Button>
-
-          {/* <Button
-            _hover={{
-              color: '#000'
-            }}
-            colorScheme='primary'
-            variant='outline'
-          >
-            <Link to='/signin'>Sign In</Link>
-          </Button>
-
-          <Button
-            _hover={{
-              color: '#000'
-            }}
-            colorScheme='primary'
-            variant='outline'
-          >
-            <Link to='/signup'>Sign Up</Link>
-          </Button> */}
-
-          <Button
-            _hover={{
-              color: "#000",
-            }}
-            colorScheme="primary"
-            variant="outline"
-          >
-            <Link to="/create">Create</Link>
-          </Button>
+          {usuario?.admin && (
+            <Button
+              _hover={{
+                color: "#000",
+              }}
+              colorScheme="primary"
+              variant="outline"
+            >
+              <Link to="/admin">Admin Panel</Link>
+            </Button>
+          )}
         </Flex>
 
         <Flex align="center" justifyContent="space-between" gap={5}>
@@ -234,6 +201,18 @@ const MenuLinks = ({ isOpen }) => {
                     justifyContent="center"
                     display="flex"
                   >
+                    <Link to="/userDetails">
+                      <Button
+                        mt="1em"
+                        _hover={{ color: "#000" }}
+                        colorScheme="primary"
+                        variant="outline"
+                        h="2em"
+                        marginRight="5px"
+                      >
+                        Edit Account
+                      </Button>
+                    </Link>
                     <Button
                       mt="1em"
                       _hover={{ color: "#000" }}
@@ -266,19 +245,11 @@ const MenuLinks = ({ isOpen }) => {
               <Icon boxSize={6} as={HiOutlineUserCircle} />
             </Button>
           )}
-          <Button
-            colorScheme="primary"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            variant="outline"
-            _hover={{
-              color: "#000",
-            }}
-          />
-          <Link to="/cart">
-            <Icon boxSize={6} as={AiOutlineShoppingCart} />
-          </Link>
+
+          {usuario.admin !== true && (
+            <Link to="/cart">
+              <Icon boxSize={8} as={AiOutlineShoppingCart} />
+            </Link>
           )}
         </Flex>
       </Stack>
@@ -307,9 +278,11 @@ const NavBarContainer = ({ children, ...props }) => {
 export default Nav;
 
 /* import React from 'react'
+
 const Nav = () => {
   return (
     <div>Nav</div>
   )
 }
+
 export default Nav */

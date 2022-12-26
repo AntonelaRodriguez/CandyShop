@@ -20,38 +20,44 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
 import stars from '../../assets/starsProductDetail/stars.svg'
-import { getProductDetails, deleteProduct, getAllProducts,getUser } from '../../redux/actions/actions'
+import { getProductDetails, deleteProduct, getAllProducts, getUser } from '../../redux/actions/actions'
 import {useAuth0} from "@auth0/auth0-react"
-import Reviews from '../Reviews/Reviews'
+import ReviewForm from '../Reviews/ReviewForm'
+import ReviewCard from '../Reviews/ReviewCard'
+
 
 
 
 const ProductDetail = () => {
   const [cantidad, setCantidad] = useState(0)
-  
-  //const [userActual, setUserActual] = useState({});
 
   const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
 
   const product = useSelector((state) => state.productDetail);
   const actualUser = useSelector((state) => state.user);
-
-  console.log(actualUser)
-
-  const dispatch = useDispatch()
-
-  const navigate = useNavigate()
-
-  const { id } = useParams()
-  useEffect(() => {
-    dispatch(getProductDetails(id))
+  const reviews = useSelector((state) => state.reviews)
+  const ratings = reviews && reviews.map(r => r.rating)
+ 
+ const dispatch = useDispatch()
+ 
+ const navigate = useNavigate()
+ 
+ const { id } = useParams()
   
-    if(isAuthenticated){
-      dispatch(getUser(user.email));
+ useEffect(() => {
+   dispatch(getProductDetails(id))
+   if(isAuthenticated){
+     dispatch(getUser(user.email));
     }
-
+    
   }, [dispatch, id])
-
+  
+  const sum = (current, last) => {
+    return current + last
+  }
+  const ratingReduce = ratings.reduce(sum, 0)
+  const totalAvg = ratingReduce / ratings.length;
+ 
   const increment = () => {
     cantidad < product.stock ? setCantidad(cantidad + 1) : cantidad
   }
@@ -60,12 +66,15 @@ const ProductDetail = () => {
     cantidad > 0 ? setCantidad(cantidad - 1) : cantidad
   }
 
-  const handlerDelete = async (e) => {
+  const handlerDelete = (e) => {
     e.preventDefault()
-    await dispatch(deleteProduct(id))
-    await dispatch(getAllProducts())
+    dispatch(deleteProduct(id))
+    dispatch(getAllProducts())
     navigate('/products')
   }
+
+
+  
 
   return (
   <>
@@ -109,7 +118,7 @@ const ProductDetail = () => {
           minH='full'
           h='full'
           direction={{ base: 'column' }}
-          align='flex-start'
+          align='center'
           justifyContent='space-evenly'
           p={10}
           gap={2}
@@ -143,13 +152,11 @@ const ProductDetail = () => {
             </Stack>
             <Stack direction='row' align='center' justify='flex-start'>
               <Flex align='center' justify='center'>
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
+                {isNaN(totalAvg)? 0 : Math.floor(totalAvg)}
+
+                
               </Flex>
-              <Link to={`/reviews/${id}`}>246 Reviews</Link>
+              <Link to={`/reviews/${id}`}>{reviews.length} Reviews</Link>
             </Stack>
             <Badge colorScheme='pink'>{product.brand}</Badge>
           </Flex>
@@ -201,9 +208,12 @@ const ProductDetail = () => {
 
    
     </Flex>
-   <Stack>
-    <Reviews />
-    <Link to={`/reviews/${id}`}>View more</Link>
+   <Flex alignItems='flex-start'>
+    <ReviewForm />
+    <ReviewCard />
+   </Flex>
+   <Stack  marginBottom='1rem'>
+	<Link to={`/reviews/${id}`}  marginBottom='1rem'>View more</Link>
    </Stack>
   </>
   )

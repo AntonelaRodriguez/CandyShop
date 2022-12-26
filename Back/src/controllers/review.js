@@ -1,32 +1,28 @@
-const { Review } = require('../db.js');
+const { Review, Product, User } = require('../db.js');
 
-const postReview = async (email, product, author, title, description, rating) => {
+const postReview = async (productId, email, author, title, description, rating) => {
 
-  // if(!product || !author || !description || !rating) throw new Error ("Fill in all arguments");
+  if(!productId || !email || !author || !description || !rating) throw new Error ("Fill in all arguments");
 
-  const newReview = await Review.findOrCreate({where:{
-    ProductId: product,
-    UserEmail: email},
-    default: {
-      author, 
-      title, 
-      description, 
-      rating
-    }
-  })
+  const reviewedProduct = await Product.findByPk(productId)
+  const reviewer = await User.findByPk(email)
+  const newReview = await Review.create({author, title, description, rating})
+
+  reviewer.addReview(newReview)
+  reviewedProduct.addReview(newReview)
+  
   return newReview;
 }
 
-const getReview = async (product) => {
-  const allReviews = await Review.findAll({
-    where: {
-      ProductId: product
-    }
-  })
+const getAllReviews = async (productId) => {
+  if(!productId) throw new Error('Must provide a product ID')
+  const allReviews = await Review.findAll({where: {
+    ProductId: productId
+  }})
   return allReviews;
 }
 
 module.exports = {
   postReview,
-  getReview
+  getAllReviews
 };

@@ -29,6 +29,8 @@ const LatestProducts = () => {
                   name={product.name}
                   price={product.price}
                   description={product.description}
+                  stock={product.stock}
+                  availability= {product.availability}
                 />
               </GridItem>
             )

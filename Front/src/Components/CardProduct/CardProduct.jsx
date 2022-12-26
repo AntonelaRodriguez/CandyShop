@@ -15,10 +15,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
-import { addProductCart, editProductCart } from '../../redux/actions/actions'
-import { useState } from 'react'
+import { addProductCart, editProductCart, getProductDetails } from '../../redux/actions/actions'
+import { useState, useEffect } from 'react'
 
-const CardProduct = ({ image, id, name, price }) => {
+const CardProduct = ({ image, id, name, price, stock, availability }) => {
   const dispatch = useDispatch()
   const products = useSelector((state) => state.products)
   const cart = useSelector((state) => state.cart.slice());
@@ -37,6 +37,9 @@ const CardProduct = ({ image, id, name, price }) => {
     cart[indexOfCart] = prod;
     dispatch(editProductCart(cart))
   }
+   
+  console.log("stock", name)
+
   return (
     <motion.div whileHover={{ scale: 1.02 }}>
       <Card h={450} boxShadow='2xl' bg='gray.300' maxW='sm' minH='full'>
@@ -60,11 +63,16 @@ const CardProduct = ({ image, id, name, price }) => {
         <Divider />
         <CardFooter justifyContent="center" >
             <Flex width="100%" alignItems="center" justifyContent="space-between" size='md'>
-              <Button variant='solid' bg='primary.100'> Buy now </Button>
-              <Button onClick={()=> setCount(count - 1)} disabled={count <= 1}>-</Button>
-              <Text fontWeight="600">{count}</Text>
-              <Button onClick={() => setCount(count + 1)}>+</Button>
-              <Button onClick={() => handleAddCart(id)} variant='ghost' bg='primary.300'> Add to cart </Button>
+              
+              {!availability ?  <Text fontWeight="600">No disponible</Text> : 
+               <>  
+               <Button variant='solid' bg='primary.100'> Buy now </Button>
+               <Button onClick={()=> setCount(count - 1)} disabled={count <= 1}>-</Button>
+               <Text fontWeight="600">{count}</Text>
+               <Button onClick={() => setCount(count + 1) } disabled={count >= stock}>+</Button>
+               <Button onClick={() => handleAddCart(id)} variant='ghost' bg='primary.300'> Add to cart </Button>
+                </>}
+
             </Flex>
         </CardFooter>
       </Card>

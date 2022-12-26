@@ -16,9 +16,6 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 const CardProductAdmin = ({ name, description, image, id, price }) => {
-  const dispatch = useDispatch()
-
-  console.log({ id })
   return (
     <Card
       w='full'

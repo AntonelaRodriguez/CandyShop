@@ -22,7 +22,8 @@ import {
   GET_CART_BY_PK,
   GET_REVIEWS,
   POST_REVIEW,
-  CLEAN_REVIEWS
+  CLEAN_REVIEWS,
+  UPDATE_CART
 } from '../actions/actions'
 
 const initialState = {
@@ -167,6 +168,10 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state
       }
+    case UPDATE_CART:
+      return{
+        ...state
+      }  
     case POST_USER:
       return {
         ...state

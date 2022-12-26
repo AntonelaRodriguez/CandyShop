@@ -21,6 +21,9 @@ export const GET_USER_CART = "GET_USER_CART"
 export const POST_CART = "POST_CART"
 export const EDIT_CART = "EDIT_CART"
 export const GET_CART_BY_PK = "GET_CART_BY_PK"
+export const GET_REVIEWS = "GET_REVIEWS"
+export const POST_REVIEW = "POST_REVIEW"
+export const CLEAN_REVIEWS = "CLEAN_REVIEWS"
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 const url = 'http://localhost:3001' //para usar la db local poner localhost en vez de url
@@ -186,5 +189,26 @@ export const getUser = (email)=>{
     return dispatch({type: GET_USER, payload: user.data})
   }
 }
+
+
+//Reviews
+export const getReviews = (productId) => {
+  return async function(dispatch) {
+    const reviews = await axios.get(`${url}/reviews/${productId}`);
+    return dispatch({type: GET_REVIEWS, payload: reviews.data})
+  }
+}
+
+export const cleanReviews = () => {
+    return {type :CLEAN_REVIEWS}
+}
+
+export const postReview = (data) => {
+  return async function(dispatch) {
+    const newReview = await axios.post(`${url}/reviews/${data.productId}/${data.email}`, data);
+    return dispatch({type: POST_REVIEW});
+  }
+}
+
 
 

@@ -19,7 +19,10 @@ import {
   GET_USER_CART,
   POST_CART,
   EDIT_CART,
-  GET_CART_BY_PK
+  GET_CART_BY_PK,
+  GET_REVIEWS,
+  POST_REVIEW,
+  CLEAN_REVIEWS
 } from '../actions/actions'
 
 const initialState = {
@@ -49,12 +52,12 @@ const initialState = {
     'unknown'
   ],
   filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
-  cart: localStorage.getItem("cart")
-  ? JSON.parse(localStorage.getItem("cart"))
-  :  [],
+  cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [],
   user: {},
   userCart: null,
-  cartByPk: []
+  cartByPk: [],
+  reviews: [],
+  ratings: []
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -83,30 +86,31 @@ const reducer = (state = initialState, { type, payload }) => {
         productDetail: payload
       }
     case SORT:
+      let productos = [...state.products]
       if (payload === 'A-Z') {
         return {
           ...state,
-          products: state.products.sort((a, b) => (a.name > b.name ? 1 : -1))
+          products: productos.sort((a, b) => (a.name > b.name ? 1 : -1))
         }
       } else if (payload === 'Z-A') {
         return {
           ...state,
-          products: state.products.sort((a, b) => (a.name > b.name ? -1 : 1))
+          products: productos.sort((a, b) => (a.name > b.name ? -1 : 1))
         }
       } else if (payload === 'Price: Highest') {
         return {
           ...state,
-          products: state.products.sort((a, b) => b.price - a.price)
+          products: productos.sort((a, b) => b.price - a.price)
         }
       } else if (payload === 'Price: Lowest') {
         return {
           ...state,
-          products: state.products.sort((a, b) => a.price - b.price)
+          products: productos.sort((a, b) => a.price - b.price)
         }
       } else {
         return {
           ...state,
-          products: state.products
+          products: productos
         }
       }
     case POST_PRODUCT:
@@ -130,51 +134,65 @@ const reducer = (state = initialState, { type, payload }) => {
         products: payload
       }
     case ADD_CART:
-      return { 
-        ...state, 
-        cart: [...state.cart, payload] 
+      return {
+        ...state,
+        cart: [...state.cart, payload]
       }
-    case EDIT_CART: 
+    case EDIT_CART:
       return {
         ...state,
         cart: payload
       }
     case PAYMENT_TO_CART:
-      return { 
-        ...state 
+      return {
+        ...state
       }
     case DELETE_FROM_CART:
-      const filteredCart = state.cart.filter(i => i.id !== payload)
-      return{
+      const filteredCart = state.cart.filter((i) => i.id !== payload)
+      return {
         ...state,
         cart: filteredCart
       }
     case GET_USER_CART:
-      return{
+      return {
         ...state,
         userCart: payload
       }
-    case GET_CART_BY_PK: 
-    return{
-      ...state,
-       cartByPk: payload
-    }  
-    case POST_CART:
-      return{
+    case GET_CART_BY_PK:
+      return {
         ...state,
+        cartByPk: payload
       }
-    case POST_USER: 
-    return {
-      ...state
-    }
+    case POST_CART:
+      return {
+        ...state
+      }
+    case POST_USER:
+      return {
+        ...state
+      }
     case POST_USER_DETAIL:
       return {
         ...state
       }
     case GET_USER:
-      return{
+      return {
         ...state,
         user: payload
+      }
+    case GET_REVIEWS:
+      return {
+        ...state,
+        reviews: payload
+      }
+    case POST_REVIEW:
+      return {
+        ...state
+      }
+    case CLEAN_REVIEWS:
+      return {
+        ...state,
+        reviews: []
       }
     default:
       return state

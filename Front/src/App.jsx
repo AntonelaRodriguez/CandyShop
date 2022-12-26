@@ -19,9 +19,11 @@ import OrdersAdmin from './Pages/Admin/OrdersAdmin'
 import UserDetails from './Pages/UserDetails/UserDetails'
 import { useAuth0 } from '@auth0/auth0-react'
 import NotFound from './Pages/NotFound/NotFound'
-import Reviews from './Pages/Reviews/Reviews'
+import ReviewCard from './Pages/Reviews/ReviewCard'
+// import Reviews from './Pages/Reviews/Reviews'
 import Create from './Pages/Admin/Create/Create'
 import { FaGlassMartiniAlt } from 'react-icons/fa'
+
 
 function App() {
   const usuario = useSelector((state) => state.user)
@@ -112,10 +114,11 @@ if(isAuthenticated){
           element={usuario.admin ? <OrdersAdmin /> : <Navigate to='/' />}
         />
         <Route
-          path='/admin/userDetails'
-          element={usuario.admin ? <UserDetails /> : <Navigate to='/' />}
+          path='/userDetails'
+          element={<UserDetails />}
         />
         <Route path='/*' element={<NotFound />} />
+        <Route path="/reviews/:id" element={<ReviewCard />} />
       </Routes>
     </Container>
   )

@@ -72,6 +72,8 @@ const Products = () => {
   const indexOfFirstPost = indexOfLastPost - productsPerPage
   const currentPosts = products.slice(indexOfFirstPost, indexOfLastPost)
 
+ console.log("products", products)
+
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber)
   }
@@ -237,13 +239,14 @@ const Products = () => {
           {currentPosts &&
             currentPosts.map((product) => {
               return (
-                <GridItem>
+                <GridItem  key={product.id}>     
                   <CardProduct
-                    key={product.id}
                     id={product.id}
                     image={product.image}
                     name={product.name}
                     price={product.price}
+                    stock={product.stock}
+                    availability= {product.availability}
                   />
                 </GridItem>
               )

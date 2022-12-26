@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
       },
       state: {
         type: DataTypes.ENUM,
-        values: ['created', 'processing', 'cancelled', 'completed' ],
+        values: ['created', 'processing', 'cancelled', 'completed', 'delivered','recived'],
         defaultValue: 'created',
         allowNull: false
       },

@@ -24,6 +24,8 @@ export const GET_CART_BY_PK = "GET_CART_BY_PK"
 export const GET_REVIEWS = "GET_REVIEWS"
 export const POST_REVIEW = "POST_REVIEW"
 export const CLEAN_REVIEWS = "CLEAN_REVIEWS"
+export const UPDATE_CART = "UPDATE_CART"
+
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 const url = 'http://localhost:3001' //para usar la db local poner localhost en vez de url
@@ -167,6 +169,14 @@ export const getCartByPk = (order) =>{
     return dispatch({type: GET_CART_BY_PK, payload: cart.data});
   }
 }
+
+export const updateCart = (value) =>{
+  return async function(dispatch){
+    const result = await axios.put(`${url}/cart`,value);
+    return dispatch({tye:UPDATE_CART})
+  }
+}
+
 
 //Users
 

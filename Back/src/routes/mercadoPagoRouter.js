@@ -1,7 +1,8 @@
 const server = require('express').Router()
-const { Cart, User } = require('../db.js')
+const { Cart, User, Product } = require('../db.js')
 const { REACT_APP_BACK_URL, REACT_APP_FRONT_URL } = process.env
 const {postDetailCart} = require("../controllers/detail")
+const {searchById, updateProduct} = require("../controllers/product")
 
 const mercadopago = require('mercadopago')
 mercadopago.configure({ access_token: process.env.ACCESS_TOKEN })
@@ -71,36 +72,52 @@ server.get('/pagos', async (req, res, next) => {
         ProductId: el.id        
       }
     })
-
+    
+    
 
     console.log("cart", carrito)
 
     if (req.query.status === 'approved'){
       updateState = 'completed';
       postDetailCart(carrito)
+      
+      for(let i = 0; i < carrito.length; i++){
+        // let product = searchById(carrito[i].ProductId) 
+         
+         let product = await Product.findByPk(carrito[i].ProductId);
+         
+         product.stock = product.stock - carrito[i].quantity;
+
+         if(product.stock === 0){
+          product.availability = false;
+         }
+ 
+         await product.save();
+
+       }
+     
+
     } 
-    if (req.query.status === 'rejected') updateState= 'processing'
+
+    if (req.query.status === 'rejected') updateState = 'processing'
     if (req.query.status === 'pending')  updateState = 'processing' //este default
 
     console.log(req.query.status)
      
     await cart.update({
-      state: updateState
-    }, 
+      state: updateState,
+      totalPrice: req.query.status === "approved" ? factura.totalUltimaCompra : 0
+    },  
    {where: {
     orderN: cartId
    }})
-
-    
-
-   
 
 
    console.log(factura);
     //relacion del cart y el user
     //await user.addCart(cart) 
 
-    return res.redirect('http://localhost:5173/')
+    return res.redirect(`http://localhost:5173/`)
   } catch (error) {
     next(error)
   }

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector} from 'react-redux'
 import CardProductCart from '../../Components/CardProductCart/CardProductCart'
 import axios from 'axios'
-import { paymentToCart, getUserCart, getCartByPk } from '../../redux/actions/actions'
+import { paymentToCart, getUserCart, getCartByPk,updateCart } from '../../redux/actions/actions'
 import { useLocalStorage } from '../../Components/useLocalStorage/useLocalStorage'
 import {useAuth0} from "@auth0/auth0-react"
 
@@ -48,14 +48,10 @@ const Cart = () => {
     }
   }
 
-
   console.log("order", order)
 
   console.log("userCart", userCarts)
   console.log("storeValue", storedValue)
-
-
-
 
   useEffect(() => {
     !cart.length && (document.getElementById('form1').textContent = "")
@@ -81,15 +77,19 @@ const Cart = () => {
         script.setAttributeNode(data_button_label)
         document.getElementById('form1').appendChild(script)
   
-        dispatch(getCartByPk(order));
+       //dispatch(getCartByPk(order));
       })()
-  }, [cart.length, isAuthenticated, order])
+  }, [cart.length,isAuthenticated, order])
 
- useEffect(()=>{
-   if(cartByPk.state === "completed"){
-      setStoredValue([]);
-   }
- },[cartByPk])
+
+
+  // useEffect(()=>{
+  //     console.log(cartByPk)
+  //   if(cartByPk.state === "completed"){
+  //      setStoredValue([]);
+  //     //document.getElementById('form1').textContent = ""
+  //   }
+  // },[cartByPk])
 
    console.log("cartByPk",cartByPk)
 
@@ -116,7 +116,7 @@ const Cart = () => {
             <TagLabel>$ {priceTotal}</TagLabel>
           </Tag>
         </Stack>
-        {isAuthenticated
+        {isAuthenticated 
           ? <>
               {loading ? <Spinner /> : ""}
             </>

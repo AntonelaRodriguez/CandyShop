@@ -23,6 +23,7 @@ import ReviewCard from './Pages/Reviews/ReviewCard'
 // import Reviews from './Pages/Reviews/Reviews'
 import Create from './Pages/Admin/Create/Create'
 import { FaGlassMartiniAlt } from 'react-icons/fa'
+import { useLocalStorage } from '../src/Components/useLocalStorage/useLocalStorage'
 
 
 function App() {
@@ -30,6 +31,9 @@ function App() {
   const dispatch = useDispatch()
   const { isAuthenticated, user } = useAuth0()
   const userCarts = useSelector(state => state.userCart);
+  const [storedValue, setStoredValue] = useLocalStorage('cart', []);
+
+
 
   let infoUser = {}
   useEffect(() => {
@@ -50,7 +54,6 @@ function App() {
     }
   }, [isAuthenticated])
 
-  console.log("userCarts", userCarts)
 if(isAuthenticated){
   if(userCarts !== null){
     if(userCarts.length === 0){
@@ -58,17 +61,30 @@ if(isAuthenticated){
             email: user.email,
             totalPrice: 0
       }))
+      dispatch(getUserCart(user.email))
     }
     if(userCarts.length > 0){
-      if(userCarts[userCarts.length - 1].state === "completed" || userCarts[userCarts.length - 1].state === "cancelled"){
+      if(userCarts[userCarts.length - 1].state === "completed" || userCarts[userCarts.length - 1].state === "cancelled" || userCarts[userCarts.length - 1].state === "delivered" || userCarts[userCarts.length - 1].state === "recived"){
         dispatch(postCart({
           email: user.email, 
           totalPrice: 0
         }))
+        console.log(storedValue)
+        dispatch(getUserCart(user.email))
+        
       }
     }
   }
 }
+
+console.log("pathname",window.location.pathname)
+  
+// if(window.location.pathname === "http://localhost:5173/?state=completed"){
+//   setStoredValue([]);
+//   console.log("entro en pathname")
+//  }
+
+console.log("userCarts", userCarts)
 
   useEffect(() => {
     if (isAuthenticated) {

@@ -56,14 +56,6 @@ const ProductsAdmin = () => {
       <Stack direction='column' w='full' align='center' justifyContent='space-between'>
         {/* busqueda */}
         <Searchname name={name} handleChange={handleChange} setName={setName} />
-        <Pagination
-          productsPerPage={productsPerPage}
-          totalProducts={products.length}
-          currentPage={currentPage}
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-        />
         {/*  ordenamientos */}
         <Order />
 

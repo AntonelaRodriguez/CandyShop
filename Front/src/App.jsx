@@ -11,7 +11,7 @@ import SignIn from './Pages/SignIn/SignIn.jsx'
 import EditProduct from './Pages/Edit/EditProduct.jsx'
 import { Container } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
-import { getAllProducts, getUser, postUser, getUserCart, postCart } from './redux/actions/actions'
+import { getAllProducts, getUser, postUser, getUserCart, postCart, getAllCarts } from './redux/actions/actions'
 import Admin from './Pages/Admin/Admin'
 import ProductsAdmin from './Pages/Admin/ProductsAdmin'
 import UsersAdmin from './Pages/Admin/UsersAdmin'
@@ -94,6 +94,7 @@ console.log("userCarts", userCarts)
 
   useEffect(() => {
     dispatch(getAllProducts())
+    dispatch(getAllCarts())
   }, [dispatch])
 
   // const { toggleColorMode, colorMode } = useColorMode(); //para el dark y light theme

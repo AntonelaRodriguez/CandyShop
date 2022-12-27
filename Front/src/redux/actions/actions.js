@@ -25,6 +25,7 @@ export const GET_REVIEWS = "GET_REVIEWS"
 export const POST_REVIEW = "POST_REVIEW"
 export const CLEAN_REVIEWS = "CLEAN_REVIEWS"
 export const UPDATE_CART = "UPDATE_CART"
+export const GET_ALL_CARTS = "GET_ALL_CARTS"
 
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
@@ -174,6 +175,13 @@ export const updateCart = (value) =>{
   return async function(dispatch){
     const result = await axios.put(`${url}/cart`,value);
     return dispatch({tye:UPDATE_CART})
+  }
+}
+
+export const getAllCarts = () => {
+  return async function(dispatch){
+    const carts = await axios(`${url}/cart`);
+    return dispatch({type: GET_ALL_CARTS, payload: carts.data});
   }
 }
 

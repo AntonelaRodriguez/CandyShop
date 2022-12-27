@@ -23,7 +23,8 @@ import {
   GET_REVIEWS,
   POST_REVIEW,
   CLEAN_REVIEWS,
-  UPDATE_CART
+  UPDATE_CART,
+  GET_ALL_CARTS
 } from '../actions/actions'
 
 const initialState = {
@@ -58,7 +59,8 @@ const initialState = {
   userCart: null,
   cartByPk: [],
   reviews: [],
-  ratings: []
+  ratings: [],
+  allCarts: []
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -171,7 +173,12 @@ const reducer = (state = initialState, { type, payload }) => {
     case UPDATE_CART:
       return{
         ...state
-      }  
+      }
+    case GET_ALL_CARTS:
+      return{
+        ...state,
+        allCarts: payload
+      }
     case POST_USER:
       return {
         ...state

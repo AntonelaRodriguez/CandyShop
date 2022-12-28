@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
 import stars from '../../assets/starsProductDetail/stars.svg'
-import { getProductDetails, deleteProduct, getAllProducts, getUser } from '../../redux/actions/actions'
+import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCart, editProductCart } from '../../redux/actions/actions'
 import {useAuth0} from "@auth0/auth0-react"
 import ReviewForm from '../Reviews/ReviewForm'
 import ReviewCard from '../Reviews/ReviewCard'
@@ -44,6 +44,26 @@ const ProductDetail = () => {
  
  const { id } = useParams()
   
+
+
+ const products = useSelector((state) => state.products)
+ const cart = useSelector((state) => state.cart.slice());
+ const [count, setCount] = useState(1)
+ const handleAddCart = (id) => {
+   let prod = products.find((p) => p.id === id);
+   if(prod) prod.quantity = count;
+   let indexOfCart = -1;
+   for (let i = 0; i < cart.length; i++) {
+     if(cart[i].id === id) {
+       indexOfCart = i;
+       break;
+     }
+   };
+   if(indexOfCart === -1) return dispatch(addProductCart(prod));
+   cart[indexOfCart] = prod;
+   dispatch(editProductCart(cart))
+ }
+
  useEffect(() => {
    dispatch(getProductDetails(id))
    if(isAuthenticated){
@@ -58,23 +78,12 @@ const ProductDetail = () => {
   const ratingReduce = ratings.reduce(sum, 0)
   const totalAvg = ratingReduce / ratings.length;
  
-  const increment = () => {
-    cantidad < product.stock ? setCantidad(cantidad + 1) : cantidad
-  }
-
-  const decrement = () => {
-    cantidad > 0 ? setCantidad(cantidad - 1) : cantidad
-  }
-
   const handlerDelete = (e) => {
     e.preventDefault()
     dispatch(deleteProduct(id))
     dispatch(getAllProducts())
     navigate('/products')
   }
-
-
-  
 
   return (
   <>
@@ -170,24 +179,12 @@ const ProductDetail = () => {
 
           <HStack spacing={10} align='center' direction='row' justify='center' width='full'>
             <HStack align='center' justify='center'>
-              <Button colorScheme='primary' variant='outline' onClick={decrement}>
-                -
-              </Button>
-              <Input
-                maxW='50px'
-                textAlign='center'
-                type='number'
-                name='cantidad'
-                value={cantidad}
-                id=''
-              />
-              <Button colorScheme='primary' variant='outline' onClick={increment}>
-                +
-              </Button>
+            <Button variant='solid' bg='primary.100'> Buy now </Button>
+              <Button onClick={()=> setCount(count - 1)} disabled={count <= 1}>-</Button>
+              <Text fontWeight="600">{count}</Text>
+              <Button onClick={() => setCount(count + 1)} disabled={count >= product.stock}>+</Button>
+              <Button onClick={() => handleAddCart(id)} variant='ghost' bg='primary.300'> Add to cart </Button>
             </HStack>
-            <Button colorScheme='primary' variant='solid' size='lg'>
-              Add to cart
-            </Button>
           </HStack>
         </Flex>
       </Stack>

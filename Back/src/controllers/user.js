@@ -1,4 +1,4 @@
-const { User, UserDetail } = require("../db.js");
+const { User, UserDetail, Cart } = require("../db.js");
 
 
 
@@ -14,7 +14,9 @@ const postUser = async (email, admin) =>{
         admin: admin
       }
     });
-
+    if(created) {
+      await Cart.create({ UserEmail: email, totalPrice: 0 })
+    }
     return result;
 
 }

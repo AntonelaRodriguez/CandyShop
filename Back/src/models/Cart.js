@@ -4,8 +4,8 @@ module.exports = (sequelize) => {
     "Cart",
     {
       orderN:{
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         allowNull: false,
         primaryKey: true,         
       },
@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
       },
       state: {
         type: DataTypes.ENUM,
-        values: ['created', 'processing', 'cancelled', 'completed' ],
+        values: ['created', 'processing', 'cancelled', 'completed', 'delivered','recived'],
         defaultValue: 'created',
         allowNull: false
       },

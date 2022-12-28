@@ -1,7 +1,8 @@
 const server = require('express').Router()
-const { Cart, User } = require('../db.js')
+const { Cart, User, Product, Detail } = require('../db.js')
 const { REACT_APP_BACK_URL, REACT_APP_FRONT_URL } = process.env
 const {postDetailCart} = require("../controllers/detail")
+const {searchById, updateProduct} = require("../controllers/product")
 
 const mercadopago = require('mercadopago')
 mercadopago.configure({ access_token: process.env.ACCESS_TOKEN })
@@ -63,7 +64,7 @@ server.get('/pagos', async (req, res, next) => {
     
    
 
-    let carrito = factura.cart.map((el)=>{
+    let carrito = factura.cart?.map((el)=>{
       return {
         quantity: Number(el.quantity),
         price: Number(el.unit_price)*Number(el.quantity),
@@ -71,36 +72,58 @@ server.get('/pagos', async (req, res, next) => {
         ProductId: el.id        
       }
     })
-
+    
+    
 
     console.log("cart", carrito)
 
     if (req.query.status === 'approved'){
       updateState = 'completed';
-      postDetailCart(carrito)
+      // postDetailCart(carrito)
+      
+      for(let i = 0; i < carrito.length; i++){
+        // let product = searchById(carrito[i].ProductId) 
+         
+         let product = await Product.findByPk(Number(carrito[i].ProductId));
+         
+         product.stock = product.stock - carrito[i].quantity;
+
+         if(product.stock === 0){
+          product.availability = false;
+         }
+ 
+         await product.save();
+         await Detail.create({
+          quantity: carrito[i].quantity, 
+          price: Number(carrito[i].price) * Number(carrito[i].quantity),
+          CartOrderN: cartId,
+          ProductId: carrito[i].ProductId
+        })
+
+       }
+     
+
     } 
-    if (req.query.status === 'rejected') updateState= 'processing'
+
+    if (req.query.status === 'rejected') updateState = 'processing'
     if (req.query.status === 'pending')  updateState = 'processing' //este default
 
     console.log(req.query.status)
      
     await cart.update({
-      state: updateState
-    }, 
+      state: updateState,
+      totalPrice: req.query.status === "approved" ? factura.totalUltimaCompra : 0
+    },  
    {where: {
     orderN: cartId
    }})
-
-    
-
-   
 
 
    console.log(factura);
     //relacion del cart y el user
     //await user.addCart(cart) 
 
-    return res.redirect('http://localhost:5173/')
+    return res.redirect(`http://localhost:5173/`)
   } catch (error) {
     next(error)
   }
@@ -117,7 +140,7 @@ const comprobante = async (id)=>{
     let status = results[results.length-1].status
     return ({totalUltimaCompra, cart, status})
   } catch (error) {
-    return({msg: "error"})
+    return({ totalUltimaCompra: 0, cart: [], status: "rejected" })
   }
 }
 

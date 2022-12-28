@@ -1,5 +1,5 @@
 const server = require('express').Router()
-const { Cart, User, Product } = require('../db.js')
+const { Cart, User, Product, Detail } = require('../db.js')
 const { REACT_APP_BACK_URL, REACT_APP_FRONT_URL } = process.env
 const {postDetailCart} = require("../controllers/detail")
 const {searchById, updateProduct} = require("../controllers/product")
@@ -64,7 +64,7 @@ server.get('/pagos', async (req, res, next) => {
     
    
 
-    let carrito = factura.cart.map((el)=>{
+    let carrito = factura.cart?.map((el)=>{
       return {
         quantity: Number(el.quantity),
         price: Number(el.unit_price)*Number(el.quantity),
@@ -79,12 +79,12 @@ server.get('/pagos', async (req, res, next) => {
 
     if (req.query.status === 'approved'){
       updateState = 'completed';
-      postDetailCart(carrito)
+      // postDetailCart(carrito)
       
       for(let i = 0; i < carrito.length; i++){
         // let product = searchById(carrito[i].ProductId) 
          
-         let product = await Product.findByPk(carrito[i].ProductId);
+         let product = await Product.findByPk(Number(carrito[i].ProductId));
          
          product.stock = product.stock - carrito[i].quantity;
 
@@ -93,6 +93,12 @@ server.get('/pagos', async (req, res, next) => {
          }
  
          await product.save();
+         await Detail.create({
+          quantity: carrito[i].quantity, 
+          price: Number(carrito[i].price) * Number(carrito[i].quantity),
+          CartOrderN: cartId,
+          ProductId: carrito[i].ProductId
+        })
 
        }
      
@@ -134,7 +140,7 @@ const comprobante = async (id)=>{
     let status = results[results.length-1].status
     return ({totalUltimaCompra, cart, status})
   } catch (error) {
-    return({msg: "error"})
+    return({ totalUltimaCompra: 0, cart: [], status: "rejected" })
   }
 }
 

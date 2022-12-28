@@ -9,13 +9,12 @@ import {useAuth0} from "@auth0/auth0-react"
 
 const Cart = () => {
   const dispatch = useDispatch()
-  const userCarts = useSelector(state => state.userCart);
+  const userCart = useSelector(state => state.userCart);
   const cartByPk = useSelector(state => state.cartByPk);
   const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
   const cart = useSelector((state) => state.cart);
   const [loading, setloading] = useState(true);
   const [storedValue, setStoredValue] = useLocalStorage('cart', []);
-  
 
   const priceTotal = storedValue?.reduce((acc, curr) => {
     return Number(acc) + Number(curr.price)*Number(curr.quantity)
@@ -32,30 +31,16 @@ const Cart = () => {
     if(cart.length === 0){
       return setStoredValue([])
     }
+  }, [cart])
 
-    if(isAuthenticated){
-      dispatch(getUserCart(user.email))
-    }
-  }, [cart,isAuthenticated])
-  
-
-  let order = "";
-
-  if(isAuthenticated){
-    if(userCarts !== null){
-      console.log("cart",userCarts[userCarts.length - 1])
-      order = userCarts[userCarts.length - 1].orderN;
-    }
-  }
-
-  console.log("order", order)
-
-  console.log("userCart", userCarts)
-  console.log("storeValue", storedValue)
+  let order = ""
+  useEffect(() => {
+    order = userCart[userCart?.length - 1]?.orderN
+  },[userCart])
 
   useEffect(() => {
     !cart.length && (document.getElementById('form1').textContent = "")
-    cart.length && isAuthenticated &&
+    cart.length && isAuthenticated && order && 
       (async () => {
         setloading(true);
         document.getElementById('form1').textContent = ""
@@ -81,17 +66,6 @@ const Cart = () => {
       })()
   }, [cart.length,isAuthenticated, order])
 
-
-
-  // useEffect(()=>{
-  //     console.log(cartByPk)
-  //   if(cartByPk.state === "completed"){
-  //      setStoredValue([]);
-  //     //document.getElementById('form1').textContent = ""
-  //   }
-  // },[cartByPk])
-
-   console.log("cartByPk",cartByPk)
 
   return (
     <Stack width='full' spacing={5} h='full' justifyContent='space-between' flexDirection='row'>

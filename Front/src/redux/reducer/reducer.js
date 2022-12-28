@@ -24,7 +24,8 @@ import {
   POST_REVIEW,
   CLEAN_REVIEWS,
   UPDATE_CART,
-  GET_ALL_CARTS
+  GET_ALL_CARTS,
+  DELETE_ALL_CARTS
 } from '../actions/actions'
 
 const initialState = {
@@ -56,7 +57,7 @@ const initialState = {
   filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
   cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [],
   user: {},
-  userCart: null,
+  userCart: [],
   cartByPk: [],
   reviews: [],
   ratings: [],
@@ -156,6 +157,11 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state,
         cart: filteredCart
       }
+    case DELETE_ALL_CARTS: 
+    return {
+      ...state,
+      cart: []
+    }
     case GET_USER_CART:
       return {
         ...state,
@@ -181,7 +187,8 @@ const reducer = (state = initialState, { type, payload }) => {
       }
     case POST_USER:
       return {
-        ...state
+        ...state,
+        user: payload
       }
     case POST_USER_DETAIL:
       return {

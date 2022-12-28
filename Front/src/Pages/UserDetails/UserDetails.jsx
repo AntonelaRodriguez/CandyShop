@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, 
   // useEffect
  } from 'react'
-import { useDispatch, 
+import { useDispatch, useSelector, 
   // useSelector 
 } from 'react-redux'
 // import axios from 'axios'
@@ -13,9 +13,10 @@ import {
   Input,
   Button,
    } from "@chakra-ui/react";
-import { postUserDetail } from '../../redux/actions/actions';
+import { getUser, postUserDetail } from '../../redux/actions/actions';
 import { useNavigate } from 'react-router-dom';
 import {useAuth0} from "@auth0/auth0-react"
+import { useEffect } from 'react';
 
 // import userRouter from '../../../../Back/src/routes/userRouter';
 
@@ -26,9 +27,15 @@ const UserDetails = (props) => {
   
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    dispatch(getUser(user.email))
+  },[dispatch])
+
+  const currentUser = useSelector(state => state.user)
+
   
   const [input, setInput] = useState({
-    email: "",
     name: "",
     lastName: "",
     companyName: "",
@@ -36,8 +43,15 @@ const UserDetails = (props) => {
     address: "",
     image: ""
   });
-  console.log(user)
+  // console.log(user, 'user ')
   
+  function handleChange(e) {
+    
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
+  }
   const newDetail = {
     email: isAuthenticated ? user.email : "",
     name: input.name,
@@ -48,14 +62,7 @@ const UserDetails = (props) => {
     image: input.image
   };
 
-  function handleChange(e) {
-    
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value,
-    });
-  }
-  console.log(newDetail);
+  // console.log(newDetail, 'NewDetail');
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -85,6 +92,7 @@ const UserDetails = (props) => {
             value={input.name}
             name="name"
             onChange={handleChange}
+            placeholder={currentUser.UserDetail ? currentUser.UserDetail.name : '...'} 
             />
 
             <FormLabel>Last Name</FormLabel>
@@ -93,6 +101,7 @@ const UserDetails = (props) => {
             value={input.lastName}
             name="lastName"
             onChange={handleChange}
+            placeholder={currentUser.UserDetail ? currentUser.UserDetail.lastName : '...'} 
             />
 
             <FormLabel>Company</FormLabel>
@@ -101,6 +110,7 @@ const UserDetails = (props) => {
             value={input.companyName}
             name="companyName"
             onChange={handleChange}
+            placeholder={currentUser.UserDetail ? currentUser.UserDetail.companyName : '...'} 
             />
 
             <FormLabel>Phone Number</FormLabel>
@@ -109,6 +119,7 @@ const UserDetails = (props) => {
             value={input.phoneNumber}
             name="phoneNumber"
             onChange={handleChange}
+            placeholder={currentUser.UserDetail ? currentUser.UserDetail.phoneNumber : '...'} 
             />
 
             <FormLabel>Address</FormLabel>
@@ -117,6 +128,7 @@ const UserDetails = (props) => {
             value={input.address}
             name="address"
             onChange={handleChange}
+            placeholder={currentUser.UserDetail ? currentUser.UserDetail.address : '...'} 
             />
 
             <FormLabel>Image</FormLabel>
@@ -125,6 +137,7 @@ const UserDetails = (props) => {
             value={input.image}
             name="image"
             onChange={handleChange}
+            placeholder={currentUser.UserDetail ? currentUser.UserDetail.image : '...'} 
             />
           </FormControl>
           <Button type="submit" colorScheme="primary">

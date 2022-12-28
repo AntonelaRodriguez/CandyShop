@@ -15,6 +15,7 @@ export const ADD_CART = 'ADD_CART'
 export const PAYMENT_TO_CART = 'PAYMENT_TO_CART'
 export const POST_USER = "POST_USER"
 export const POST_USER_DETAIL = "POST_USER_DETAIL"
+export const UPDATE_USER_DETAIL = "UPDATE_USER_DETAIL"
 export const GET_USER = "GET_USER"
 export const DELETE_FROM_CART = "DELETE_FROM_CART"
 export const GET_USER_CART = "GET_USER_CART"
@@ -203,12 +204,20 @@ export const postUser = (data) =>{
 }
 
 export const postUserDetail = (data) =>{
+  console.log(data, 'action')
   return async function(dispatch){
     const result = await axios.post(`${url}/users/userDetail`, data);
     return dispatch({type: POST_USER_DETAIL})
   }
 }
-export const getUser = (email)=>{
+
+export const updateUserDetail = (data) => {
+  return async function(dispatch){
+    await axios.put(`${url}/users/userDetail`, data);
+    return dispatch({type: UPDATE_USER_DETAIL})
+  }
+}
+export const getUser = (email)=>{   //trae el user y el UserDetail
   return async function(dispatch){
     const user = await axios.get(`${url}/users/${email}`);
     return dispatch({type: GET_USER, payload: user.data})

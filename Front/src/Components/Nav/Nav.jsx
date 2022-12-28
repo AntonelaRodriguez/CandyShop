@@ -9,7 +9,7 @@ import {
   Image,
   Avatar,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import img from "../../assets/candy_logo.svg";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { HiOutlineUserCircle } from "react-icons/hi";
@@ -38,6 +38,7 @@ import {
 //auth0
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
+import { useEffect } from "react";
 
 const Nav = (props) => {
   const [isOpen, setIsOpen] = React.useState(false);

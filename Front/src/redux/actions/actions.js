@@ -26,6 +26,7 @@ export const POST_REVIEW = "POST_REVIEW"
 export const CLEAN_REVIEWS = "CLEAN_REVIEWS"
 export const UPDATE_CART = "UPDATE_CART"
 export const GET_ALL_CARTS = "GET_ALL_CARTS"
+export const DELETE_ALL_CARTS = "DELETE_ALL_CARTS"
 
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
@@ -185,6 +186,12 @@ export const getAllCarts = () => {
   }
 }
 
+export const deleteallCarts = () =>{
+  return async function(dispatch){
+    localStorage.setItem('cart', []);
+    return dispatch({type: DELETE_ALL_CARTS})
+  }
+}
 
 //Users
 

@@ -70,11 +70,12 @@ const Filters = () => {
         <option value='bubble gum'>bubble gum</option>
         <option value='caramel cookie'>caramel cookie</option>
         <option value='candy'>candy</option>
-        <option value='cerealbars'>cerealbars</option>
+        <option value='cereal bars'>cereal bars</option>
         <option value='chocolate'>chocolate</option>
         <option value='gummies'>gummies</option>
         <option value='lollipop'>lollipop</option>
-        <option value='tablets'>tablets</option>
+        <option value='bars'>bars</option>
+        <option value='wafers'>wafers</option>
         <option value='unknown'>unknown</option>
       </Select>
     </Flex>

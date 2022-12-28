@@ -197,8 +197,8 @@ export const deleteallCarts = () =>{
 
 export const postUser = (data) =>{
   return async function(dispatch){
-    const result = await axios.post(`${url}/users`, data);
-    return dispatch({type: POST_USER})
+    const { data: usuario } = await axios.post(`${url}/users`, data);
+    return dispatch({type: POST_USER, payload: usuario})
   }
 }
 

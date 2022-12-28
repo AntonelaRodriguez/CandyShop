@@ -187,7 +187,8 @@ const reducer = (state = initialState, { type, payload }) => {
       }
     case POST_USER:
       return {
-        ...state
+        ...state,
+        user: payload
       }
     case POST_USER_DETAIL:
       return {

@@ -68,14 +68,6 @@ const ProductsAdmin = () => {
       >
         {/* busqueda */}
         <Searchname name={name} handleChange={handleChange} setName={setName} />
-        <Pagination
-          productsPerPage={productsPerPage}
-          totalProducts={products.length}
-          currentPage={currentPage}
-          paginate={paginate}
-          prevPage={prevPage}
-          nextPage={nextPage}
-        />
         {/*  ordenamientos */}
         <Order />
 

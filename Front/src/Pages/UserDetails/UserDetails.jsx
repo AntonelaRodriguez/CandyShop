@@ -13,10 +13,11 @@ import {
   Input,
   Button,
    } from "@chakra-ui/react";
-import { getUser, postUserDetail } from '../../redux/actions/actions';
+import { getUser, postUserDetail, updateUserDetail } from '../../redux/actions/actions';
 import { useNavigate } from 'react-router-dom';
 import {useAuth0} from "@auth0/auth0-react"
 import { useEffect } from 'react';
+import { useLocalStorage } from '../../Components/useLocalStorage/useLocalStorage';
 
 // import userRouter from '../../../../Back/src/routes/userRouter';
 
@@ -24,16 +25,15 @@ import { useEffect } from 'react';
 const UserDetails = (props) => {
 
   const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
-  
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  // const [storedValue, setStoredValue] = useLocalStorage('email', '');
+  // setStoredValue(user.email)
+  
   useEffect(() => {
-    dispatch(getUser(user.email))
-  },[dispatch])
-
+      dispatch(getUser(user.email))
+    },[dispatch])
   const currentUser = useSelector(state => state.user)
-
   
   const [input, setInput] = useState({
     name: "",
@@ -66,17 +66,32 @@ const UserDetails = (props) => {
 
   function handleSubmit(e) {
     e.preventDefault()
-    dispatch(postUserDetail(newDetail))
+    if(!currentUser){
+      dispatch(postUserDetail(newDetail))
+      dispatch(getUser(user.email))
+      setInput({
+      name: "",
+      lastName: "",
+      companyName: "",
+      phoneNumber: "",
+      address: "",
+      image: "",
+      })
+      alert("User details updated successfully")
+      navigate('/userDetails')
+    }
+    dispatch(updateUserDetail(newDetail))
+    dispatch(getUser(user.email))
     setInput({
-    name: "",
-    lastName: "",
-    companyName: "",
-    phoneNumber: "",
-    address: "",
-    image: "",
-    })
-    alert("User details updated successfully")
-    navigate('/userDetails')
+      name: "",
+      lastName: "",
+      companyName: "",
+      phoneNumber: "",
+      address: "",
+      image: "",
+      })
+      alert("User details updated successfully")
+      navigate('/userDetails')
   }
 
 

@@ -1,21 +1,21 @@
 const { Router } = require('express')
 const productRouter = Router()
 const { getAllProducts, searchCandy, searchById, updateProduct, deleteProduct, createProduct, filteringProducts } = require('../controllers/product')
-const { Product, Category } = require('../db.js')
-const dbProducts = require("../../dbProducts.json");
-const dbCategories = require("../../dbCategories.json");
+// const { Product, Category } = require('../db.js')
+// const dbProducts = require("../../dbProducts.json");
+// const dbCategories = require("../../dbCategories.json");
 
 productRouter.get("/", async (req, res, next) => {  //busca todos los products
 	try {
 	  const allProducts = await getAllProducts();
-		if(!allProducts.length) {
-      await Category.bulkCreate(dbCategories);
-      for(let i=0; i<dbProducts.length; i++) {
-        let product = await Product.create(dbProducts[i]);
-        let categoryProduct = await Category.findAll({ where: { name: dbProducts[i].category } });
-        await product.addCategories(categoryProduct);
-      }
-    }
+		// if(!allProducts.length) {
+    //   await Category.bulkCreate(dbCategories);
+    //   for(let i=0; i<dbProducts.length; i++) {
+    //     let product = await Product.create(dbProducts[i]);
+    //     let categoryProduct = await Category.findAll({ where: { name: dbProducts[i].category } });
+    //     await product.addCategories(categoryProduct);
+    //   }
+    // }
 	  res.status(201).json(allProducts);
 	} catch (error) {
 		next(error);

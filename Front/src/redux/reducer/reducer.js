@@ -1,4 +1,3 @@
-import { filter } from '@chakra-ui/react'
 import {
   ALL_PRODUCTS,
   SEARCH_CANDY,
@@ -25,197 +24,207 @@ import {
   CLEAN_REVIEWS,
   UPDATE_CART,
   GET_ALL_CARTS,
-  DELETE_ALL_CARTS
-} from '../actions/actions'
+  DELETE_ALL_CARTS,
+  GET_ALL_USERS,
+} from "../actions/actions";
 
 const initialState = {
   products: [],
   productDetail: [],
   categories: [],
   brands: [
-    'arcor',
-    'bagley',
-    'milka',
-    'mogul',
-    'aguila',
-    'bon o bon',
-    'cofler',
-    'terrabusi',
-    'topline',
-    'tofi',
-    'godet',
-    'nestle',
-    'felfort',
-    'billiken',
-    'georgalos',
-    'bonafide',
-    'jorgito',
-    'trident',
-    'ferrero',
-    'unknown'
+    "arcor",
+    "bagley",
+    "milka",
+    "mogul",
+    "aguila",
+    "bon o bon",
+    "cofler",
+    "terrabusi",
+    "topline",
+    "tofi",
+    "godet",
+    "nestle",
+    "felfort",
+    "billiken",
+    "georgalos",
+    "bonafide",
+    "jorgito",
+    "trident",
+    "ferrero",
+    "unknown",
   ],
-  filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
-  cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [],
+  filters: { tacc: "TACC", brand: "BRAND", category: "CATEGORY" },
+  cart: localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart"))
+    : [],
   user: {},
+  users: [],
   userCart: [],
   cartByPk: [],
   reviews: [],
   ratings: [],
-  allCarts: []
-}
+  allCarts: [],
+};
 
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case ALL_PRODUCTS: {
       return {
         ...state,
-        products: payload
-      }
+        products: payload,
+      };
     }
     case ALL_CATEGORIES: {
       return {
         ...state,
-        categories: payload
-      }
+        categories: payload,
+      };
     }
     case SEARCH_CANDY: {
       return {
         ...state,
-        products: payload
-      }
+        products: payload,
+      };
     }
     case DETAILS_PRODUCT:
       return {
         ...state,
-        productDetail: payload
-      }
+        productDetail: payload,
+      };
     case SORT:
-      let productos = [...state.products]
-      if (payload === 'A-Z') {
+      let productos = [...state.products];
+      if (payload === "A-Z") {
         return {
           ...state,
-          products: productos.sort((a, b) => (a.name > b.name ? 1 : -1))
-        }
-      } else if (payload === 'Z-A') {
+          products: productos.sort((a, b) => (a.name > b.name ? 1 : -1)),
+        };
+      } else if (payload === "Z-A") {
         return {
           ...state,
-          products: productos.sort((a, b) => (a.name > b.name ? -1 : 1))
-        }
-      } else if (payload === 'Price: Highest') {
+          products: productos.sort((a, b) => (a.name > b.name ? -1 : 1)),
+        };
+      } else if (payload === "Price: Highest") {
         return {
           ...state,
-          products: productos.sort((a, b) => b.price - a.price)
-        }
-      } else if (payload === 'Price: Lowest') {
+          products: productos.sort((a, b) => b.price - a.price),
+        };
+      } else if (payload === "Price: Lowest") {
         return {
           ...state,
-          products: productos.sort((a, b) => a.price - b.price)
-        }
+          products: productos.sort((a, b) => a.price - b.price),
+        };
       } else {
         return {
           ...state,
-          products: productos
-        }
+          products: productos,
+        };
       }
     case POST_PRODUCT:
       return {
-        ...state
-      }
+        ...state,
+      };
     case EDIT_PRODUCT:
-      return { ...state }
+      return { ...state };
 
     case DELETED_PRODUCT:
-      return { ...state }
+      return { ...state };
 
     case SET_FILTERS:
       return {
         ...state,
-        filters: payload
-      }
+        filters: payload,
+      };
     case APPLY_FILTERS:
       return {
         ...state,
-        products: payload
-      }
+        products: payload,
+      };
     case ADD_CART:
       return {
         ...state,
-        cart: [...state.cart, payload]
-      }
+        cart: [...state.cart, payload],
+      };
     case EDIT_CART:
       return {
         ...state,
-        cart: payload
-      }
+        cart: payload,
+      };
     case PAYMENT_TO_CART:
       return {
-        ...state
-      }
+        ...state,
+      };
     case DELETE_FROM_CART:
-      const filteredCart = state.cart.filter((i) => i.id !== payload)
+      const filteredCart = state.cart.filter((i) => i.id !== payload);
       return {
         ...state,
-        cart: filteredCart
-      }
-    case DELETE_ALL_CARTS: 
-    return {
-      ...state,
-      cart: []
-    }
+        cart: filteredCart,
+      };
+    case DELETE_ALL_CARTS:
+      return {
+        ...state,
+        cart: [],
+      };
     case GET_USER_CART:
       return {
         ...state,
-        userCart: payload
-      }
+        userCart: payload,
+      };
     case GET_CART_BY_PK:
       return {
         ...state,
-        cartByPk: payload
-      }
+        cartByPk: payload,
+      };
     case POST_CART:
       return {
-        ...state
-      }
-    case UPDATE_CART:
-      return{
-        ...state
-      }
-    case GET_ALL_CARTS:
-      return{
         ...state,
-        allCarts: payload
-      }
+      };
+    case UPDATE_CART:
+      return {
+        ...state,
+      };
+    case GET_ALL_CARTS:
+      return {
+        ...state,
+        allCarts: payload,
+      };
     case POST_USER:
       return {
         ...state,
-        user: payload
-      }
+        user: payload,
+      };
     case POST_USER_DETAIL:
       return {
-        ...state
-      }
+        ...state,
+      };
     case GET_USER:
       return {
         ...state,
-        user: payload
-      }
+        user: payload,
+      };
     case GET_REVIEWS:
       return {
         ...state,
-        reviews: payload
-      }
+        reviews: payload,
+      };
     case POST_REVIEW:
       return {
-        ...state
-      }
+        ...state,
+      };
     case CLEAN_REVIEWS:
       return {
         ...state,
-        reviews: []
-      }
+        reviews: [],
+      };
+    case GET_ALL_USERS: {
+      return {
+        ...state,
+        users: payload,
+      };
+    }
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default reducer
+export default reducer;

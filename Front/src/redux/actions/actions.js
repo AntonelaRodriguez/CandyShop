@@ -1,5 +1,4 @@
 import axios from "axios";
-
 export const ALL_PRODUCTS = "ALL_PRODUCTS";
 export const ALL_CATEGORIES = "ALL_CATEGORIES";
 export const SEARCH_CANDY = "SEARCH_CANDY";
@@ -204,12 +203,21 @@ export const postUser = (data) => {
   };
 };
 
-export const postUserDetail = (data) => {
-  return async function (dispatch) {
+export const postUserDetail = (data) =>{
+  console.log(data, 'action')
+  return async function(dispatch){
     const result = await axios.post(`${url}/users/userDetail`, data);
-    return dispatch({ type: POST_USER_DETAIL });
-  };
-};
+    return dispatch({type: POST_USER_DETAIL})
+  }
+}
+
+export const updateUserDetail = (data) => {
+  return async function(dispatch){
+    await axios.put(`${url}/users/userDetail`, data);
+    return dispatch({type: UPDATE_USER_DETAIL})
+  }
+}
+
 export const getUser = (email) => {
   return async function (dispatch) {
     const user = await axios.get(`${url}/users/${email}`);

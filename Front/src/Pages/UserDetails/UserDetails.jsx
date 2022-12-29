@@ -68,7 +68,7 @@ const UserDetails = (props) => {
 
   function handleSubmit(e) {
     e.preventDefault()
-    if(!currentUser){
+    if(!currentUser.UserDetail){
       dispatch(postUserDetail(newDetail))
       setInput({
         name: "",

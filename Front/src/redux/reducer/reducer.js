@@ -1,4 +1,3 @@
-import { filter } from "@chakra-ui/react";
 import {
   ALL_PRODUCTS,
   SEARCH_CANDY,

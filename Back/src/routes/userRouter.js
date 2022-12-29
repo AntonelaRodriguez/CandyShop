@@ -68,9 +68,8 @@ userRouter.post("/userDetail", async (req, res, next) => {
   }
 });
 
-userRouter.put("/userDetail/:email", async (req, res, next) => {
-  const { email } = req.params;
-  const {name,lastName, phoneNumber, address, image, companyName} = req.body;
+userRouter.put("/userDetail", async (req, res, next) => {
+  const {email,name,lastName, phoneNumber, address, image, companyName} = req.body;
   try {
     const user = await updateUserDetail(email,name, lastName, phoneNumber, address, image,companyName);
     return res.status(200).send("Done");

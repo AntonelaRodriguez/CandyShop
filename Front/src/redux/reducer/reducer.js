@@ -1,4 +1,3 @@
-import { filter } from '@chakra-ui/react'
 import {
   ALL_PRODUCTS,
   SEARCH_CANDY,
@@ -23,7 +22,11 @@ import {
   GET_REVIEWS,
   POST_REVIEW,
   CLEAN_REVIEWS,
-  UPDATE_CART
+  UPDATE_CART,
+  GET_ALL_CARTS,
+  DELETE_ALL_CARTS,
+  GET_ALL_USERS,
+  UPDATE_USER_DETAIL
 } from '../actions/actions'
 
 const initialState = {
@@ -55,10 +58,12 @@ const initialState = {
   filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
   cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [],
   user: {},
-  userCart: null,
+  users: [],
+  userCart: [],
   cartByPk: [],
   reviews: [],
-  ratings: []
+  ratings: [],
+  allCarts: []
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -154,6 +159,11 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state,
         cart: filteredCart
       }
+    case DELETE_ALL_CARTS:
+      return {
+        ...state,
+        cart: []
+      }
     case GET_USER_CART:
       return {
         ...state,
@@ -169,12 +179,18 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state
       }
     case UPDATE_CART:
-      return{
-        ...state
-      }  
-    case POST_USER:
       return {
         ...state
+      }
+    case GET_ALL_CARTS:
+      return {
+        ...state,
+        allCarts: payload
+      }
+    case POST_USER:
+      return {
+        ...state,
+        user: payload
       }
     case POST_USER_DETAIL:
       return {
@@ -199,6 +215,17 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state,
         reviews: []
       }
+    case GET_ALL_USERS: {
+      return {
+        ...state,
+        users: payload
+      }
+    }
+    case UPDATE_USER_DETAIL: {
+      return {
+        ...state
+      }
+    }
     default:
       return state
   }

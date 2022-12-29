@@ -27,23 +27,25 @@ const UserDetails = (props) => {
   const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  // const [storedValue, setStoredValue] = useLocalStorage('email', '');
-  // setStoredValue(user.email)
-  
+  const [storedValue, setStoredValue] = useLocalStorage('userDetail', {});
+  const currentUser = useSelector(state => state.user)
+
   useEffect(() => {
       dispatch(getUser(user.email))
-    },[dispatch])
-  const currentUser = useSelector(state => state.user)
-  
+  },[dispatch])
+
+  // function setValue(){
+  //   setStoredValue(currentUser.UserDetail)
+  // }
+
   const [input, setInput] = useState({
     name: "",
     lastName: "",
     companyName: "",
     phoneNumber: null,
     address: "",
-    image: ""
   });
-  // console.log(user, 'user ')
+  console.log(currentUser, 'user ')
   
   function handleChange(e) {
     
@@ -59,7 +61,7 @@ const UserDetails = (props) => {
     companyName: input.companyName,
     phoneNumber: input.phoneNumber,
     address: input.address,
-    image: input.image
+    image: isAuthenticated ? user.picture : ""
   };
 
   // console.log(newDetail, 'NewDetail');
@@ -68,30 +70,28 @@ const UserDetails = (props) => {
     e.preventDefault()
     if(!currentUser){
       dispatch(postUserDetail(newDetail))
-      dispatch(getUser(user.email))
       setInput({
-      name: "",
-      lastName: "",
-      companyName: "",
-      phoneNumber: "",
-      address: "",
-      image: "",
+        name: "",
+        lastName: "",
+        companyName: "",
+        phoneNumber: "",
+        address: "",
       })
+      dispatch(getUser(user.email))
       alert("User details updated successfully")
-      navigate('/userDetails')
+      navigate('/products')
     }
     dispatch(updateUserDetail(newDetail))
-    dispatch(getUser(user.email))
     setInput({
       name: "",
       lastName: "",
       companyName: "",
       phoneNumber: "",
       address: "",
-      image: "",
-      })
-      alert("User details updated successfully")
-      navigate('/userDetails')
+    })
+    dispatch(getUser(user.email))
+    alert("User details updated successfully")
+      navigate('/products')
   }
 
 
@@ -144,15 +144,6 @@ const UserDetails = (props) => {
             name="address"
             onChange={handleChange}
             placeholder={currentUser.UserDetail ? currentUser.UserDetail.address : '...'} 
-            />
-
-            <FormLabel>Image</FormLabel>
-            <Input
-            type="text"
-            value={input.image}
-            name="image"
-            onChange={handleChange}
-            placeholder={currentUser.UserDetail ? currentUser.UserDetail.image : '...'} 
             />
           </FormControl>
           <Button type="submit" colorScheme="primary">

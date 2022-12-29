@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const { Product, Category } = require('../db.js')
+const loadProductsAndCategories = require("../../loadDB.js");
 
 const searchCandy = async (name) => {    //busca products por matcheo parcial
 	let product = []
@@ -47,11 +48,20 @@ const deleteProduct = async (id) => {    //elimina un producto
 };
 
 const getAllProducts = async () => {    //busca todos los products de la db
-	const allProducts = await Product.findAll({ include: [
-		{ model: Category },
-	]})
+	// const allProducts = await Product.findAll({ include: [
+	// 	{ model: Category },
+	// ]})
      
-	return allProducts.map((el)=>valuesToReturn(el.toJSON()));
+	// return allProducts.map((el)=>valuesToReturn(el.toJSON()));
+	try {
+    let allProducts = await Product.findAll({
+      include: { model: Category },
+    });
+    !allProducts.length && (allProducts = await loadProductsAndCategories());
+    return allProducts.map((el) => valuesToReturn(el.toJSON()));
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 

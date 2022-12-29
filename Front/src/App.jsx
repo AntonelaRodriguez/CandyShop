@@ -11,7 +11,7 @@ import SignIn from './Pages/SignIn/SignIn.jsx'
 import EditProduct from './Pages/Edit/EditProduct.jsx'
 import { Container } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
-import { getAllProducts, getUser, postUser, getUserCart, postCart, getAllCarts } from './redux/actions/actions'
+import { getAllProducts, getUser, postUser, getUserCart, postCart, getAllCarts, deleteallCarts } from './redux/actions/actions'
 import Admin from './Pages/Admin/Admin'
 import ProductsAdmin from './Pages/Admin/ProductsAdmin'
 import UsersAdmin from './Pages/Admin/UsersAdmin'
@@ -24,7 +24,7 @@ import ReviewCard from './Pages/Reviews/ReviewCard'
 import Create from './Pages/Admin/Create/Create'
 import { FaGlassMartiniAlt } from 'react-icons/fa'
 import { useLocalStorage } from '../src/Components/useLocalStorage/useLocalStorage'
-
+import axios from "axios"
 
 function App() {
   const usuario = useSelector((state) => state.user)
@@ -35,66 +35,109 @@ function App() {
 
 
 
-  let infoUser = {}
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (user.email === 'bongiovanniivaan@gmail.com' || user.email === "pepo@gmail.com") {
-        infoUser = {
-          email: user.email,
-          admin: true
-        }
-      } else {
-        infoUser = {
-          email: user.email,
-          admin: false
-        }
-        dispatch(getUserCart(user.email))
-      }
-      dispatch(postUser(infoUser))
-    }
-  }, [isAuthenticated])
+//   let infoUser = {}
+//   useEffect(() => {
+//     if (isAuthenticated) {
+//       if (user.email === 'bongiovanniivaan@gmail.com' || user.email === "pepo@gmail.com") {
+//         infoUser = {
+//           email: user.email,
+//           admin: true
+//         }
+//       } else {
+//         infoUser = {
+//           email: user.email,
+//           admin: false
+//         }
+//         dispatch(getUserCart(user.email))
+//       }
+//       dispatch(postUser(infoUser))
+//     }
+//   }, [isAuthenticated])
 
-if(isAuthenticated){
-  if(userCarts !== null){
-    if(userCarts.length === 0){
-      dispatch(postCart({
-            email: user.email,
-            totalPrice: 0
-      }))
-      dispatch(getUserCart(user.email))
-    }
-    if(userCarts.length > 0){
-      if(userCarts[userCarts.length - 1].state === "completed" || userCarts[userCarts.length - 1].state === "cancelled" || userCarts[userCarts.length - 1].state === "delivered" || userCarts[userCarts.length - 1].state === "recived"){
-        dispatch(postCart({
-          email: user.email, 
-          totalPrice: 0
-        }))
-        console.log(storedValue)
-        dispatch(getUserCart(user.email))
+// if(isAuthenticated){
+//   if(userCarts !== null){
+//     if(userCarts.length === 0){
+//       dispatch(postCart({
+//             email: user.email,
+//             totalPrice: 0
+//       }))
+//       dispatch(getUserCart(user.email))
+//     }
+//     if(userCarts.length > 0){
+//       if(userCarts[userCarts.length - 1].state === "completed" || userCarts[userCarts.length - 1].state === "cancelled" || userCarts[userCarts.length - 1].state === "delivered" || userCarts[userCarts.length - 1].state === "recived"){
+//         dispatch(postCart({
+//           email: user.email, 
+//           totalPrice: 0
+//         }))
+//         console.log(storedValue)
+//         dispatch(getUserCart(user.email))
         
-      }
-    }
-  }
-}
+//       }
+//     }
+//   }
+// }
 
-console.log("pathname",window.location.pathname)
+// console.log("pathname",window.location.pathname)
   
-// if(window.location.pathname === "http://localhost:5173/?state=completed"){
-//   setStoredValue([]);
-//   console.log("entro en pathname")
-//  }
+// // if(window.location.pathname === "http://localhost:5173/?state=completed"){
+// //   setStoredValue([]);
+// //   console.log("entro en pathname")
+// //  }
 
-console.log("userCarts", userCarts)
+// console.log("userCarts", userCarts)
 
+//   useEffect(() => {
+//     if (isAuthenticated) {
+//       dispatch(getUser(infoUser.email))
+//     }
+//   }, [user])
+
+//   useEffect(() => {
+//     dispatch(getAllProducts())
+//     dispatch(getAllCarts())
+//   }, [dispatch])
+
+  //Despacha la acción que resulta en la creación de un usuario en la DB (si es que no existe) y su carrito correspondiente.
   useEffect(() => {
     if (isAuthenticated) {
-      dispatch(getUser(infoUser.email))
+      let infoUser = { email: user.email, admin: (user.email === 'bongiovanniivaan@gmail.com' || user.email === "pepo@gmail.com") }
+      dispatch(postUser(infoUser)) 
     }
-  }, [user])
+  }, [isAuthenticated, dispatch])
 
+  //Despacha acciones que resultan en el creación de un nuevo carrito para el usuario y el vaciado del estado "cart".
+  //Estas acciones dependen del estado del último carrito creado para el usuario, las mismas se ejecutan
+  //si el estado de este último carrito es igual a "completed", "cancelled", "delivered" o "recived".
   useEffect(() => {
-    dispatch(getAllProducts())
-    dispatch(getAllCarts())
+    if (isAuthenticated && userCarts.length) {
+    (async () => {
+      dispatch(getUserCart(user.email));
+      let { data } = await axios(`http://localhost:3001/cart/${user.email}`)
+      let optionStates = ["completed", "cancelled", "delivered", "recived"]
+      if(optionStates.includes(data[data.length - 1].state)){
+        dispatch(postCart({ email: user.email, totalPrice: 0 }));
+        dispatch(deleteallCarts());
+      }
+    })()
+  }
+  }, [isAuthenticated, userCarts.length, dispatch]);
+
+  //Despacha la accion que resulta en el seteo del estado "userCart". Es muy importante que esta acción 
+  //se ejecute despues de la creación del usuario en DB.
+  useEffect(() => {
+    if (isAuthenticated) { 
+      setTimeout(() => {
+        dispatch(getUserCart(user.email));
+      }, 3000);
+    }
+  }, [isAuthenticated, userCarts.length, dispatch])
+
+  //Despacha la acción que resulta en el seteo de los estados "products" y "allCarts"
+  useEffect(() => { 
+    dispatch(getAllProducts()) 
+    setTimeout(() => {
+      dispatch(getAllCarts())
+    }, 5000);
   }, [dispatch])
 
   // const { toggleColorMode, colorMode } = useColorMode(); //para el dark y light theme

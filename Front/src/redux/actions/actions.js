@@ -27,6 +27,7 @@ export const UPDATE_CART = "UPDATE_CART";
 export const GET_ALL_CARTS = "GET_ALL_CARTS";
 export const DELETE_ALL_CARTS = "DELETE_ALL_CARTS";
 export const GET_ALL_USERS = "GET_ALL_USERS";
+export const UPDATE_USER_DETAIL = "UPDATE_USER_DETAIL";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 const url = "http://localhost:3001"; //para usar la db local poner localhost en vez de url

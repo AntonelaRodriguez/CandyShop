@@ -4,6 +4,7 @@ import {
   Card,
   CardBody,
   CardFooter,
+  Flex,
   Heading,
   Image,
   Stack,
@@ -25,8 +26,8 @@ const CardUserAdmin = ({
 }) => {
   return (
     <Card
-      w="400px"
-      h="150px"
+      w="full"
+      h="full"
       display="flex"
       justifyContent="space-between"
       alignItems="flex-start"
@@ -38,6 +39,7 @@ const CardUserAdmin = ({
       size="sm"
       gap={10}
       p={5}
+      position="relative"
     >
       <Stack margin="auto" w={{ base: "full", sm: "20%", lg: "15%" }} h="full">
         <Image
@@ -52,6 +54,7 @@ const CardUserAdmin = ({
       </Stack>
 
       <Stack
+        w="100%"
         flex={1}
         justifyContent="space-between"
         direction={{ base: "column-reverse", lg: "row" }}
@@ -66,21 +69,14 @@ const CardUserAdmin = ({
           justifyContent="space-between"
           flexDirection="column"
         >
-          <Heading fontWeight={700} size="sm">
-            {name} {lastName}
-          </Heading>
-
-          <Text fontWeight={300} size="sm">
-            {companyName}
-            {phoneNumber}
-            {address}
-          </Text>
-
-          <Stack>
-            <Tag variant="outline" size="sm" colorScheme="primary">
-              <TagLabel> activa </TagLabel>
-            </Tag>
-          </Stack>
+          <Flex fontWeight={300} size="sm" flexDirection="column" w="100%">
+            <Heading fontWeight={700} size="sm">
+              {name} {lastName}
+            </Heading>
+            <Text>Company: {companyName}</Text>
+            <Text>PhoneNumber: {phoneNumber}</Text>
+            <Text>Address: {address}</Text>
+          </Flex>
         </CardBody>
 
         <Stack h="full" direction="row">
@@ -91,9 +87,26 @@ const CardUserAdmin = ({
           >
             <Link to={"/edit/"}>Edit User</Link>
           </Button>
-          <Button>Delete User</Button>
+          <Button
+            size={{ base: "xs", lg: "sm" }}
+            variant="solid"
+            colorScheme="red"
+          >
+            <Link>Ban User</Link>
+          </Button>
         </Stack>
       </Stack>
+      <Tag
+        variant="outline"
+        size="sm"
+        colorScheme="green"
+        w="fit-content"
+        position="absolute"
+        top="5px"
+        left="5px"
+      >
+        <TagLabel> Active </TagLabel>
+      </Tag>
     </Card>
   );
 };

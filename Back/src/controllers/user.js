@@ -10,7 +10,7 @@ const postUser = async (email, admin) => {
       admin: admin,
     },
   });
-  if (created) {
+  if (created && !admin) {
     await Cart.create({ UserEmail: email, totalPrice: 0 });
   }
   return result;

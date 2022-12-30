@@ -164,13 +164,15 @@ const ProductDetail = () => {
                 {[...Array(5)].map((star, i) => {
                   const starValue = i + 1
                   return (
-                    <FaStar value={starValue} color={starValue <= Math.floor(totalAvg) ? "black" : "lightgrey"}/>
+                    <FaStar value={starValue} color={starValue <= Math.floor(totalAvg) ? "gold" : "lightgrey"}/>
                   )
                 })}      
                 {/* al .5 mas cercano hacia abajo */}
                 {/* {isNaN(totalAvg)? 0 : (Math.floor(totalAvg*2)/2)} */}
                 {/* al decimal */}
-                {isNaN(totalAvg)? 0 : (Math.floor(totalAvg*10)/10)}
+                <Text marginLeft='5px'>
+                {/* {isNaN(totalAvg)? 0 : (Math.floor(totalAvg*10)/10)} */}
+                </Text>
                 {/* al entero */}
                 {/* {isNaN(totalAvg)? 0 : Math.floor(totalAvg)} */}
 
@@ -190,7 +192,6 @@ const ProductDetail = () => {
 
           <HStack spacing={10} align='center' direction='row' justify='center' width='full'>
             <HStack align='center' justify='center'>
-            <Button variant='solid' bg='primary.100'> Buy now </Button>
               <Button onClick={()=> setCount(count - 1)} disabled={count <= 1}>-</Button>
               <Text fontWeight="600">{count}</Text>
               <Button onClick={() => setCount(count + 1)} disabled={count >= product.stock}>+</Button>
@@ -221,7 +222,11 @@ const ProductDetail = () => {
     <ReviewCard />
    </Flex>
    <Stack  marginBottom='1rem'>
-	<Link to={`/reviews/${id}`}  marginBottom='1rem'>View more</Link>
+	<Button _hover={{
+              color: "#000",
+            }}
+            colorScheme="primary"
+            variant="outline" marginTop='20px'><Link to={`/reviews/${id}`}  marginBottom='1rem'>View more</Link></Button>
    </Stack>
   </>
   )

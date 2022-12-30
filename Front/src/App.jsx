@@ -125,7 +125,7 @@ function App() {
     if (isAuthenticated && userCarts.length) {
       (async () => {
         dispatch(getUserCart(user.email));
-        let { data } = await axios(`http://localhost:3001/cart/${user.email}`);
+        let { data } = await axios(`/cart/${user.email}`);
         let optionStates = ["completed", "cancelled", "delivered", "recived"];
         if (optionStates.includes(data[data.length - 1].state)) {
           dispatch(postCart({ email: user.email, totalPrice: 0 }));

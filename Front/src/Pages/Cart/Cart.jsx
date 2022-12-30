@@ -13,7 +13,8 @@ const Cart = () => {
   const cartByPk = useSelector(state => state.cartByPk);
   const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
   const cart = useSelector((state) => state.cart);
-  const [loading, setloading] = useState(true);
+  const [loading, setloading] = useState(false);
+  const [showOrderReady, setShowOrderReady] = useState(true);
   const [storedValue, setStoredValue] = useLocalStorage('cart', []);
 
   const priceTotal = storedValue?.reduce((acc, curr) => {
@@ -33,43 +34,45 @@ const Cart = () => {
     }
   }, [cart])
 
-  let order = ""
-  useEffect(() => {
-    order = userCart[userCart?.length - 1]?.orderN
-  },[userCart])
+  // let order = ""
+  // useEffect(() => {
+  //   order = userCart[userCart?.length - 1]?.orderN
+  // },[userCart])
 
   useEffect(() => {
-    !cart.length && (document.getElementById('form1').textContent = "")
-    cart.length && isAuthenticated && order && 
-      (async () => {
-        setloading(true);
-        document.getElementById('form1').textContent = ""
-        let {
-          data: { id }
-        } = await axios.post(`http://localhost:3001/mercadopago`, {
-          cartId:  order, 
-          userId: user.email, 
-          cartItems: cart
-        })
-        setloading(false);
-        const script = document.createElement('script')
-        const attr_data_preference = document.createAttribute('data-preference-id')
-        attr_data_preference.value = id
-        const data_button_label = document.createAttribute('data-button-label')
-        data_button_label.value = "Pay with Mercado Pago"
-        script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js'
-        script.setAttributeNode(attr_data_preference)
-        script.setAttributeNode(data_button_label)
-        document.getElementById('form1').appendChild(script)
-  
-       //dispatch(getCartByPk(order));
-      })()
-  }, [cart.length,isAuthenticated, order])
+    document.getElementById('form1').textContent = "";
+    setloading(false);
+    if(!cart.length) {
+      setShowOrderReady(false);
+    } else {
+      setShowOrderReady(true);
+    }
+  }, [cart.length]);
 
+  const handlerOrderReady = async () => {
+    setShowOrderReady(false);
+    setloading(true);
+    document.getElementById('form1').textContent = "";
+    let { data: { id } } = await axios.post('/mercadopago', {
+      cartId: userCart[userCart?.length - 1]?.orderN, 
+      userId: user.email, 
+      cartItems: cart
+    })
+    setloading(false);
+    const script = document.createElement('script');
+    const attr_data_preference = document.createAttribute('data-preference-id');
+    attr_data_preference.value = id;
+    const data_button_label = document.createAttribute('data-button-label');
+    data_button_label.value = "To pay";
+    script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js';
+    script.setAttributeNode(attr_data_preference);
+    script.setAttributeNode(data_button_label);
+    document.getElementById('form1').appendChild(script);
+  }
 
   return (
     <Stack width='full' spacing={5} h='full' justifyContent='space-between' flexDirection='row'>
-      <Stack width='full'>
+      <Stack width='full' margin="3em 0 5em 0">
         {storedValue?.map((p) => (
           <CardProductCart
             key={p.id}
@@ -85,15 +88,22 @@ const Cart = () => {
       </Stack>
       <Stack height='full' w='40%' p={15} spacing={15} justifyContent='center' align='center'>
         <Heading>Payment</Heading>
-        <Stack direction='row' align='center'>
-          <Text>Order Total:</Text>
+        <Stack direction={{ base: 'column', md: 'row' }} align='center'>
+          <Text fontWeight="600">TOTAL:</Text>
           <Tag size='lg' variant='subtle' colorScheme='primary'>
             <TagLabel>$ {priceTotal}</TagLabel>
           </Tag>
         </Stack>
         {isAuthenticated 
           ? <>
-              {loading ? <Spinner /> : ""}
+              {loading 
+                ? <Spinner /> 
+                : showOrderReady 
+                  ? <Button variant='ghost' bg='primary.300' onClick={() => handlerOrderReady()}>
+                      Order ready! 
+                    </Button>
+                  : ""
+              }
             </>
           : <Button variant='ghost' bg='primary.300' onClick={() => loginWithRedirect()}>
               Log in and pay 

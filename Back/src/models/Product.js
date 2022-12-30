@@ -2,12 +2,12 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define("Product", {
-    id:{
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
-      primaryKey: true
-    },
+    // id:{
+    //   type: DataTypes.UUID,
+    //   defaultValue: DataTypes.UUIDV4,
+    //   allowNull: false,
+    //   primaryKey: true
+    // },
     name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -43,28 +43,28 @@ module.exports = (sequelize) => {
     },
     brand: {
       type: DataTypes.ENUM([
-        "Arcor",
-        "Bagley",
-        "Milka",
-        "Mogul",
-        "Aguila",
-        "Bon o Bon",
-        "Cofler",
-        "Terrabusi",
-        "Topline",
-        "Tofi",
-        "Godet",
-        "Nestle",
-        "Felfort",
-        "Billiken",
-        "Georgalos",
-        "Bonafide",
-        "Jorgito",
-        "Trident",
-        "Ferrero",
-        "Unknown",
+        "arcor",
+        "felfort",
+        "bagley",
+        "georgalos",
+        "mogul",
+        "tofi",
+        "godet",
+        "topline",
+        "aguila",
+        "bon o bon",
+        "cofler",
+        "unknown",
+        "bonafide",
+        "milka",
+        "jorgito",
+        "trident",
+        "ferrero",
+        "terrabusi",
+        "nestle",
+        "billiken",
       ]),
-      defaultValue: "Unknown",
+      defaultValue: "unknown",
     },
     tacc: {
         type: DataTypes.BOOLEAN,

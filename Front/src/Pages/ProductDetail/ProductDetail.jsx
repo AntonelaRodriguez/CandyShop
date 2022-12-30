@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Flex,
+  GridItem,
   Heading,
   HStack,
   Image,
@@ -18,39 +19,74 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
-import stars from '../../assets/starsProductDetail/stars.svg'
-import { getProductDetails, deleteProduct, getAllProducts } from '../../redux/actions/actions'
+import { FaStar } from 'react-icons/fa' 
+import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCart, editProductCart } from '../../redux/actions/actions'
+import {useAuth0} from "@auth0/auth0-react"
+import ReviewForm from '../Reviews/ReviewForm'
+import ReviewCard from '../Reviews/ReviewCard'
+
+
+
 
 const ProductDetail = () => {
   const [cantidad, setCantidad] = useState(0)
 
-  const product = useSelector((state) => state.productDetail)
+  const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
 
-  const dispatch = useDispatch()
+  const product = useSelector((state) => state.productDetail);
+  const actualUser = useSelector((state) => state.user);
+  const reviews = useSelector((state) => state.reviews)
+  const ratings = reviews && reviews.map(r => r.rating)
+ 
+ const dispatch = useDispatch()
+ 
+ const navigate = useNavigate()
+ 
+ const { id } = useParams()
+  
 
-  const navigate = useNavigate()
 
-  const { id } = useParams()
-  useEffect(() => {
-    dispatch(getProductDetails(id))
+ const products = useSelector((state) => state.products)
+ const cart = useSelector((state) => state.cart.slice());
+ const [count, setCount] = useState(1)
+ const handleAddCart = (id) => {
+   let prod = products.find((p) => p.id === id);
+   if(prod) prod.quantity = count;
+   let indexOfCart = -1;
+   for (let i = 0; i < cart.length; i++) {
+     if(cart[i].id === id) {
+       indexOfCart = i;
+       break;
+     }
+   };
+   if(indexOfCart === -1) return dispatch(addProductCart(prod));
+   cart[indexOfCart] = prod;
+   dispatch(editProductCart(cart))
+ }
+
+ useEffect(() => {
+   dispatch(getProductDetails(id))
+   if(isAuthenticated){
+     dispatch(getUser(user.email));
+    }
+    
   }, [dispatch, id])
-
-  const increment = () => {
-    cantidad < product.stock ? setCantidad(cantidad + 1) : cantidad
+  
+  const sum = (current, last) => {
+    return current + last
   }
-
-  const decrement = () => {
-    cantidad > 0 ? setCantidad(cantidad - 1) : cantidad
-  }
-
-  const handlerDelete = async (e) => {
+  const ratingReduce = ratings.reduce(sum, 0)
+  const totalAvg = ratingReduce / ratings.length;
+ 
+  const handlerDelete = (e) => {
     e.preventDefault()
-    await dispatch(deleteProduct(id))
-    await dispatch(getAllProducts())
+    dispatch(deleteProduct(id))
+    dispatch(getAllProducts())
     navigate('/products')
   }
 
   return (
+  <>
     <Flex
       w='full'
       direction={{ base: 'column', sm: 'column', md: 'row', lg: 'row' }}
@@ -91,7 +127,7 @@ const ProductDetail = () => {
           minH='full'
           h='full'
           direction={{ base: 'column' }}
-          align='flex-start'
+          align='center'
           justifyContent='space-evenly'
           p={10}
           gap={2}
@@ -125,13 +161,22 @@ const ProductDetail = () => {
             </Stack>
             <Stack direction='row' align='center' justify='flex-start'>
               <Flex align='center' justify='center'>
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
-                <Image width='3.5' src={stars} />
+                {[...Array(5)].map((star, i) => {
+                  const starValue = i + 1
+                  return (
+                    <FaStar value={starValue} color={starValue <= Math.floor(totalAvg) ? "black" : "lightgrey"}/>
+                  )
+                })}      
+                {/* al .5 mas cercano hacia abajo */}
+                {/* {isNaN(totalAvg)? 0 : (Math.floor(totalAvg*2)/2)} */}
+                {/* al decimal */}
+                {isNaN(totalAvg)? 0 : (Math.floor(totalAvg*10)/10)}
+                {/* al entero */}
+                {/* {isNaN(totalAvg)? 0 : Math.floor(totalAvg)} */}
+
+                
               </Flex>
-              <Text>246 Reviews</Text>
+              <Link to={`/reviews/${id}`}>{reviews.length} Reviews</Link>
             </Stack>
             <Badge colorScheme='pink'>{product.brand}</Badge>
           </Flex>
@@ -145,28 +190,18 @@ const ProductDetail = () => {
 
           <HStack spacing={10} align='center' direction='row' justify='center' width='full'>
             <HStack align='center' justify='center'>
-              <Button colorScheme='primary' variant='outline' onClick={decrement}>
-                -
-              </Button>
-              <Input
-                maxW='50px'
-                textAlign='center'
-                type='number'
-                name='cantidad'
-                value={cantidad}
-                id=''
-              />
-              <Button colorScheme='primary' variant='outline' onClick={increment}>
-                +
-              </Button>
+            <Button variant='solid' bg='primary.100'> Buy now </Button>
+              <Button onClick={()=> setCount(count - 1)} disabled={count <= 1}>-</Button>
+              <Text fontWeight="600">{count}</Text>
+              <Button onClick={() => setCount(count + 1)} disabled={count >= product.stock}>+</Button>
+              <Button onClick={() => handleAddCart(id)} variant='ghost' bg='primary.300'> Add to cart </Button>
             </HStack>
-            <Button colorScheme='primary' variant='solid' size='lg'>
-              Add to cart
-            </Button>
           </HStack>
         </Flex>
       </Stack>
-      <Stack position='absolute' top={15} right={15} direction='row'>
+      {
+        actualUser && actualUser.admin === true ? 
+        <Stack position='absolute' top={15} right={15} direction='row'>
         <Link to={`/edit/${id}`}>
           <Button variant='solid' colorScheme='blue'>
             Editing
@@ -175,8 +210,20 @@ const ProductDetail = () => {
         <Button colorScheme='red' onClick={(e) => handlerDelete(e)}>
           Delete
         </Button>
-      </Stack>
+       </Stack> :
+          <></>
+      }
+
+   
     </Flex>
+   <Flex alignItems='flex-start'>
+    <ReviewForm />
+    <ReviewCard />
+   </Flex>
+   <Stack  marginBottom='1rem'>
+	<Link to={`/reviews/${id}`}  marginBottom='1rem'>View more</Link>
+   </Stack>
+  </>
   )
 }
 

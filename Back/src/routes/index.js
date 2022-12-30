@@ -1,10 +1,23 @@
-const { Router } = require("express");
-const userRouter = require("./userRouter.js");
-const productRouter = require('./productRouter.js');
+const { Router } = require('express')
+const userRouter = require('./userRouter.js')
+const productRouter = require('./productRouter.js')
+const categoryRouter = require('./categoryRouter')
+const cartRouter = require('./cartRouter')
+const detailRouter = require('./detailRouter.js')
+const mercadoPagoRouter = require('./mercadoPagoRouter')
+const reviewRouter = require('./reviewRouter.js')
+const router = Router()
+/* const PaymentController = require('../Controllers/PaymentController')
+const PaymentService = require('../services/PaymentService')
+const PaymentInstance = new PaymentController(new PaymentService()) */
 
-const router = Router();
+router.use('/users', userRouter)
+router.use('/products', productRouter)
+router.use('/categories', categoryRouter)
+router.use('/cart', cartRouter);
+router.use('/detail', detailRouter);
+//mercado pago get de info del producto
+router.use('/mercadopago', mercadoPagoRouter)
+router.use('/reviews', reviewRouter)
 
-router.use("/users", userRouter);
-router.use("/products", productRouter);
-
-module.exports = router;
+module.exports = router

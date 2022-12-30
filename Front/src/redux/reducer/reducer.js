@@ -26,7 +26,8 @@ import {
   GET_ALL_CARTS,
   DELETE_ALL_CARTS,
   GET_ALL_USERS,
-  UPDATE_USER_DETAIL
+  UPDATE_USER_DETAIL,
+  GET_CART_PRODUCT_DETAIL
 } from '../actions/actions'
 
 const initialState = {
@@ -63,7 +64,8 @@ const initialState = {
   cartByPk: [],
   reviews: [],
   ratings: [],
-  allCarts: []
+  allCarts: [],
+  productDetailCart: [],
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -186,6 +188,11 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         allCarts: payload
+      }
+    case GET_CART_PRODUCT_DETAIL:
+      return{
+        ...state,
+        productDetailCart: payload,
       }
     case POST_USER:
       return {

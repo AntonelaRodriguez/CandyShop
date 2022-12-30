@@ -33,6 +33,7 @@ import Create from "./Pages/Admin/Create/Create";
 import { FaGlassMartiniAlt } from "react-icons/fa";
 import { useLocalStorage } from "../src/Components/useLocalStorage/useLocalStorage";
 import axios from "axios";
+import CartOrderDetail from "./Pages/Admin/CartOrderDetail";
 
 function App() {
   const usuario = useSelector((state) => state.user);
@@ -124,7 +125,7 @@ function App() {
     if (isAuthenticated && userCarts.length) {
       (async () => {
         dispatch(getUserCart(user.email));
-        let { data } = await axios(`http://localhost:3001/cart/${user.email}`);
+        let { data } = await axios(`/cart/${user.email}`);
         let optionStates = ["completed", "cancelled", "delivered", "recived"];
         if (optionStates.includes(data[data.length - 1].state)) {
           dispatch(postCart({ email: user.email, totalPrice: 0 }));
@@ -196,6 +197,10 @@ function App() {
         <Route
           path="/admin/OrdersAdmin"
           element={usuario.admin ? <OrdersAdmin /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/detail/:id"
+          element={usuario.admin ? <CartOrderDetail /> : <Navigate to="/" />}
         />
         <Route path="/userDetails" element={<UserDetails />} />
         <Route path="/*" element={<NotFound />} />

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Card, CardBody, Flex, FormControl, Heading, Stack, Text } from '@chakra-ui/react';
+import { Card, CardBody, Container, Flex, FormControl, Heading, Stack, Text } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReviews, cleanReviews } from '../../redux/actions/actions';
 import { useParams } from 'react-router-dom';
@@ -45,7 +45,7 @@ const ReviewCard = () => {
                   <Text>
                   Description:
                   </Text>
-                  <Text border='1px' borderRadius='5px'>{r.description}</Text>
+                  <Container maxW={window.location.pathname === `/product/${id}` ? '20ch' : '60ch'} border='1px' borderRadius='5px'>{r.description}</Container>
                 </Stack>
             </CardBody>
           </Card>)} 

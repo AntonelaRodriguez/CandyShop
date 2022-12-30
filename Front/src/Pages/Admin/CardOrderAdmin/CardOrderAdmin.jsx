@@ -16,25 +16,8 @@ import {
   import React from 'react'
   import { useDispatch } from 'react-redux'
   import { Link } from 'react-router-dom'
-  import { useState, useEffect } from 'react'
   
-  const CardOrderAdmin = ({orderN, date, totalPrice, state, id}) => {
-
-    const [input, setInput] = useState({
-        orderN: orderN, 
-        state: state, 
-        totalPrice: totalPrice, 
-        date: date
-    })
-
-    function handleChange(e) {
-        setInput({
-          ...input,
-          [e.target.name]: e.target.value
-        })
-        console.log(input.state)
-    }
-
+  const CardProductAdmin = ({ orderN, date, totalPrice, state,}) => {
     return (
       <Card
         w='full'
@@ -51,6 +34,16 @@ import {
         gap={10}
         p={5}
       >
+        <Stack margin='auto' w={{ base: 'full', sm: '20%', lg: '15%' }} h='full'>
+          <Image
+            objectFit='cover'
+            w='full'
+            margin='auto'
+            h='full'
+            src={'https://e7.pngegg.com/pngimages/833/426/png-clipart-shopping-cart-shopping-cart.png'}
+            loading='lazy'
+          />
+        </Stack>
   
         <Stack
           flex={1}
@@ -67,24 +60,26 @@ import {
             justifyContent='space-between'
             flexDirection='column'
           >
-            <Heading fontWeight={700} size='md'>
-               Order Number:
-            </Heading>
             <Heading fontWeight={700} size='sm'>
-               {orderN}
+            Order Number: {orderN}
             </Heading>
   
             <Text fontWeight={300} size='sm'>
-              Date: {date}
+            Date: {date}
             </Text>
 
             <Text fontWeight={300} size='sm'>
-              Actual State: {state}
+            Actual State: {state}
             </Text>
-            
+  
+            <Stack>
+              <Tag variant='outline' size='sm' colorScheme='primary'>
+                <TagLabel>$ {totalPrice}</TagLabel>
+              </Tag>
+            </Stack>
+
             <form action='submit' onSubmit={(e) => handleSubmit(e)}>
-                <FormLabel htmlFor='cat'>State</FormLabel>
-                <Select id='cat' name='state' value={input.state} onChange={(e)=>handleChange(e)}>
+                <Select name='state'>
                     <option>Select category</option>
                     <option value="cancelled">Cancelled</option>
                     <option value="delivered">Delivered</option>
@@ -95,21 +90,17 @@ import {
                 </Button>
             </form>
 
-            <Stack>
-              <Tag variant='outline' size='sm' colorScheme='primary'>
-                <TagLabel>$ {totalPrice}</TagLabel>
-              </Tag>
-            </Stack>
           </CardBody>
   
           <Stack h='full' direction='row'>
-            <Button size={{ base: 'xs', lg: 'sm' }} variant='solid' colorScheme='pink'>
-              <Link to={'/edit/' + orderN}>Detail Cart</Link>
+            <Button size={{ base: 'xs', lg: 'sm' }} variant='solid' colorScheme='blue'>
+              <Link to={'/edit/'}>Shopping Cart Detail</Link>
             </Button>
+            
           </Stack>
         </Stack>
       </Card>
     )
   }
   
-  export default CardOrderAdmin
+  export default CardProductAdmin

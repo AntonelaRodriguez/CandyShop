@@ -79,6 +79,7 @@ const Cart = () => {
             name={p.name}
             price={p.price}
             quantity={p.quantity}
+            variable="cart"
           />
         ))}
       </Stack>

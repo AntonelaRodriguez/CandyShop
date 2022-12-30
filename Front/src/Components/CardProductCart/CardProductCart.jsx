@@ -15,7 +15,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteFromCart } from '../../redux/actions/actions'
 
-const CardProductCart = ({ name, description, price, id, image, quantity = 1 }) => {
+const CardProductCart = ({ name, description, price, id, image, quantity = 1, variable }) => {
 
   const dispatch = useDispatch()
 
@@ -35,7 +35,10 @@ const CardProductCart = ({ name, description, price, id, image, quantity = 1 }) 
       <Image objectFit='cover' maxW={{ base: '100%', sm: '200px' }} src={image} alt={description} />
 
       <Stack>
+        {variable === "cart" ?
         <Button heigt='fit-content' width='fit-content' variant='solid' bg='primary.100' onClick={() => handleDelete(id)}>X</Button>
+        : <></>
+        }
         <CardBody>
           <Heading size='md'>{name}</Heading>
           <Text py={5} fontWeight="light">{description}</Text>

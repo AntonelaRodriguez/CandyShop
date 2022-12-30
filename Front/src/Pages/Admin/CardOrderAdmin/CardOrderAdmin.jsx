@@ -13,11 +13,42 @@ import {
     FormLabel,
     Select
   } from '@chakra-ui/react'
-  import React from 'react'
+  import React, {useState} from 'react'
   import { useDispatch } from 'react-redux'
   import { Link } from 'react-router-dom'
+  import {updateCart} from '../../../redux/actions/actions'
   
   const CardProductAdmin = ({ orderN, date, totalPrice, state,}) => {
+
+    let dispatch = useDispatch();
+
+    const [input, setInput] = useState({
+      orderN: orderN, 
+      state: state, 
+      totalPrice: totalPrice, 
+      date: date
+  })
+
+  function handleChange(e) {
+      setInput({
+        ...input,
+        [e.target.name]: e.target.value
+      })
+      console.log(input.state)
+  }
+
+  let newInput = {
+    orderN: input.orderN,
+    state: input.state,
+    totalPrice: input.totalPrice,
+    date: input.date,
+  }
+
+  function handleSubmit(e){
+    e.preventDefault()
+    dispatch(updateCart(newInput))
+  }
+
     return (
       <Card
         w='full'
@@ -79,13 +110,13 @@ import {
             </Stack>
 
             <form action='submit' onSubmit={(e) => handleSubmit(e)}>
-                <Select name='state'>
+                <Select name='state' value={input.state} onChange={(e)=>handleChange(e)}>
                     <option>Select category</option>
                     <option value="cancelled">Cancelled</option>
                     <option value="delivered">Delivered</option>
                     <option value="recived">Recived</option>
                 </Select>
-                <Button size={{ base: 'xs', lg: 'sm' }} variant='solid' colorScheme='pink'>
+                <Button size={{ base: 'xs', lg: 'sm' }} variant='solid' colorScheme='pink' type='submit'>
                     Change State
                 </Button>
             </form>
@@ -94,7 +125,7 @@ import {
   
           <Stack h='full' direction='row'>
             <Button size={{ base: 'xs', lg: 'sm' }} variant='solid' colorScheme='blue'>
-              <Link to={'/edit/'}>Shopping Cart Detail</Link>
+              <Link to={'/detail/' + orderN}>Shopping Cart Detail</Link>
             </Button>
             
           </Stack>

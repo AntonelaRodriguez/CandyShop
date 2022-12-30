@@ -1,4 +1,4 @@
-const { Detail } = require('../db.js');
+const { Detail, Product } = require('../db.js');
 
 const postDetailCart = async(cart) => {
     if(!cart.length === 0) throw new Error({message:"Empty Cart", status:400});

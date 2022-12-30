@@ -7,6 +7,7 @@ import {
   Divider,
   Flex,
   Heading,
+  Icon,
   Image,
   Stack,
   Text
@@ -15,52 +16,95 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
-import { addProductCart, editProductCart, getProductDetails } from '../../redux/actions/actions'
+import { addProductCart, editProductCart, getProductDetails, deleteFromCart } from '../../redux/actions/actions'
 import { useState, useEffect } from 'react'
+import { AiOutlineShoppingCart } from 'react-icons/ai'
+import { TbShoppingCartOff } from 'react-icons/tb'
 
 const CardProduct = ({ image, id, name, price, stock, availability }) => {
   const dispatch = useDispatch()
   const products = useSelector((state) => state.products)
   const cart = useSelector((state) => state.cart.slice());
-  const [count, setCount] = useState(1)
+
+  let inCart = (id) => cart.some((c) => c.id === id);
+  let indexOfCart = (id) => cart.findIndex((c) => c.id === id);
+  let initialCount = () =>  inCart(id) ? cart[indexOfCart(id)].quantity : 1;
+  let initialLastUnits = () =>  inCart(id) ? cart[indexOfCart(id)].quantity : -1;
+  const [count, setCount] = useState(initialCount);
+  const [lastUnits, setLastUnits] = useState(initialLastUnits)
+  const [showIconElim, setSetShowIconElim] = useState(false);
+
   const handleAddCart = (id) => {
     let prod = products.find((p) => p.id === id);
     if(prod) prod.quantity = count;
-    let indexOfCart = -1;
-    for (let i = 0; i < cart.length; i++) {
-      if(cart[i].id === id) {
-        indexOfCart = i;
-        break;
-      }
-    };
-    if(indexOfCart === -1) return dispatch(addProductCart(prod));
-    cart[indexOfCart] = prod;
-    dispatch(editProductCart(cart))
+    setLastUnits(count);
+    if(inCart(id)) {
+      cart[indexOfCart(id)] = prod;
+      return dispatch(editProductCart(cart));
+    }
+    dispatch(addProductCart(prod));
   }
    
+  const handleDelete = (id) => {
+    dispatch(deleteFromCart(id));
+    setCount(1);
+    setSetShowIconElim(false);
+  }
 
   return (
     <motion.div whileHover={{ scale: 1.02 }}>
-    <Card maxW='sm' border="1px solid #F8E0E6" boxShadow="md" borderRadius="10px">
+    <Card 
+      maxW='sm' 
+      border={ inCart(id) ? "1px solid #F6ACA3" : "1px solid #F8E0E6" } 
+      boxShadow="md" 
+      borderRadius="10px" 
+      pos="relative"
+    >
+      {
+        inCart(id)
+          ?  <Button 
+              pos="absolute"  top="15px"  right="15px"
+              bg='primary.300'
+              onMouseOver={(e) => setSetShowIconElim(true) } 
+              onMouseOut={(e) => setSetShowIconElim(false) }
+              onClick={() => handleDelete(id)}
+            > 
+              {
+                showIconElim 
+                ? <Icon color="#424242" boxSize={6} as={TbShoppingCartOff} /> 
+                : <Icon color="#424242" boxSize={6} as={AiOutlineShoppingCart}  /> 
+              }
+            </Button>
+          : ""
+      }
       <CardBody>
         <Link to={`/product/${id}`}>
           <Image src={image} alt='Green double couch with wooden legs' borderRadius='lg'/>
         </Link>
         <Stack mt='6' spacing='3'>
-          <Heading size='md'>{name}</Heading>
+          <Heading minH="50px" size='md'>{name}</Heading>
           <Text color='primary.300' fontSize='2xl'> {`${count}un. x $${price * count}`} </Text>
         </Stack>
       </CardBody>
       <Divider />
-      <CardFooter justifyContent="center" bg='primary.100' borderRadius="0 0 10px 10px">
+      <CardFooter 
+        justifyContent="center" 
+        bg='primary.100' 
+        borderRadius="0 0 10px 10px"
+      >
         {!availability ? <Text fontWeight="600">No disponible</Text> :
-          <Flex width="95%" alignItems="center" justifyContent="space-between" size='md'>
+          <Flex 
+            width="100%" 
+            alignItems="center" 
+            justifyContent="space-between" 
+            size='md'
+          >
             <ButtonGroup spacing="2" alignItems="center">
               <Button 
                 onClick={() => setCount(count - 1)} 
                 disabled={count <= 1} 
                 boxShadow={ count <= 1 ? "inner" : "lg" } 
-                bg={ count <= 1 ? "" : 'primary.300' }
+                bg='primary.300'
                 fontWeight="700"
               >
                 -
@@ -70,7 +114,7 @@ const CardProduct = ({ image, id, name, price, stock, availability }) => {
                 onClick={() => setCount(count + 1)} 
                 disabled={count >= stock} 
                 boxShadow={ count >= stock ? "inner" : "lg" } 
-                bg={ count >= stock ? "" : 'primary.300' }
+                bg='primary.300'
                 fontWeight="700"
               >
                 +
@@ -82,8 +126,10 @@ const CardProduct = ({ image, id, name, price, stock, availability }) => {
               bg='primary.300' 
               boxShadow="lg"
               marginLeft="10px"
+              disabled={inCart(id) && count === lastUnits}
+              // width="130px"
             > 
-              Add to cart 
+              { inCart(id) ? "Change units" : "Add to cart" }
             </Button>
           </Flex>
         }

@@ -14,15 +14,19 @@ import {
 } from "@chakra-ui/react";
 import { FiHome, FiCompass, FiStar, FiSettings, FiMenu } from "react-icons/fi";
 import { TfiPanel } from "react-icons/tfi";
-import { FaUsersCog, FaCandyCane, FaShippingFast, FaPencilAlt } from "react-icons/fa";
+import {
+  FaUsersCog,
+  FaCandyCane,
+  FaShippingFast,
+  FaPencilAlt,
+} from "react-icons/fa";
 
 const LinkItems = [
   { name: "Admin", icon: TfiPanel, source: "/admin" },
   { name: "Users", icon: FaUsersCog, source: "/admin/UsersAdmin" },
   { name: "Products", icon: FaCandyCane, source: "/admin/ProductsAdmin" },
   { name: "Orders", icon: FaShippingFast, source: "/admin/OrdersAdmin" },
-  { name: "Create", icon: FaPencilAlt, source: "/create", },
-  { name: "Settings", icon: FiSettings },
+  { name: "Create", icon: FaPencilAlt, source: "/create" },
 ];
 
 export default function SimpleSidebar({ children }) {
@@ -76,7 +80,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
 };
 
 const NavItem = ({ source, icon, children, ...rest }) => {
-  console.log(source);
   return (
     <Link to={source}>
       <Flex
@@ -127,10 +130,6 @@ const MobileNav = ({ onOpen, ...rest }) => {
         aria-label="open menu"
         icon={<FiMenu />}
       />
-
-      <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Logo
-      </Text>
     </Flex>
   );
 };

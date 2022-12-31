@@ -19,7 +19,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
-import stars from '../../assets/starsProductDetail/stars.svg'
+import { FaStar } from 'react-icons/fa' 
 import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCart, editProductCart } from '../../redux/actions/actions'
 import {useAuth0} from "@auth0/auth0-react"
 import ReviewForm from '../Reviews/ReviewForm'
@@ -161,7 +161,20 @@ const ProductDetail = () => {
             </Stack>
             <Stack direction='row' align='center' justify='flex-start'>
               <Flex align='center' justify='center'>
-                {isNaN(totalAvg)? 0 : Math.floor(totalAvg)}
+                {[...Array(5)].map((star, i) => {
+                  const starValue = i + 1
+                  return (
+                    <FaStar value={starValue} color={starValue <= Math.floor(totalAvg) ? "gold" : "lightgrey"}/>
+                  )
+                })}      
+                {/* al .5 mas cercano hacia abajo */}
+                {/* {isNaN(totalAvg)? 0 : (Math.floor(totalAvg*2)/2)} */}
+                {/* al decimal */}
+                <Text marginLeft='5px'>
+                {/* {isNaN(totalAvg)? 0 : (Math.floor(totalAvg*10)/10)} */}
+                </Text>
+                {/* al entero */}
+                {/* {isNaN(totalAvg)? 0 : Math.floor(totalAvg)} */}
 
                 
               </Flex>
@@ -179,7 +192,6 @@ const ProductDetail = () => {
 
           <HStack spacing={10} align='center' direction='row' justify='center' width='full'>
             <HStack align='center' justify='center'>
-            <Button variant='solid' bg='primary.100'> Buy now </Button>
               <Button onClick={()=> setCount(count - 1)} disabled={count <= 1}>-</Button>
               <Text fontWeight="600">{count}</Text>
               <Button onClick={() => setCount(count + 1)} disabled={count >= product.stock}>+</Button>
@@ -210,7 +222,11 @@ const ProductDetail = () => {
     <ReviewCard />
    </Flex>
    <Stack  marginBottom='1rem'>
-	<Link to={`/reviews/${id}`}  marginBottom='1rem'>View more</Link>
+	<Button _hover={{
+              color: "#000",
+            }}
+            colorScheme="primary"
+            variant="outline" marginTop='20px'><Link to={`/reviews/${id}`}  marginBottom='1rem'>View more</Link></Button>
    </Stack>
   </>
   )

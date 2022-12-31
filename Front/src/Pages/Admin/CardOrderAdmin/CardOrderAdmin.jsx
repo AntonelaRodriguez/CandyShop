@@ -13,27 +13,41 @@ import {
     FormLabel,
     Select
   } from '@chakra-ui/react'
-  import React from 'react'
+  import React, {useState} from 'react'
   import { useDispatch } from 'react-redux'
   import { Link } from 'react-router-dom'
-  import { useState, useEffect } from 'react'
+  import {updateCart} from '../../../redux/actions/actions'
   
-  const CardOrderAdmin = ({orderN, date, totalPrice, state, id}) => {
+  const CardProductAdmin = ({ orderN, date, totalPrice, state,}) => {
+
+    let dispatch = useDispatch();
 
     const [input, setInput] = useState({
-        orderN: orderN, 
-        state: state, 
-        totalPrice: totalPrice, 
-        date: date
-    })
+      orderN: orderN, 
+      state: state, 
+      totalPrice: totalPrice, 
+      date: date
+  })
 
-    function handleChange(e) {
-        setInput({
-          ...input,
-          [e.target.name]: e.target.value
-        })
-        console.log(input.state)
-    }
+  function handleChange(e) {
+      setInput({
+        ...input,
+        [e.target.name]: e.target.value
+      })
+      console.log(input.state)
+  }
+
+  let newInput = {
+    orderN: input.orderN,
+    state: input.state,
+    totalPrice: input.totalPrice,
+    date: input.date,
+  }
+
+  function handleSubmit(e){
+    e.preventDefault()
+    dispatch(updateCart(newInput))
+  }
 
     return (
       <Card
@@ -51,6 +65,16 @@ import {
         gap={10}
         p={5}
       >
+        <Stack margin='auto' w={{ base: 'full', sm: '20%', lg: '15%' }} h='full'>
+          <Image
+            objectFit='cover'
+            w='full'
+            margin='auto'
+            h='full'
+            src={'https://e7.pngegg.com/pngimages/833/426/png-clipart-shopping-cart-shopping-cart.png'}
+            loading='lazy'
+          />
+        </Stack>
   
         <Stack
           flex={1}
@@ -67,49 +91,47 @@ import {
             justifyContent='space-between'
             flexDirection='column'
           >
-            <Heading fontWeight={700} size='md'>
-               Order Number:
-            </Heading>
             <Heading fontWeight={700} size='sm'>
-               {orderN}
+            Order Number: {orderN}
             </Heading>
   
             <Text fontWeight={300} size='sm'>
-              Date: {date}
+            Date: {date}
             </Text>
 
             <Text fontWeight={300} size='sm'>
-              Actual State: {state}
+            Actual State: {state}
             </Text>
-            
-            <form action='submit' onSubmit={(e) => handleSubmit(e)}>
-                <FormLabel htmlFor='cat'>State</FormLabel>
-                <Select id='cat' name='state' value={input.state} onChange={(e)=>handleChange(e)}>
-                    <option>Select category</option>
-                    <option value="cancelled">Cancelled</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="recived">Recived</option>
-                </Select>
-                <Button size={{ base: 'xs', lg: 'sm' }} variant='solid' colorScheme='pink'>
-                    Change State
-                </Button>
-            </form>
-
+  
             <Stack>
               <Tag variant='outline' size='sm' colorScheme='primary'>
                 <TagLabel>$ {totalPrice}</TagLabel>
               </Tag>
             </Stack>
+
+            <form action='submit' onSubmit={(e) => handleSubmit(e)}>
+                <Select name='state' value={input.state} onChange={(e)=>handleChange(e)}>
+                    <option>Select category</option>
+                    <option value="cancelled">Cancelled</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="recived">Recived</option>
+                </Select>
+                <Button size={{ base: 'xs', lg: 'sm' }} variant='solid' colorScheme='pink' type='submit'>
+                    Change State
+                </Button>
+            </form>
+
           </CardBody>
   
           <Stack h='full' direction='row'>
-            <Button size={{ base: 'xs', lg: 'sm' }} variant='solid' colorScheme='pink'>
-              <Link to={'/edit/' + orderN}>Detail Cart</Link>
+            <Button size={{ base: 'xs', lg: 'sm' }} variant='solid' colorScheme='blue'>
+              <Link to={'/detail/' + orderN}>Shopping Cart Detail</Link>
             </Button>
+            
           </Stack>
         </Stack>
       </Card>
     )
   }
   
-  export default CardOrderAdmin
+  export default CardProductAdmin

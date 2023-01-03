@@ -67,7 +67,7 @@ const ReviewForm = () => {
     >
       <Stack marginTop='3rem' direction='column' align='center' justify='center'>
         <form action='submit' onSubmit={(e) => handleSubmit(e)}>
-        <Stack spacing='2' w='24rem'>  {/* aca se puede modificar para hacerlo mas ancho al form */}
+        <Stack spacing='2' w='24rem' alignItems='center'>  {/* aca se puede modificar para hacerlo mas ancho al form */}
             <Heading  marginBottom='2rem'>
             Leave a Review
             </Heading>
@@ -107,7 +107,7 @@ const ReviewForm = () => {
               <option value='5'>5</option>
               </Select>
             </FormControl>
-            <Button type="submit" colorScheme="primary">
+            <Button type="submit" colorScheme="primary" w='fit-content'>
               Submit review
             </Button>
           </Stack>

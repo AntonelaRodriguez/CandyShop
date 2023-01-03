@@ -29,6 +29,7 @@ export const DELETE_ALL_CARTS = "DELETE_ALL_CARTS";
 export const GET_ALL_USERS = "GET_ALL_USERS";
 export const UPDATE_USER_DETAIL = "UPDATE_USER_DETAIL";
 export const GET_CART_PRODUCT_DETAIL = "GET_CART_PRODUCT_DETAIL";
+export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 const url = "http://localhost:3001"; //para usar la db local poner localhost en vez de url
@@ -262,3 +263,7 @@ export const postReview = (data) => {
     return dispatch({ type: POST_REVIEW });
   };
 };
+
+export const setCurrentPage = (page) => {
+  return { type: SET_CURRENT_PAGE, payload: page }
+}

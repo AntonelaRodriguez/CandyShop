@@ -61,12 +61,13 @@ const ReviewForm = () => {
       justifyContent='space-around'
       borderRadius='md'
       height='full'
-      w='25rem'
+      w="25rem"
       position='relative'
+      marginRight='2rem'
     >
       <Stack marginTop='3rem' direction='column' align='center' justify='center'>
         <form action='submit' onSubmit={(e) => handleSubmit(e)}>
-          <Stack spacing={2}>
+        <Stack spacing='2' w='24rem' alignItems='center'>  {/* aca se puede modificar para hacerlo mas ancho al form */}
             <Heading  marginBottom='2rem'>
             Leave a Review
             </Heading>
@@ -87,6 +88,7 @@ const ReviewForm = () => {
               name="description"
               onChange={handleChange}
               marginBottom='2rem'
+              maxLength='150ch'
               />
 
               <FormLabel>Rating</FormLabel>
@@ -95,7 +97,9 @@ const ReviewForm = () => {
               value={input.rating}
               name="rating"
               onChange={handleChange}
-              marginBottom='2rem'>
+              marginBottom='2rem'
+              // width='25rem'
+              >
               <option value='1'>1</option>
               <option value='2'>2</option>
               <option value='3'>3</option>
@@ -103,7 +107,7 @@ const ReviewForm = () => {
               <option value='5'>5</option>
               </Select>
             </FormControl>
-            <Button type="submit" colorScheme="primary">
+            <Button type="submit" colorScheme="primary" w='fit-content'>
               Submit review
             </Button>
           </Stack>

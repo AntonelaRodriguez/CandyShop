@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import {
   Badge,
   Button,
@@ -15,8 +16,11 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import img from '../../../assets/user-png-33842.png'
+import EditUser from "../EditUser/EditUser";
 
 const CardUserAdmin = ({
+  email,
   name,
   lastName,
   companyName,
@@ -24,6 +28,7 @@ const CardUserAdmin = ({
   address,
   image,
 }) => {
+// console.log(email);
   return (
     <Card
       w="full"
@@ -47,7 +52,7 @@ const CardUserAdmin = ({
           w="full"
           margin="auto"
           h="full"
-          src="https://imgs.search.brave.com/r6TBQaVZ6R-YCIDK0ViahPr0maxIvQniZo5pzWBf2vs/rs:fit:1000:600:1/g:ce/aHR0cHM6Ly9pMi53/cC5jb20vd2lweS50/di93cC1jb250ZW50/L3VwbG9hZHMvMjAx/OS8wMS9NdXJpJUMz/JUIzLWVsLXBlcnJp/dG8tbSVDMyVBMXMt/ZmFtb3Nvcy1kZS1p/bnRlcm5ldC0yLmpw/Zz9maXQ9MTAwMCUy/QzYwMCZzc2w9MQ"
+          src={image ? image : img}
           loading="lazy"
           alt={name}
         />
@@ -85,7 +90,8 @@ const CardUserAdmin = ({
             variant="solid"
             colorScheme="blue"
           >
-            <Link to={"/edit/"}>Edit User</Link>
+            <EditUser email={email} />
+            <Link to={`/editUser/${email}`}>Edit User</Link>
           </Button>
           <Button
             size={{ base: "xs", lg: "sm" }}

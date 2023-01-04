@@ -31,7 +31,8 @@ export const UPDATE_USER_DETAIL = "UPDATE_USER_DETAIL";
 export const GET_CART_PRODUCT_DETAIL = "GET_CART_PRODUCT_DETAIL";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
-const url = "https://candyshop-production.up.railway.app"; //para usar la db local poner localhost en vez de url
+// const url = "https://candyshop-production.up.railway.app"; //para usar la db local poner localhost en vez de url
+const url = "http://localhost:3001"
 
 export const getAllProducts = () => {
   return async function (dispatch) {

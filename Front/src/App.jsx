@@ -29,11 +29,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 import NotFound from "./Pages/NotFound/NotFound";
 import ReviewCard from "./Pages/Reviews/ReviewCard";
 // import Reviews from './Pages/Reviews/Reviews'
-import Create from "./Pages/Admin/Create/Create";
+import Create from "./Pages/Admin/CreateProduct/CreateProduct";
 import { FaGlassMartiniAlt } from "react-icons/fa";
 import { useLocalStorage } from "../src/Components/useLocalStorage/useLocalStorage";
 import axios from "axios";
 import CartOrderDetail from "./Pages/Admin/CartOrderDetail";
+import EditUser from "./Pages/Admin/EditUser/EditUser";
 
 function App() {
   const usuario = useSelector((state) => state.user);
@@ -112,12 +113,13 @@ function App() {
         admin:
           user.email === "bongiovanniivaan@gmail.com" ||
           user.email === "pipeurien@gmail.com" ||
+          user.email === "luca.mattbes@gmail.com" ||
           user.email === "pepo@gmail.com",
       };
       dispatch(postUser(infoUser));
     }
   }, [isAuthenticated, dispatch]);
-
+// console.log(user)
   //Despacha acciones que resultan en el creación de un nuevo carrito para el usuario y el vaciado del estado "cart".
   //Estas acciones dependen del estado del último carrito creado para el usuario, las mismas se ejecutan
   //si el estado de este último carrito es igual a "completed", "cancelled", "delivered" o "recived".
@@ -185,6 +187,10 @@ function App() {
         <Route
           path="/edit/:id"
           element={usuario.admin ? <EditProduct /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/editUser/:email"
+          element={usuario.admin ? <EditUser /> : <Navigate to="/" />}
         />
         <Route
           path="/admin/UsersAdmin"

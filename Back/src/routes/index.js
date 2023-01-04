@@ -6,6 +6,7 @@ const cartRouter = require('./cartRouter')
 const detailRouter = require('./detailRouter.js')
 const mercadoPagoRouter = require('./mercadoPagoRouter')
 const reviewRouter = require('./reviewRouter.js')
+const chatbotRouter = require('./chatbotRouter.js')
 const router = Router()
 /* const PaymentController = require('../Controllers/PaymentController')
 const PaymentService = require('../services/PaymentService')
@@ -16,6 +17,7 @@ router.use('/products', productRouter)
 router.use('/categories', categoryRouter)
 router.use('/cart', cartRouter);
 router.use('/detail', detailRouter);
+router.use('/chatbot', chatbotRouter);
 //mercado pago get de info del producto
 router.use('/mercadopago', mercadoPagoRouter)
 router.use('/reviews', reviewRouter)

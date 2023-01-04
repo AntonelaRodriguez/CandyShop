@@ -102,7 +102,7 @@ function App() {
   //   }, [user])
 
   //   useEffect(() => {
-  //     dispatch(getAllProducts())"698620a3-cf44-41a9-aa1f-15be7fc814f4"
+  //     dispatch(getAllProducts())
   //     dispatch(getAllCarts())
   //   }, [dispatch])
 

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import SimpleSidebar from "./src/NavAdmin/NavAdmin";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Button,
   Container,
@@ -10,25 +9,30 @@ import {
   Stack,
   FormLabel,
 } from "@chakra-ui/react";
-import CardProductAdmin from "./CardProductAdmin/CardProductAdmin.jsx";
-import CardOrderAdmin from './CardOrderAdmin/CardOrderAdmin'
 import Pagination from "../../Components/Pagination/Pagination";
-import { ImCross } from "react-icons/im";
-import Searchname from "../../Components/SearchName/Searchname";
-import Filters from "../../Components/Filters/Filters";
-import Order from "../../Components/Order/Order";
-import { useDispatch } from 'react-redux'
-import {getAllCarts} from '../../redux/actions/actions'
+import { useEffect } from "react";
+import { getUserCart } from "../../redux/actions/actions"
+import { useAuth0 } from "@auth0/auth0-react";
+import CardUserShopping from "./CardUserShopping/CardUserShopping"
 
-const OrdersAdmin = () => {
-    let dispatch = useDispatch();
-    let carts = useSelector((state) => state.allCarts)
-    console.log(carts)
-    carts = carts.filter((c) => c.state !== 'created');
+const UserShopping = () => {
+
+
+    const {isAuthenticated, user } = useAuth0();
+
+    const dispatch = useDispatch();
+    let carts = useSelector((state) => state.userCart)
+
+    carts = carts.filter((c) => c.state === 'completed' ||  c.state === 'delivered' ||  c.state === 'recived' );
     
+     
     useEffect(()=>{
-      dispatch(getAllCarts())
-  },[])
+        if(isAuthenticated){
+            dispatch(getUserCart(user.email));
+        }
+    },[])
+
+
   
     //--- pagination
     const [currentPage, setCurrentPage] = useState(1)
@@ -73,19 +77,16 @@ const OrdersAdmin = () => {
 
         {/* // productos y sidebar */}
         <Stack justifyContent="space-between" direction="row">
-          <SimpleSidebar />
           <Stack w="full" h="full" gap={4} p={5}>
             {currentPosts.length ? (
               currentPosts.map((p, i) => {
                 return (
-                    <CardOrderAdmin
+                    <CardUserShopping
                     key={p.orderN}
                     orderN={p.orderN}
                     date={p.date}
                     totalPrice={p.totalPrice}
                     state={p.state}
-                    trackingNumber={p.trackingNumber}
-                    variable={"button"}
                   />
                 );
               })
@@ -108,4 +109,4 @@ const OrdersAdmin = () => {
   );
 };
 
-export default OrdersAdmin;
+export default UserShopping;

@@ -59,6 +59,7 @@ const Products = () => {
 
   const handlerSort = (e) => {
     setOrder(dispatch(actions.sort(e.target.value)))
+    dispatch(actions.setCurrentPage(1))
   }
 
   const handleClear = (e) => {

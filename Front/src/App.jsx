@@ -1,16 +1,16 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Home from "./Pages/Home/Home";
-import Cart from "./Pages/Cart/Cart";
-import ProductDetail from "./Pages/ProductDetail/ProductDetail";
-import Products from "./Pages/Products/Products.jsx";
-import SignUp from "./Pages/SignUp/SignUp.jsx";
-import SignIn from "./Pages/SignIn/SignIn.jsx";
+import { Navigate, Route, Routes } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import Home from './Pages/Home/Home'
+import Cart from './Pages/Cart/Cart'
+import ProductDetail from './Pages/ProductDetail/ProductDetail'
+import Products from './Pages/Products/Products.jsx'
+import SignUp from './Pages/SignUp/SignUp.jsx'
+import SignIn from './Pages/SignIn/SignIn.jsx'
 
-import EditProduct from "./Pages/Edit/EditProduct.jsx";
-import { Container } from "@chakra-ui/react";
-import Nav from "./Components/Nav/Nav";
+import EditProduct from './Pages/Edit/EditProduct.jsx'
+import { Container } from '@chakra-ui/react'
+import Nav from './Components/Nav/Nav'
 import {
   getAllProducts,
   getUser,
@@ -18,29 +18,33 @@ import {
   getUserCart,
   postCart,
   getAllCarts,
-  deleteallCarts,
-} from "./redux/actions/actions";
-import Admin from "./Pages/Admin/Admin";
-import ProductsAdmin from "./Pages/Admin/ProductsAdmin";
-import UsersAdmin from "./Pages/Admin/UsersAdmin";
-import OrdersAdmin from "./Pages/Admin/OrdersAdmin";
-import UserDetails from "./Pages/UserDetails/UserDetails";
-import { useAuth0 } from "@auth0/auth0-react";
-import NotFound from "./Pages/NotFound/NotFound";
-import ReviewCard from "./Pages/Reviews/ReviewCard";
+  deleteallCarts
+} from './redux/actions/actions'
+import Admin from './Pages/Admin/Admin'
+import ProductsAdmin from './Pages/Admin/ProductsAdmin'
+import UsersAdmin from './Pages/Admin/UsersAdmin'
+import OrdersAdmin from './Pages/Admin/OrdersAdmin'
+import UserDetails from './Pages/UserDetails/UserDetails'
+import { useAuth0 } from '@auth0/auth0-react'
+import NotFound from './Pages/NotFound/NotFound'
+import ReviewCard from './Pages/Reviews/ReviewCard'
 // import Reviews from './Pages/Reviews/Reviews'
+
 import Create from "./Pages/Admin/Create/Create";
 import { FaGlassMartiniAlt } from "react-icons/fa";
 import { useLocalStorage } from "../src/Components/useLocalStorage/useLocalStorage";
 import axios from "axios";
 import CartOrderDetail from "./Pages/Admin/CartOrderDetail";
+import UserShopping from "./Pages/UserShopping/UserShopping";
+import CardProductShopping from "./Pages/UserShopping/CardProductShopping/CardProductShopping";
+import ChatBotChatBot from './Components/ChatBot/ChatBot'
 
 function App() {
-  const usuario = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const { isAuthenticated, user } = useAuth0();
-  const userCarts = useSelector((state) => state.userCart);
-  const [storedValue, setStoredValue] = useLocalStorage("cart", []);
+  const usuario = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+  const { isAuthenticated, user } = useAuth0()
+  const userCarts = useSelector((state) => state.userCart)
+  const [storedValue, setStoredValue] = useLocalStorage('cart', [])
 
   //   let infoUser = {}
   //   useEffect(() => {
@@ -110,104 +114,97 @@ function App() {
       let infoUser = {
         email: user.email,
         admin:
-          user.email === "bongiovanniivaan@gmail.com" ||
-          user.email === "pipeurien@gmail.com" ||
-          user.email === "pepo@gmail.com",
-      };
-      dispatch(postUser(infoUser));
+          user.email === 'bongiovanniivaan@gmail.com' ||
+          user.email === 'pipeurien@gmail.com' ||
+          user.email === 'pepo@gmail.com'
+      }
+      dispatch(postUser(infoUser))
     }
-  }, [isAuthenticated, dispatch]);
+  }, [isAuthenticated, dispatch])
 
   //Despacha acciones que resultan en el creación de un nuevo carrito para el usuario y el vaciado del estado "cart".
   //Estas acciones dependen del estado del último carrito creado para el usuario, las mismas se ejecutan
   //si el estado de este último carrito es igual a "completed", "cancelled", "delivered" o "recived".
   useEffect(() => {
     if (isAuthenticated && userCarts.length) {
-      (async () => {
-        dispatch(getUserCart(user.email));
-        let { data } = await axios(`/cart/${user.email}`);
-        let optionStates = ["completed", "cancelled", "delivered", "recived"];
+      ;(async () => {
+        dispatch(getUserCart(user.email))
+        let { data } = await axios(`/cart/${user.email}`)
+        let optionStates = ['completed', 'cancelled', 'delivered', 'recived']
         if (optionStates.includes(data[data.length - 1].state)) {
-          dispatch(postCart({ email: user.email, totalPrice: 0 }));
-          dispatch(deleteallCarts());
+          dispatch(postCart({ email: user.email, totalPrice: 0 }))
+          dispatch(deleteallCarts())
         }
-      })();
+      })()
     }
-  }, [isAuthenticated, userCarts.length, dispatch]);
+  }, [isAuthenticated, userCarts.length, dispatch])
 
   //Despacha la accion que resulta en el seteo del estado "userCart". Es muy importante que esta acción
   //se ejecute despues de la creación del usuario en DB.
   useEffect(() => {
     if (isAuthenticated) {
       setTimeout(() => {
-        dispatch(getUserCart(user.email));
-      }, 3000);
+        dispatch(getUserCart(user.email))
+      }, 3000)
     }
-  }, [isAuthenticated, userCarts.length, dispatch]);
+  }, [isAuthenticated, userCarts.length, dispatch])
 
   //Despacha la acción que resulta en el seteo de los estados "products" y "allCarts"
   useEffect(() => {
-    dispatch(getAllProducts());
+    dispatch(getAllProducts())
     setTimeout(() => {
-      dispatch(getAllCarts());
-    }, 5000);
-  }, [dispatch]);
+      dispatch(getAllCarts())
+    }, 5000)
+  }, [dispatch])
 
   // const { toggleColorMode, colorMode } = useColorMode(); //para el dark y light theme
   return (
     <Container
-      maxW="container.xl"
-      height="full"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
+      maxW='container.xl'
+      height='full'
+      display='flex'
+      flexDirection='column'
+      alignItems='center'
     >
       <Nav />
-
+      <ChatBotChatBot />
       <Routes>
-        <Route exact path="/" element={<Home />} />
+        <Route exact path='/' element={<Home />} />
+        <Route path='/cart' element={!usuario.admin ? <Cart /> : <Navigate to='/admin' />} />
+        <Route path='/Products' element={<Products />} />
+        <Route path='/product/:id' element={<ProductDetail />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/signin' element={<SignIn />} />
+        <Route path='/admin' element={usuario.admin ? <Admin /> : <Navigate to='/' />} />
+        <Route path='/create' element={usuario.admin ? <Create /> : <Navigate to='/' />} />
+        <Route path='/edit/:id' element={usuario.admin ? <EditProduct /> : <Navigate to='/' />} />
         <Route
-          path="/cart"
-          element={!usuario.admin ? <Cart /> : <Navigate to="/admin" />}
-        />
-        <Route path="/Products" element={<Products />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route
-          path="/admin"
-          element={usuario.admin ? <Admin /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/create"
-          element={usuario.admin ? <Create /> : <Navigate to="/" />}
+          path='/admin/UsersAdmin'
+          element={usuario.admin ? <UsersAdmin /> : <Navigate to='/' />}
         />
         <Route
-          path="/edit/:id"
-          element={usuario.admin ? <EditProduct /> : <Navigate to="/" />}
+          path='/admin/ProductsAdmin'
+          element={usuario.admin ? <ProductsAdmin /> : <Navigate to='/' />}
         />
         <Route
-          path="/admin/UsersAdmin"
-          element={usuario.admin ? <UsersAdmin /> : <Navigate to="/" />}
+          path='/admin/OrdersAdmin'
+          element={usuario.admin ? <OrdersAdmin /> : <Navigate to='/' />}
         />
         <Route
-          path="/admin/ProductsAdmin"
-          element={usuario.admin ? <ProductsAdmin /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/admin/OrdersAdmin"
-          element={usuario.admin ? <OrdersAdmin /> : <Navigate to="/" />}
-        />
-        <Route
+
           path="/detail/:id"
-          element={usuario.admin ? <CartOrderDetail /> : <Navigate to="/" />}
+          element={usuario.admin  ? <CartOrderDetail /> : <Navigate to="/" />}
         />
         <Route path="/userDetails" element={<UserDetails />} />
         <Route path="/*" element={<NotFound />} />
         <Route path="/reviews/:id" element={<ReviewCard />} />
+        
+        <Route path="/UserShopping" element={<UserShopping/>} />
+        <Route path="/detailShopping/:id" element={<CardProductShopping/>} />
+
       </Routes>
     </Container>
-  );
+  )
 }
 
-export default App;
+export default App

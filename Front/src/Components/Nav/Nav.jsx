@@ -9,7 +9,7 @@ import {
   Image,
   Avatar,
 } from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import img from "../../assets/candy_logo.svg";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { HiOutlineUserCircle } from "react-icons/hi";
@@ -102,7 +102,7 @@ const MenuLinks = ({ isOpen }) => {
   //auth0
   const { loginWithRedirect, isAuthenticated, user, logout } = useAuth0();
   const history = useNavigate();
-
+  const location = useLocation();
   return (
     <Box
       width="100%"
@@ -112,7 +112,7 @@ const MenuLinks = ({ isOpen }) => {
       <Stack
         spacing={8}
         align="center"
-        justify={["center", "space-between", "center", "space-between"]}
+        justify={["center", "space-between", "space-between", "space-between"]}
         direction={["column", "row", "row", "row"]}
         pt={[4, 4, 0, 0]}
       >
@@ -136,30 +136,29 @@ const MenuLinks = ({ isOpen }) => {
             </Flex>
           </Link>
         </Flex>
-        <Flex align="center" justifyContent="space-between" gap={5}>
-          <Button
-            _hover={{
-              color: "#000",
-            }}
-            colorScheme="primary"
-            variant="outline"
-          >
-            <Link to="/products">Store</Link>
-          </Button>
-          {usuario?.admin && (
-            <Button
-              _hover={{
-                color: "#000",
-              }}
-              colorScheme="primary"
-              variant="outline"
-            >
-              <Link to="/admin">Admin Panel</Link>
-            </Button>
-          )}
-        </Flex>
-
-        <Flex align="center" justifyContent="space-between" gap={5}>
+        <Flex alignSelf='flex-end' alignItems="center" justifyContent="space-between" gap={5}>
+          {/* location.pathname !== "/products" && */}
+          <Link to="/products">
+            <Text fontWeight='600' _hover={{ color: "#000"}}> Store </Text>
+          </Link>
+          {
+            usuario?.admin &&
+              <Link to="/admin">
+                <Text fontWeight='600' _hover={{ color: "#000"}}> Admin Panel </Text>
+              </Link>
+          }
+          {
+            isAuthenticated && !usuario?.admin &&
+              <Link to="/UserShopping">
+                <Text fontWeight='600' _hover={{ color: "#000"}}> My shopping </Text>
+              </Link>
+          }
+          {
+            usuario.admin !== true && 
+              <Link to="/cart">
+                <Icon boxSize={7} as={AiOutlineShoppingCart} _hover={{ color: "#000"}}/>
+              </Link>
+          }
           {isAuthenticated ? (
             <Popover>
               <PopoverTrigger>
@@ -247,11 +246,6 @@ const MenuLinks = ({ isOpen }) => {
             </Button>
           )}
 
-          {usuario.admin !== true && (
-            <Link to="/cart">
-              <Icon boxSize={8} as={AiOutlineShoppingCart} />
-            </Link>
-          )}
         </Flex>
       </Stack>
     </Box>

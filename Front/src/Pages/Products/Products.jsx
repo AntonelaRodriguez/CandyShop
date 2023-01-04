@@ -9,7 +9,8 @@ import {
   Text,
   Grid,
   GridItem,
-  Select
+  Select,
+  Spinner
 } from '@chakra-ui/react'
 import CardProduct from '../../Components/CardProduct/CardProduct'
 import * as actions from '../../redux/actions/actions'
@@ -72,7 +73,7 @@ const Products = () => {
   const indexOfFirstPost = indexOfLastPost - productsPerPage
   const currentPosts = products.slice(indexOfFirstPost, indexOfLastPost)
 
- console.log("products", products)
+  console.log('products', products)
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber)
@@ -236,21 +237,24 @@ const Products = () => {
           gap={20}
           minW='full'
         >
-          {currentPosts &&
+          {currentPosts.length ? (
             currentPosts.map((product) => {
               return (
-                <GridItem  key={product.id}>     
+                <GridItem key={product.id}>
                   <CardProduct
                     id={product.id}
                     image={product.image}
                     name={product.name}
                     price={product.price}
                     stock={product.stock}
-                    availability= {product.availability}
+                    availability={product.availability}
                   />
                 </GridItem>
               )
-            })}
+            })
+          ) : (
+            <Spinner size='lg' />
+          )}
         </Grid>
       </Stack>
       <Pagination

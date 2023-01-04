@@ -6,6 +6,7 @@ import {
   GridItem,
   Heading,
   HStack,
+  Icon,
   Image,
   Input,
   Stack,
@@ -24,11 +25,13 @@ import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCa
 import {useAuth0} from "@auth0/auth0-react"
 import ReviewForm from '../Reviews/ReviewForm'
 import ReviewCard from '../Reviews/ReviewCard'
+import { IoMdArrowBack } from "react-icons/io";
 
 
 
 
 const ProductDetail = () => {
+  window.scroll(0, 0);
   const [cantidad, setCantidad] = useState(0)
 
   const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
@@ -96,6 +99,7 @@ const ProductDetail = () => {
       margin='auto'
       boxShadow='2xl'
       position='relative'
+      marginTop="4em"
     >
       <Stack
         borderStartRadius='md'
@@ -116,11 +120,9 @@ const ProductDetail = () => {
           boxSize='md'
           width='full'
         ></Box>
-        <Link to='/products'>
-          <Button position='absolute' colorScheme='primary' variant='outline' top={15} left={15}>
-            Home
-          </Button>
-        </Link>
+        <Button onClick={() => navigate(-1)} position='absolute' colorScheme='primary' variant='outline' top="-4em" left="0">
+          <Icon boxSize={5} as={IoMdArrowBack} /> 
+        </Button>
       </Stack>
       <Stack minHeight='full' width={{ base: '100%', sm: '100%', md: '50%' }}>
         <Flex

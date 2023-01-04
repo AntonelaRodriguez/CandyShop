@@ -31,7 +31,8 @@ const Products = () => {
 
   const filters = useSelector((state) => state.filters)
   function handleFilters(event) {
-    setCurrentPage(1)
+    // setCurrentPage(1)
+    dispatch(actions.setCurrentPage(1))
     dispatch(actions.setFilters({ ...filters, [event.target.name]: event.target.value }))
     dispatch(actions.applyFilters({ ...filters, [event.target.name]: event.target.value }))
   }
@@ -41,7 +42,8 @@ const Products = () => {
   const handleSumbit = (event) => {
     event.preventDefault()
     if (name) {
-      setCurrentPage(1)
+      // setCurrentPage(1)
+      dispatch(actions.setCurrentPage(1))
       dispatch(actions.searchCandy(name))
       setName('')
     } else {
@@ -57,6 +59,7 @@ const Products = () => {
 
   const handlerSort = (e) => {
     setOrder(dispatch(actions.sort(e.target.value)))
+    dispatch(actions.setCurrentPage(1))
   }
 
   const handleClear = (e) => {
@@ -65,30 +68,33 @@ const Products = () => {
   }
 
   //--- pagination
-  const [currentPage, setCurrentPage] = useState(1)
+  // const [currentPage, setCurrentPage] = useState(1)
+  let currentPage = useSelector((state) => state.currentPage)
+  let categories = useSelector((state) => state.categories);
+  let brands = useSelector((state) => state.brands);
   const [productsPerPage] = useState(9)
 
   const indexOfLastPost = currentPage * productsPerPage
   const indexOfFirstPost = indexOfLastPost - productsPerPage
   const currentPosts = products.slice(indexOfFirstPost, indexOfLastPost)
 
- console.log("products", products)
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber)
+    // setCurrentPage(pageNumber)
+    dispatch(actions.setCurrentPage(pageNumber))
   }
 
-  const prevPage = () => {
-    if (currentPage !== 1) {
-      setCurrentPage(currentPage - 1)
-    }
-  }
+  // const prevPage = () => {
+  //   if (currentPage !== 1) {
+  //     setCurrentPage(currentPage - 1)
+  //   }
+  // }
 
-  const nextPage = () => {
-    if (currentPage !== Math.ceil(products.length / productsPerPage)) {
-      setCurrentPage(currentPage + 1)
-    }
-  }
+  // const nextPage = () => {
+  //   if (currentPage !== Math.ceil(products.length / productsPerPage)) {
+  //     setCurrentPage(currentPage + 1)
+  //   }
+  // }
   //----
 
   return (
@@ -180,28 +186,9 @@ const Products = () => {
           onChange={handleFilters}
           m={2}
         >
-          <option value='aguila'>Aguila</option>
-          <option value='arcor'>Arcor</option>
-          <option value='bagley'>Bagley</option>
-          <option value='bon o bon' option>
-            Bon o Bon
-          </option>
-          <option value='billiken'>Billiken</option>
-          <option value='bonafide'>Bonafide</option>
-          <option value='cofler'>Cofler</option>
-          <option value='felfort'>Felfort</option>
-          <option value='ferrero'>Ferrero</option>
-          <option value='georgalos'>Georgalos</option>
-          <option value='godet'>Godet</option>
-          <option value='jorgito'>Jorgito</option>
-          <option value='milka'>Milka</option>
-          <option value='mogul'>Mogul</option>
-          <option value='nestle'>Nestle</option>
-          <option value='terrabusi'>Terrabusi</option>
-          <option value='tofi'>Tofi</option>
-          <option value='topline'>Topline</option>
-          <option value='trident'>Trident</option>
-          <option value='unknown'>Unknown</option>
+          {
+            brands.map((b) =>  <option key={b} value={b}>{b}</option>)
+          }
         </Select>
         <Select
           placeholder='CATEGORY'
@@ -212,16 +199,9 @@ const Products = () => {
           onChange={handleFilters}
           m={2}
         >
-          <option value='biscuits'>biscuits</option>
-          <option value='bubble gum'>bubble gum</option>
-          <option value='caramel cookie'>caramel cookie</option>
-          <option value='candy'>candy</option>
-          <option value='cerealbars'>cerealbars</option>
-          <option value='chocolate'>chocolate</option>
-          <option value='gummies'>gummies</option>
-          <option value='lollipop'>lollipop</option>
-          <option value='tablets'>tablets</option>
-          <option value='unknown'>unknown</option>
+          {
+            categories.map((c) => <option key={c} value={c}>{c}</option> )
+          }
         </Select>
       </Flex>
 
@@ -258,8 +238,8 @@ const Products = () => {
         totalProducts={products.length}
         currentPage={currentPage}
         paginate={paginate}
-        prevPage={prevPage}
-        nextPage={nextPage}
+        // prevPage={prevPage}
+        // nextPage={nextPage}
       />
       <Footer />
     </Flex>

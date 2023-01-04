@@ -11,43 +11,51 @@ import {
     TagLabel,
     Text,
     FormLabel,
-    Select
+    Select,
+    Input
   } from '@chakra-ui/react'
   import React, {useState} from 'react'
   import { useDispatch } from 'react-redux'
   import { Link } from 'react-router-dom'
-  import {updateCart} from '../../../redux/actions/actions'
+  import {updateCart,getCartByPk} from '../../../redux/actions/actions'
+  import { useNavigate, useParams } from 'react-router-dom'
   
-  const CardProductAdmin = ({ orderN, date, totalPrice, state,}) => {
+  const CardProductAdmin = ({ orderN, date, totalPrice, state, trackingNumber, variable}) => {
 
     let dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [input, setInput] = useState({
       orderN: orderN, 
       state: state, 
       totalPrice: totalPrice, 
-      date: date
-  })
+      date: date,
+      trackingNumber: trackingNumber,
+  });
 
   function handleChange(e) {
       setInput({
         ...input,
         [e.target.name]: e.target.value
-      })
-      console.log(input.state)
-  }
+      });
+      console.log(input);
+  };
 
   let newInput = {
     orderN: input.orderN,
     state: input.state,
     totalPrice: input.totalPrice,
     date: input.date,
-  }
+    trackingNumber: input.trackingNumber,
+  };
 
   function handleSubmit(e){
-    e.preventDefault()
-    dispatch(updateCart(newInput))
-  }
+    e.preventDefault();
+    dispatch(updateCart(newInput));
+    dispatch(getCartByPk(orderN))
+    alert("Cart succesfully updated!");
+    navigate('/admin/OrdersAdmin');
+  };
 
     return (
       <Card
@@ -96,11 +104,15 @@ import {
             </Heading>
   
             <Text fontWeight={300} size='sm'>
-            Date: {date}
+            Date: {date}.
             </Text>
 
             <Text fontWeight={300} size='sm'>
-            Actual State: {state}
+            Actual State: {state}.
+            </Text>
+
+            <Text fontWeight={300} size='sm'>
+            Tracking Number: {trackingNumber}.
             </Text>
   
             <Stack>
@@ -108,8 +120,11 @@ import {
                 <TagLabel>$ {totalPrice}</TagLabel>
               </Tag>
             </Stack>
-
+            {variable === "inputs" &&
+            
             <form action='submit' onSubmit={(e) => handleSubmit(e)}>
+                <FormLabel>Tracking Number:</FormLabel>
+                <Input type='text' value={input.trackingNumber} name='trackingNumber' onChange={(e)=> handleChange(e)}></Input>
                 <Select name='state' value={input.state} onChange={(e)=>handleChange(e)}>
                     <option>Select category</option>
                     <option value="cancelled">Cancelled</option>
@@ -120,15 +135,16 @@ import {
                     Change State
                 </Button>
             </form>
+            }
 
           </CardBody>
-  
+          {variable === "button" && 
           <Stack h='full' direction='row'>
             <Button size={{ base: 'xs', lg: 'sm' }} variant='solid' colorScheme='blue'>
               <Link to={'/detail/' + orderN}>Shopping Cart Detail</Link>
             </Button>
-            
           </Stack>
+          }
         </Stack>
       </Card>
     )

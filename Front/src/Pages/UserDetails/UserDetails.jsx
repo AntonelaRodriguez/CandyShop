@@ -91,7 +91,7 @@ const UserDetails = (props) => {
 
   return (
     <Stack direction='row' align='center' justify='center' gap={15}>
-      <form action='submit' onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={(e) => handleSubmit(e)}>
         <Stack spacing={2}>
           <FormControl isRequired>
             <FormLabel>Name</FormLabel>

@@ -34,6 +34,8 @@ import { FaGlassMartiniAlt } from "react-icons/fa";
 import { useLocalStorage } from "../src/Components/useLocalStorage/useLocalStorage";
 import axios from "axios";
 import CartOrderDetail from "./Pages/Admin/CartOrderDetail";
+import UserShopping from "./Pages/UserShopping/UserShopping";
+import CardProductShopping from "./Pages/UserShopping/CardProductShopping/CardProductShopping";
 
 function App() {
   const usuario = useSelector((state) => state.user);
@@ -200,11 +202,15 @@ function App() {
         />
         <Route
           path="/detail/:id"
-          element={usuario.admin ? <CartOrderDetail /> : <Navigate to="/" />}
+          element={usuario.admin  ? <CartOrderDetail /> : <Navigate to="/" />}
         />
         <Route path="/userDetails" element={<UserDetails />} />
         <Route path="/*" element={<NotFound />} />
         <Route path="/reviews/:id" element={<ReviewCard />} />
+        
+        <Route path="/UserShopping" element={<UserShopping/>} />
+        <Route path="/detailShopping/:id" element={<CardProductShopping/>} />
+
       </Routes>
     </Container>
   );

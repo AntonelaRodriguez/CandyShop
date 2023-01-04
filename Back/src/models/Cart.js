@@ -23,6 +23,11 @@ module.exports = (sequelize) => {
         defaultValue: 'created',
         allowNull: false
       },
+      trackingNumber: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'none'
+      }
     },
     {
       timestamps: false,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SimpleSidebar from "./src/NavAdmin/NavAdmin";
 import { useSelector } from "react-redux";
 import {
@@ -17,12 +17,18 @@ import { ImCross } from "react-icons/im";
 import Searchname from "../../Components/SearchName/Searchname";
 import Filters from "../../Components/Filters/Filters";
 import Order from "../../Components/Order/Order";
+import { useDispatch } from 'react-redux'
+import {getAllCarts} from '../../redux/actions/actions'
 
 const OrdersAdmin = () => {
+    let dispatch = useDispatch();
     let carts = useSelector((state) => state.allCarts)
     console.log(carts)
     carts = carts.filter((c) => c.state !== 'created');
     
+    useEffect(()=>{
+      dispatch(getAllCarts())
+  },[])
   
     //--- pagination
     const [currentPage, setCurrentPage] = useState(1)
@@ -78,6 +84,8 @@ const OrdersAdmin = () => {
                     date={p.date}
                     totalPrice={p.totalPrice}
                     state={p.state}
+                    trackingNumber={p.trackingNumber}
+                    variable={"button"}
                   />
                 );
               })

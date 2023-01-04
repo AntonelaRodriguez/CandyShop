@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Grid, GridItem, Heading, Image, Stack } from '@chakra-ui/react'
 import CardProduct from '../CardProduct/CardProduct'
 import { Link, NavLink } from 'react-router-dom'
@@ -6,6 +6,11 @@ import { useSelector } from 'react-redux'
 const LatestProducts = () => {
   let products = useSelector((state) => state.products)
   products = products.slice(0, 3)
+  useEffect(() => {
+    return () => {
+      window.scroll(0, 0);
+    }
+  },[])
   return (
     <>
       <Stack gap={3} justify='center' align='center' overflow='hidden'>

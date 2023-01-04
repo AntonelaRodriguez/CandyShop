@@ -30,13 +30,13 @@ import NotFound from './Pages/NotFound/NotFound'
 import ReviewCard from './Pages/Reviews/ReviewCard'
 // import Reviews from './Pages/Reviews/Reviews'
 
-import Create from "./Pages/Admin/Create/Create";
-import { FaGlassMartiniAlt } from "react-icons/fa";
-import { useLocalStorage } from "../src/Components/useLocalStorage/useLocalStorage";
-import axios from "axios";
-import CartOrderDetail from "./Pages/Admin/CartOrderDetail";
-import UserShopping from "./Pages/UserShopping/UserShopping";
-import CardProductShopping from "./Pages/UserShopping/CardProductShopping/CardProductShopping";
+import Create from './Pages/Admin/Create/Create'
+import { FaGlassMartiniAlt } from 'react-icons/fa'
+import { useLocalStorage } from '../src/Components/useLocalStorage/useLocalStorage'
+import axios from 'axios'
+import CartOrderDetail from './Pages/Admin/CartOrderDetail'
+import UserShopping from './Pages/UserShopping/UserShopping'
+import CardProductShopping from './Pages/UserShopping/CardProductShopping/CardProductShopping'
 import ChatBotChatBot from './Components/ChatBot/ChatBot'
 
 function App() {
@@ -122,6 +122,14 @@ function App() {
     }
   }, [isAuthenticated, dispatch])
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      setTimeout(() => {
+        dispatch(getUser(user.email))
+      }, 1000)
+    }
+  }, [isAuthenticated, user, usuario?.UserDetails])
+
   //Despacha acciones que resultan en el creación de un nuevo carrito para el usuario y el vaciado del estado "cart".
   //Estas acciones dependen del estado del último carrito creado para el usuario, las mismas se ejecutan
   //si el estado de este último carrito es igual a "completed", "cancelled", "delivered" o "recived".
@@ -191,17 +199,15 @@ function App() {
           element={usuario.admin ? <OrdersAdmin /> : <Navigate to='/' />}
         />
         <Route
-
-          path="/detail/:id"
-          element={usuario.admin  ? <CartOrderDetail /> : <Navigate to="/" />}
+          path='/detail/:id'
+          element={usuario.admin ? <CartOrderDetail /> : <Navigate to='/' />}
         />
-        <Route path="/userDetails" element={<UserDetails />} />
-        <Route path="/*" element={<NotFound />} />
-        <Route path="/reviews/:id" element={<ReviewCard />} />
-        
-        <Route path="/UserShopping" element={<UserShopping/>} />
-        <Route path="/detailShopping/:id" element={<CardProductShopping/>} />
+        <Route path='/userDetails' element={<UserDetails />} />
+        <Route path='/*' element={<NotFound />} />
+        <Route path='/reviews/:id' element={<ReviewCard />} />
 
+        <Route path='/UserShopping' element={<UserShopping />} />
+        <Route path='/detailShopping/:id' element={<CardProductShopping />} />
       </Routes>
     </Container>
   )

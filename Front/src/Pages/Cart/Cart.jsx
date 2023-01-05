@@ -34,10 +34,10 @@ const Cart = () => {
     }
   }, [cart])
 
-  // let order = ""
-  // useEffect(() => {
-  //   order = userCart[userCart?.length - 1]?.orderN
-  // },[userCart])
+  const [orderN, setorderN] = useState(0);
+  useEffect(() => {
+    setorderN(userCart[userCart?.length - 1]?.orderN)
+  }, [userCart.length])
 
   useEffect(() => {
     document.getElementById('form1').textContent = "";
@@ -48,13 +48,14 @@ const Cart = () => {
       setShowOrderReady(true);
     }
   }, [cart.length]);
-
+  
   const handlerOrderReady = async () => {
+    if(!orderN) return
     setShowOrderReady(false);
     setloading(true);
     document.getElementById('form1').textContent = "";
     let { data: { id } } = await axios.post('/mercadopago', {
-      cartId: userCart[userCart?.length - 1]?.orderN, 
+      cartId: orderN, 
       userId: user.email, 
       cartItems: cart
     })
@@ -99,7 +100,7 @@ const Cart = () => {
               {loading 
                 ? <Spinner /> 
                 : showOrderReady 
-                  ? <Button variant='ghost' bg='primary.300' onClick={() => handlerOrderReady()}>
+                  ? <Button variant='ghost' bg='primary.300' onClick={() => handlerOrderReady()} disabled={!orderN}>
                       Order ready! 
                     </Button>
                   : ""

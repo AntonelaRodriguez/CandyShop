@@ -136,16 +136,16 @@ function App() {
   useEffect(() => {
     if (isAuthenticated && userCarts.length) {
       ;(async () => {
-        dispatch(getUserCart(user.email))
-        let { data } = await axios(`/cart/${user.email}`)
+        /* dispatch(getUserCart(user.email)) */
+        let res = await axios(`/cart/${user.email}`)
         let optionStates = ['completed', 'cancelled', 'delivered', 'recived']
-        if (optionStates.includes(data[data.length - 1].state)) {
+        if (optionStates.includes(res.data[res.data.length - 1].state)) {
           dispatch(postCart({ email: user.email, totalPrice: 0 }))
           dispatch(deleteallCarts())
         }
       })()
     }
-  }, [isAuthenticated, userCarts.length, dispatch])
+  }, [isAuthenticated, userCarts.length])
 
   //Despacha la accion que resulta en el seteo del estado "userCart". Es muy importante que esta acción
   //se ejecute despues de la creación del usuario en DB.
@@ -155,7 +155,7 @@ function App() {
         dispatch(getUserCart(user.email))
       }, 3000)
     }
-  }, [isAuthenticated, userCarts.length, dispatch])
+  }, [isAuthenticated, userCarts.length])
 
   //Despacha la acción que resulta en el seteo de los estados "products" y "allCarts"
   useEffect(() => {

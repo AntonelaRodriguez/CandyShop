@@ -100,16 +100,7 @@ const updateUserDetail = async (
   image,
   companyName
 ) => {
-  if (
-    !email ||
-    !name ||
-    !lastName ||
-    !phoneNumber ||
-    !address ||
-    !image ||
-    !companyName
-  )
-    throw new Error("All arguments are require");
+  
 
   await UserDetail.update(
     {

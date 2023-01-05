@@ -35,6 +35,7 @@ const UsersAdmin = () => {
                 console.log(u)
                 return (
                   <CardUserAdmin
+                    key={u?.UserDetail?.UserEmail}
                     name={u.UserDetail ? u.UserDetail.name : '...'}
                     lastName={u.UserDetail ? u.UserDetail.lastName : '...'}
                     companyName={u.UserDetail ? u.UserDetail.companyName : '...'}

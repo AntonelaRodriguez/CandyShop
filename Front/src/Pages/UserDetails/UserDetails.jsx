@@ -69,9 +69,9 @@ const UserDetails = (props) => {
         phoneNumber: '',
         address: ''
       })
-      dispatch(getUser(user?.email))
       alert('User details updated successfully')
       navigate('/products')
+      dispatch(getUser(user?.email))
       return
     } else if (currentUser?.UserDetail) {
       dispatch(updateUserDetail(newDetail))
@@ -82,9 +82,9 @@ const UserDetails = (props) => {
         phoneNumber: '',
         address: ''
       })
-      dispatch(getUser(user?.email))
       alert('User details updated successfully')
       navigate('/products')
+      dispatch(getUser(user?.email))
       return
     }
   }

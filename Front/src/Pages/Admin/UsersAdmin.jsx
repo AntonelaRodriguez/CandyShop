@@ -16,7 +16,6 @@ const UsersAdmin = () => {
   useEffect(() => {
     dispatch(getAllUsers())
   }, [dispatch])
-
   return (
     <Container
       maxW='container.lg'
@@ -32,16 +31,19 @@ const UsersAdmin = () => {
           <Stack w='full' h='full' gap={4} p={5}>
             {users.length ? (
               users.map((u) => {
-                console.log(u)
+                // console.log(u)
                 return (
                   <CardUserAdmin
-                    key={u?.UserDetail?.UserEmail}
-                    name={u.UserDetail ? u.UserDetail.name : '...'}
-                    lastName={u.UserDetail ? u.UserDetail.lastName : '...'}
-                    companyName={u.UserDetail ? u.UserDetail.companyName : '...'}
-                    phoneNumber={u.UserDetail ? u.UserDetail.phoneNumber : '...'}
-                    address={u.UserDetail ? u.UserDetail.address : '...'}
-                    image={u.UserDetail ? u.UserDetail.image : '...'}
+                    key={u.email}
+                    email={u.email}
+                    banned = {u.banned}
+                    admin = {u.admin}
+                    name={u.UserDetail ? u.UserDetail.name : ''}
+                    lastName={u.UserDetail ? u.UserDetail.lastName : ''}
+                    companyName={u.UserDetail ? u.UserDetail.companyName : ''}
+                    phoneNumber={u.UserDetail ? u.UserDetail.phoneNumber : ''}
+                    address={u.UserDetail ? u.UserDetail.address : ''}
+                    image={u.UserDetail ? u.UserDetail.image : ''}
                   />
                 )
               })

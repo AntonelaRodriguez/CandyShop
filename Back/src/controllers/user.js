@@ -34,7 +34,7 @@ const getAllUsers = async () => {
 };
 
 const updateUser = async (email, banned, admin) => {
-  if (!email || !banned || !admin) throw new Error("All arguments are require");
+  // if (!email || !banned || !admin) throw new Error("All arguments are require");
 
   await User.update(
     {

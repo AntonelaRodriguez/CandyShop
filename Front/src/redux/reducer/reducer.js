@@ -27,35 +27,18 @@ import {
   DELETE_ALL_CARTS,
   GET_ALL_USERS,
   UPDATE_USER_DETAIL,
-  GET_CART_PRODUCT_DETAIL
+  GET_CART_PRODUCT_DETAIL,
+  SET_CURRENT_PAGE,
+  updateUser,
+  UPDATE_USER
 } from '../actions/actions'
 
 const initialState = {
   products: [],
   productDetail: [],
   categories: [],
-  brands: [
-    'arcor',
-    'bagley',
-    'milka',
-    'mogul',
-    'aguila',
-    'bon o bon',
-    'cofler',
-    'terrabusi',
-    'topline',
-    'tofi',
-    'godet',
-    'nestle',
-    'felfort',
-    'billiken',
-    'georgalos',
-    'bonafide',
-    'jorgito',
-    'trident',
-    'ferrero',
-    'unknown'
-  ],
+  brands: [],
+  categories: [],
   filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
   cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [],
   user: {},
@@ -66,6 +49,7 @@ const initialState = {
   ratings: [],
   allCarts: [],
   productDetailCart: [],
+  currentPage: 1
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -73,7 +57,9 @@ const reducer = (state = initialState, { type, payload }) => {
     case ALL_PRODUCTS: {
       return {
         ...state,
-        products: payload
+        products: payload,
+        categories: Array.from(new Set([...payload.map( p => p.category).flat()])).sort(),
+        brands: Array.from(new Set([...payload.map( p => p.brand)])).sort()
       }
     }
     case ALL_CATEGORIES: {
@@ -231,6 +217,17 @@ const reducer = (state = initialState, { type, payload }) => {
     case UPDATE_USER_DETAIL: {
       return {
         ...state
+      }
+    }
+    case UPDATE_USER: {
+      return {
+        ...state
+      }
+    }
+    case SET_CURRENT_PAGE: {
+      return {
+        ...state,
+        currentPage: payload
       }
     }
     default:

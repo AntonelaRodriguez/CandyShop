@@ -1,5 +1,11 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Badge,
   Button,
   Card,
@@ -12,11 +18,13 @@ import {
   Tag,
   TagLabel,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import img from '../../../assets/user-png-33842.png'
+import { getUser, updateUser } from "../../../redux/actions/actions";
 import EditUser from "../EditUser/EditUser";
 
 const CardUserAdmin = ({
@@ -27,8 +35,10 @@ const CardUserAdmin = ({
   phoneNumber,
   address,
   image,
+  banned,
+  admin
 }) => {
-// console.log(email);
+
   return (
     <Card
       w="full"
@@ -81,6 +91,8 @@ const CardUserAdmin = ({
             <Text>Company: {companyName}</Text>
             <Text>PhoneNumber: {phoneNumber}</Text>
             <Text>Address: {address}</Text>
+            <Text>Banned: {banned === true ? 'Yes' : 'Not Banned'}</Text>
+            <Text>Admin: {admin === true ? 'Yes' : 'Not Admin'}</Text>
           </Flex>
         </CardBody>
 
@@ -90,15 +102,7 @@ const CardUserAdmin = ({
             variant="solid"
             colorScheme="blue"
           >
-            <EditUser email={email} />
-            <Link to={`/editUser/${email}`}>Edit User</Link>
-          </Button>
-          <Button
-            size={{ base: "xs", lg: "sm" }}
-            variant="solid"
-            colorScheme="red"
-          >
-            <Link>Ban User</Link>
+            <Link to={`/editUser/${email}`}>Edit Status</Link>
           </Button>
         </Stack>
       </Stack>

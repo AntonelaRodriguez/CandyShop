@@ -187,7 +187,7 @@ const EditProduct = () => {
             </Flex>
 
             <FormLabel as='legend'>Tacc</FormLabel>
-            <RadioGroup>
+            <RadioGroup defaultValue={tacc === true ? 'True' : 'False'}>
               <HStack spacing='24px'>
                 <Radio
                   onChange={(e) => handleChange(e)}

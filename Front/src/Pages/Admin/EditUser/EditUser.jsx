@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useState, 
   // useEffect
  } from 'react'
@@ -12,8 +12,21 @@ import {
   Stack,
   Input,
   Button,
+  HStack,
+  Select,
+  Text,
+  Heading,
+  useDisclosure,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
+  RadioGroup,
+  Radio,
    } from "@chakra-ui/react";
-import { getUser, postUserDetail, updateUserDetail } from '../../../redux/actions/actions';
+import { getAllUsers, getUser, postUserDetail, updateUser, updateUserDetail } from '../../../redux/actions/actions';
 import { useNavigate } from 'react-router-dom';
 import {useAuth0} from "@auth0/auth0-react"
 import { useEffect } from 'react';
@@ -28,24 +41,29 @@ const EditUser = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [storedValue, setStoredValue] = useLocalStorage('userDetail', {});
-  const currentUser = useSelector(state => state.user)
+  // const currentUser = useSelector(state => state.user)
+  const users = useSelector(state => state.users)
+  const currentUser = users && users.filter(u => window.location.pathname === `/editUser/${u.email}`)
 
   useEffect(() => {
-      dispatch(getUser(user.email))
+      dispatch(getAllUsers())
   },[dispatch])
+
+   
 
   // function setValue(){
   //   setStoredValue(currentUser.UserDetail)
   // }
 
+// console.log(currentUser[0]);
+
   const [input, setInput] = useState({
-    name: "",
-    lastName: "",
-    companyName: "",
-    phoneNumber: null,
-    address: "",
+    email: currentUser[0].email,
+    banned: currentUser[0].banned,
+    admin: currentUser[0].admin
   });
-//   console.log(currentUser, 'user ')
+  console.log(currentUser[0], 'user ')
+// console.log(user);
   
   function handleChange(e) {
     
@@ -55,100 +73,87 @@ const EditUser = (props) => {
     });
   }
   const newDetail = {
-    email: isAuthenticated ? user.email : "",
-    name: input.name,
-    lastName: input.lastName,
-    companyName: input.companyName,
-    phoneNumber: input.phoneNumber,
-    address: input.address,
-    image: isAuthenticated ? user.picture : ""
+    email: input.email,
+    banned: input.banned === 'true' ? true : false,
+    admin: input.admin === 'true' ? true : false
   };
 
-  // console.log(newDetail, 'NewDetail');
+  console.log(newDetail, 'NewDetail');
 
   function handleSubmit(e) {
-    e.preventDefault()
-    if(!currentUser.UserDetail){
-      dispatch(postUserDetail(newDetail))
-      setInput({
-        name: "",
-        lastName: "",
-        companyName: "",
-        phoneNumber: "",
-        address: "",
-      })
-      dispatch(getUser(user.email))
-      alert("User details updated successfully")
-      navigate('/products')
-    }
-    dispatch(updateUserDetail(newDetail))
-    setInput({
-      name: "",
-      lastName: "",
-      companyName: "",
-      phoneNumber: "",
-      address: "",
-    })
-    dispatch(getUser(user.email))
-    alert("User details updated successfully")
-      navigate('/products')
+    // e.preventDefault()
+    dispatch(updateUser(newDetail))
+    // dispatch(getUser(currentUser[0].email))
+    navigate('/admin/UsersAdmin')
   }
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = useRef()
 
 
   return (
-    <Stack direction='row' align='center' justify='center' gap={15}>
+    <Stack direction='column' align='center' justify='center' gap={15}>
+      <Heading fontWeight={700} size="lg" >{`Edit User: ${currentUser[0].UserDetail.name} ${currentUser[0].UserDetail.lastName}`}</Heading>
       <form action='submit' onSubmit={(e) => handleSubmit(e)}>
-        <Stack spacing={2}>
+        <Stack spacing={7}>
           <FormControl isRequired>
-            <FormLabel>Name</FormLabel>
-            <Input 
-            type="text"
-            value={input.name}
-            name="name"
-            onChange={handleChange}
-            placeholder={currentUser.UserDetail ? currentUser.UserDetail.name : '...'} 
-            />
+          <FormLabel as='legend' marginTop='1rem'>Ban</FormLabel>
+            <RadioGroup defaultValue={currentUser[0].banned === true ? 'true' : 'false'}>
+              <HStack spacing='24px'>
+                <Radio name='banned' onChange={(e) => handleChange(e)} value='false'>
+                  No
+                </Radio>
+                <Radio name='banned' onChange={(e) => handleChange(e)} value='true'>
+                  Yes
+                </Radio>
+              </HStack>
+            </RadioGroup>
 
-            <FormLabel>Last Name</FormLabel>
-            <Input
-            type="text"
-            value={input.lastName}
-            name="lastName"
-            onChange={handleChange}
-            placeholder={currentUser.UserDetail ? currentUser.UserDetail.lastName : '...'} 
-            />
 
-            <FormLabel>Company</FormLabel>
-            <Input
-            type="text"
-            value={input.companyName}
-            name="companyName"
-            onChange={handleChange}
-            placeholder={currentUser.UserDetail ? currentUser.UserDetail.companyName : '...'} 
-            />
-
-            <FormLabel>Phone Number</FormLabel>
-            <Input
-            type="number"
-            value={input.phoneNumber}
-            name="phoneNumber"
-            onChange={handleChange}
-            placeholder={currentUser.UserDetail ? currentUser.UserDetail.phoneNumber : '...'} 
-            />
-
-            <FormLabel>Address</FormLabel>
-            <Input
-            type="text"
-            value={input.address}
-            name="address"
-            onChange={handleChange}
-            placeholder={currentUser.UserDetail ? currentUser.UserDetail.address : '...'} 
-            />
+            <FormLabel as='legend' marginTop='2rem'>Admin</FormLabel>
+            <RadioGroup defaultValue={currentUser[0].admin === true ? 'true' : 'false'}>
+              <HStack spacing='24px'>
+                <Radio name='admin' onChange={(e) => handleChange(e)} value='false'>
+                  No
+                </Radio>
+                <Radio name='admin' onChange={(e) => handleChange(e)} value='true'>
+                  Yes
+                </Radio>
+              </HStack>
+            </RadioGroup>
           </FormControl>
-          <Button type="submit" colorScheme="primary">
+          <Button onClick={onOpen} colorScheme="primary">
             Change details
           </Button>
+
+          <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+            Edit User
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              Are you sure?
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button colorScheme='red' 
+              // type='submit'
+              onClick={(e) => {handleSubmit(e); onClose(e)}} 
+              ml={3}>
+                Save changes
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
         </Stack>
       </form>
     </Stack>

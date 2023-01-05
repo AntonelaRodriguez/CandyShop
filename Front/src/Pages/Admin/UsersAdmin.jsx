@@ -31,10 +31,13 @@ const UsersAdmin = () => {
           <Stack w='full' h='full' gap={4} p={5}>
             {users.length ? (
               users.map((u) => {
-                // console.log(u.email)
+                // console.log(u)
                 return (
                   <CardUserAdmin
+                    key={u.email}
                     email={u.email}
+                    banned = {u.banned}
+                    admin = {u.admin}
                     name={u.UserDetail ? u.UserDetail.name : ''}
                     lastName={u.UserDetail ? u.UserDetail.lastName : ''}
                     companyName={u.UserDetail ? u.UserDetail.companyName : ''}

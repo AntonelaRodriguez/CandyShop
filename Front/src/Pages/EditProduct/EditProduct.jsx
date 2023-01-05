@@ -93,7 +93,7 @@ const EditProduct = () => {
       category: input.category.filter((param) => param !== e)
     })
   }
-  console.log(input)
+  // console.log(productDetail.tacc)
   function handleSubmit(e) {
     e.preventDefault()
     dispatch(editProduct(id, input))
@@ -187,7 +187,9 @@ const EditProduct = () => {
             </Flex>
 
             <FormLabel as='legend'>Tacc</FormLabel>
-            <RadioGroup>
+            <RadioGroup 
+            defaultValue={productDetail.tacc === true ? 'True' : 'False'}
+            >
               <HStack spacing='24px'>
                 <Radio
                   onChange={(e) => handleChange(e)}

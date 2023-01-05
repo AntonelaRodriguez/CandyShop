@@ -8,7 +8,7 @@ import Products from './Pages/Products/Products.jsx'
 import SignUp from './Pages/SignUp/SignUp.jsx'
 import SignIn from './Pages/SignIn/SignIn.jsx'
 
-import EditProduct from './Pages/Edit/EditProduct.jsx'
+import EditProduct from './Pages/EditProduct/EditProduct'
 import { Container } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
 import {

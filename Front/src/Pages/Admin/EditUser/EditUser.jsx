@@ -27,7 +27,7 @@ import {
   Radio,
    } from "@chakra-ui/react";
 import { getAllUsers, getUser, postUserDetail, updateUser, updateUserDetail } from '../../../redux/actions/actions';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {useAuth0} from "@auth0/auth0-react"
 import { useEffect } from 'react';
 import { useLocalStorage } from '../../../Components/useLocalStorage/useLocalStorage';
@@ -92,6 +92,12 @@ const EditUser = (props) => {
 
 
   return (
+    <Stack direction='column' align='start'>
+      <Button variant="solid"
+            colorScheme="primary"
+            >
+        <Link to={'/admin/UsersAdmin'}>Back</Link>
+      </Button>
     <Stack direction='column' align='center' justify='center' gap={15}>
       <Heading fontWeight={700} size="lg" >{`Edit User: ${currentUser[0].UserDetail.name} ${currentUser[0].UserDetail.lastName}`}</Heading>
       <form action='submit' onSubmit={(e) => handleSubmit(e)}>
@@ -156,6 +162,7 @@ const EditUser = (props) => {
       </AlertDialog>
         </Stack>
       </form>
+    </Stack>
     </Stack>
   )
 }

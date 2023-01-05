@@ -72,6 +72,22 @@ import {
               : <Spinner/>
             }
         </Stack>
+        <Stack display='flex' flexDir='column'>
+            <Text fontWeight='600'>Number tracking: </Text>
+            {
+              order
+              ? <>
+                  <Text 
+                    fontWeight='600' 
+                    textTransform='uppercase'
+                    color="black"
+                  >
+                    {order.trackingNumber === "none" ? "unknown" : order.trackingNumber}
+                  </Text>
+                </>
+              : <Spinner/>
+            }
+        </Stack>
       </Stack>
     );
   };

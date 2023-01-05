@@ -135,11 +135,11 @@ function App() {
   //si el estado de este último carrito es igual a "completed", "cancelled", "delivered" o "recived".
   useEffect(() => {
     if (isAuthenticated && userCarts.length) {
-      ;(async () => {
+      (async () => {
         dispatch(getUserCart(user.email))
-        let { data } = await axios(`/cart/${user.email}`)
+        let res = await axios(`/cart/${user.email}`)
         let optionStates = ['completed', 'cancelled', 'delivered', 'recived']
-        if (optionStates.includes(data[data.length - 1].state)) {
+        if (optionStates.includes(res.data[res.data.length - 1]?.state)) {
           dispatch(postCart({ email: user.email, totalPrice: 0 }))
           dispatch(deleteallCarts())
         }

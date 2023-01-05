@@ -36,11 +36,12 @@ const getAllCarts = async () => {
     return allOrders;
 }
 
-const updateCart = async (orderN, state, totalPrice, date) => {
+const updateCart = async (orderN, state, totalPrice, date, trackingNumber) => {
     await Cart.update({ 
         state: state,
         totalPrice: totalPrice,
-        date: date
+        date: date,
+        trackingNumber: trackingNumber,
     }, {
         where: {
             orderN: orderN

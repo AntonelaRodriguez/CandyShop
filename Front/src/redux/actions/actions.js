@@ -260,7 +260,7 @@ export const postReview = (data) => {
     const newReview = await axios.post(
       `${url}/reviews/${data.productId}/${data.email}`,
       data
-    );
+    ).then(data => alert('Review posted succesfully')).catch(error => alert('You can only post one review'));
     return dispatch({ type: POST_REVIEW });
   };
 };

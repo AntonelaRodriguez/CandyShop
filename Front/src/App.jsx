@@ -38,6 +38,7 @@ import CartOrderDetail from './Pages/Admin/CartOrderDetail'
 import UserShopping from './Pages/UserShopping/UserShopping'
 import CardProductShopping from './Pages/UserShopping/CardProductShopping/CardProductShopping'
 import ChatBotChatBot from './Components/ChatBot/ChatBot'
+import MailchimpFormContainer from './Components/MailChimp/Subscribe'
 
 function App() {
   const usuario = useSelector((state) => state.user)
@@ -208,6 +209,7 @@ function App() {
 
         <Route path='/UserShopping' element={<UserShopping />} />
         <Route path='/detailShopping/:id' element={<CardProductShopping />} />
+        <Route path='/subscribe' element={<MailchimpFormContainer/>}/>
       </Routes>
     </Container>
   )

@@ -180,7 +180,7 @@ export const getCartByPk = (order) => {
 export const updateCart = (value) => {
   return async function (dispatch) {
     const result = await axios.put(`${url}/cart`, value);
-    return dispatch({ tye: UPDATE_CART });
+    return dispatch({ type: UPDATE_CART });
   };
 };
 

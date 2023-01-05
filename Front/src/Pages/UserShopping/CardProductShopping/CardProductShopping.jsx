@@ -11,7 +11,10 @@ import {
     TagLabel,
     Text,
     FormLabel,
-    Select
+    Select,
+    Flex,
+    Progress,
+    Spinner
   } from '@chakra-ui/react';
   import React, { useEffect } from 'react';
   import { useDispatch, useSelector } from 'react-redux';
@@ -24,12 +27,15 @@ import {
     const { id } = useParams();
 
     let detailCart = useSelector((state) => state.productDetailCart);
+    let userCart = useSelector((state) => state.userCart)
+    let order = userCart.find((u) => u.orderN === Number(id))
+    
     useEffect(()=>{
         dispatch(getCartProductDetail(id));
     },[])
 
     return (
-        <Stack width='full' spacing={5} h='full' justifyContent='space-between' flexDirection='row'>
+      <Stack width='full' spacing={5} h='full' justifyContent='space-between' flexDirection='column'>
         <Stack width='full'>
           {detailCart?.map((p) => (
             <CardProductCart
@@ -38,11 +44,33 @@ import {
               image={p.Product.image}
               description={p.Product.description}
               name={p.Product.name}
-              price={p.price}
+              price={p.Product.price}
               quantity={p.quantity}
               variable="detail"
             />
           ))}
+        
+        </Stack>
+          <Stack display='flex' flexDir='column'>
+            <Text fontWeight='600'>Purchase status: </Text>
+            {
+              order
+              ? <>
+                  <Progress 
+                    value={order.state === 'completed' ? 25 : order.state === 'delivered' ? 75 : order.state === 'recived' ? 100 : 0 } 
+                    size='xs' 
+                    colorScheme={order.state === 'completed' ? 'yellow' : order.state === 'delivered' ? 'blue' : order.state === 'recived' ? 'green' : ''} 
+                  />
+                  <Text 
+                    fontWeight='600' 
+                    textTransform='uppercase'
+                    color={order.state === 'completed' ? '#D4AC0D' : order.state === 'delivered' ? '#2874A6' : order.state === 'recived' ? '#239B56' : ''} 
+                  >
+                    {order.state}
+                  </Text>
+                </>
+              : <Spinner/>
+            }
         </Stack>
       </Stack>
     );

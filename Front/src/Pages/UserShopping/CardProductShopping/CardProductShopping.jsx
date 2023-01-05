@@ -13,7 +13,8 @@ import {
     FormLabel,
     Select,
     Flex,
-    Progress
+    Progress,
+    Spinner
   } from '@chakra-ui/react';
   import React, { useEffect } from 'react';
   import { useDispatch, useSelector } from 'react-redux';
@@ -34,7 +35,7 @@ import {
     },[])
 
     return (
-        <Stack width='full' spacing={5} h='full' justifyContent='space-between' flexDirection='column'>
+      <Stack width='full' spacing={5} h='full' justifyContent='space-between' flexDirection='column'>
         <Stack width='full'>
           {detailCart?.map((p) => (
             <CardProductCart
@@ -48,19 +49,28 @@ import {
               variable="detail"
             />
           ))}
+        
         </Stack>
-        <Stack w='90%' display='flex' flexDir='column'>
-          <Text fontWeight='600'>Estado de entrega: </Text>
-          <Progress 
-            value={order.state === 'completed' ? 25 : order.state === 'delivered' ? 75 : order.state === 'recived' ? 100 : 0 } 
-            size='xs' 
-            colorScheme={order.state === 'completed' ? 'yellow' : order.state === 'delivered' ? 'blue' : order.state === 'recived' ? 'green' : ''} 
-          />
-          <Text 
-            fontWeight='600' 
-            textTransform='uppercase'
-            color={order.state === 'completed' ? 'orange' : order.state === 'delivered' ? 'blue' : order.state === 'recived' ? 'green' : ''} 
-          >{order.state}</Text>
+          <Stack display='flex' flexDir='column'>
+            <Text fontWeight='600'>Purchase status: </Text>
+            {
+              order
+              ? <>
+                  <Progress 
+                    value={order.state === 'completed' ? 25 : order.state === 'delivered' ? 75 : order.state === 'recived' ? 100 : 0 } 
+                    size='xs' 
+                    colorScheme={order.state === 'completed' ? 'yellow' : order.state === 'delivered' ? 'blue' : order.state === 'recived' ? 'green' : ''} 
+                  />
+                  <Text 
+                    fontWeight='600' 
+                    textTransform='uppercase'
+                    color={order.state === 'completed' ? '#D4AC0D' : order.state === 'delivered' ? '#2874A6' : order.state === 'recived' ? '#239B56' : ''} 
+                  >
+                    {order.state}
+                  </Text>
+                </>
+              : <Spinner/>
+            }
         </Stack>
       </Stack>
     );

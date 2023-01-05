@@ -201,7 +201,7 @@ const Products = () => {
           m={2}
         >
           {
-            categories.map((c) => <option key={c} value={c}>{c}</option> )
+            categories.map((c) => <option key={c.id} value={c.name}>{c.name}</option> )
           }
         </Select>
       </Flex>

@@ -8,7 +8,7 @@ import Products from './Pages/Products/Products.jsx'
 import SignUp from './Pages/SignUp/SignUp.jsx'
 import SignIn from './Pages/SignIn/SignIn.jsx'
 
-import EditProduct from './Pages/Edit/EditProduct.jsx'
+import EditProduct from './Pages/EditProduct/EditProduct'
 import { Container } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
 import {
@@ -30,7 +30,7 @@ import NotFound from './Pages/NotFound/NotFound'
 import ReviewCard from './Pages/Reviews/ReviewCard'
 // import Reviews from './Pages/Reviews/Reviews'
 
-import Create from './Pages/Admin/Create/Create'
+import Create from './Pages/Admin/CreateProduct/CreateProduct'
 import { FaGlassMartiniAlt } from 'react-icons/fa'
 import { useLocalStorage } from '../src/Components/useLocalStorage/useLocalStorage'
 import axios from 'axios'
@@ -38,6 +38,7 @@ import CartOrderDetail from './Pages/Admin/CartOrderDetail'
 import UserShopping from './Pages/UserShopping/UserShopping'
 import CardProductShopping from './Pages/UserShopping/CardProductShopping/CardProductShopping'
 import ChatBotChatBot from './Components/ChatBot/ChatBot'
+import EditUser from './Pages/Admin/EditUser/EditUser'
 
 function App() {
   const usuario = useSelector((state) => state.user)
@@ -116,6 +117,7 @@ function App() {
         admin:
           user.email === 'bongiovanniivaan@gmail.com' ||
           user.email === 'pipeurien@gmail.com' ||
+          user.email === "luca.mattbes@gmail.com" ||
           user.email === 'pepo@gmail.com'
       }
       dispatch(postUser(infoUser))
@@ -199,8 +201,28 @@ function App() {
           element={usuario.admin ? <OrdersAdmin /> : <Navigate to='/' />}
         />
         <Route
+          path="/editUser/:email"
+          element={usuario.admin ? <EditUser /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/admin/UsersAdmin"
+          element={usuario.admin ? <UsersAdmin /> : <Navigate to="/" />}
+        />
+        <Route
           path='/detail/:id'
           element={usuario.admin ? <CartOrderDetail /> : <Navigate to='/' />}
+        />
+          <Route
+          path="/admin/ProductsAdmin"
+          element={usuario.admin ? <ProductsAdmin /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/admin/OrdersAdmin"
+          element={usuario.admin ? <OrdersAdmin /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/detail/:id"
+          element={usuario.admin ? <CartOrderDetail /> : <Navigate to="/" />}
         />
         <Route path='/userDetails' element={<UserDetails />} />
         <Route path='/*' element={<NotFound />} />

@@ -39,7 +39,7 @@ const UserDetails = (props) => {
   // function setValue(){
   //   setStoredValue(currentUser?.UserDetail)
   // }
-// console.log(user);
+  // console.log(user);
   function handleChange(e) {
     setInput({
       ...input,
@@ -69,9 +69,11 @@ const UserDetails = (props) => {
         phoneNumber: '',
         address: ''
       })
-      dispatch(getUser(user?.email))
       alert('User details updated successfully')
       navigate('/products')
+      setTimeout(() => {
+        dispatch(getUser(user?.email))
+      }, 1000)
       return
     } else if (currentUser?.UserDetail) {
       dispatch(updateUserDetail(newDetail))
@@ -82,9 +84,11 @@ const UserDetails = (props) => {
         phoneNumber: '',
         address: ''
       })
-      dispatch(getUser(user?.email))
       alert('User details updated successfully')
       navigate('/products')
+      setTimeout(() => {
+        dispatch(getUser(user?.email))
+      }, 1000)
       return
     }
   }

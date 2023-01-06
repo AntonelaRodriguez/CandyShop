@@ -199,9 +199,11 @@ export default function LargeWithNewsletter() {
                 />
               </form>
               </Stack>
+
             </Stack>
           </SimpleGrid>
         </Container>
+        
       </Box>
     </Flex>
   );

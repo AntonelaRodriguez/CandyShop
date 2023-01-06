@@ -185,7 +185,7 @@ import { TbShoppingCartOff } from 'react-icons/tb'
 import { ImPriceTag } from 'react-icons/im'
 
 const CardProduct = ({ image, id, name, price, stock, availability }) => {
-  const actualUser = useSelector((state) => state.user);
+  const actualUser = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const products = useSelector((state) => state.products)
   const cart = useSelector((state) => state.cart.slice())
@@ -216,15 +216,19 @@ const CardProduct = ({ image, id, name, price, stock, availability }) => {
   }
 
   return (
-    <motion.div whileHover={{ scale: 1.02 }}>
+    <motion.div style={{ width: '100%' }} whileHover={{ scale: 1.02 }}>
       <Card
-        maxW='sm'
-        border={(inCart(id) || actualUser?.admin) ? '1px solid #F6ACA3' : '1px solid #F8E0E6'}
+        minW='full'
+        minH={500}
+        maxH={500}
+        h='full'
+        maxW={{ base: 'full', md: '50%', lg: 'full' }}
+        border={inCart(id) || actualUser?.admin ? '1px solid #F6ACA3' : '1px solid #F8E0E6'}
         boxShadow='2xl'
         borderRadius='10px'
         pos='relative'
       >
-        { actualUser && !actualUser.admin && inCart(id) ? (
+        {actualUser && !actualUser.admin && inCart(id) ? (
           <Button
             pos='absolute'
             top='15px'
@@ -234,7 +238,7 @@ const CardProduct = ({ image, id, name, price, stock, availability }) => {
             onMouseOut={(e) => setSetShowIconElim(false)}
             onClick={() => handleDelete(id)}
           >
-            { actualUser && !actualUser.admin && showIconElim ? (
+            {actualUser && !actualUser.admin && showIconElim ? (
               <Icon color='#424242' boxSize={6} as={TbShoppingCartOff} />
             ) : (
               <Icon color='#424242' boxSize={6} as={AiOutlineShoppingCart} />
@@ -243,16 +247,22 @@ const CardProduct = ({ image, id, name, price, stock, availability }) => {
         ) : (
           ''
         )}
-        <CardBody>
+        <CardBody w='full'>
           <Link to={`/product/${id}`}>
-            {
-              image?.length 
-                && <Image loading='lazy' src={image} alt='Green double couch with wooden legs' borderRadius='lg' />
-            }
+            {image?.length && (
+              <Image
+                w='full'
+                objectFit='cover'
+                maxW={200}
+                margin='auto'
+                loading='lazy'
+                src={image}
+                alt='Green double couch with wooden legs'
+                borderRadius='lg'
+              />
+            )}
           </Link>
-        {  
-          actualUser && !actualUser.admin 
-          ?
+          {actualUser && !actualUser.admin ? (
             <Stack mt='6' spacing='3'>
               <Heading minH='50px' size='md'>
                 {name}
@@ -261,28 +271,30 @@ const CardProduct = ({ image, id, name, price, stock, availability }) => {
                 {`${count}un. x $${price * count}`}
               </Text>
             </Stack>
-          : 
-          <Stack mt='6' spacing='2'>
-            <Heading minH='50px' size='md'>{name}</Heading>
-            <Tag
-              w='fit-content'
-              cursor='pointer'
-              pointerEvents='none'
-              size='lg'
-              variant='subtle'
-              colorScheme='primary'
-              display='flex'
-              alignItems='center'
-              justifyContent='flex-start'
-            >
-              <TagLeftIcon as={ImPriceTag} />
-              <TagLabel>$ {price}</TagLabel>
-            </Tag>
-          </Stack>
-        }
+          ) : (
+            <Stack mt='6' spacing='2'>
+              <Heading minH='50px' size='md'>
+                {name}
+              </Heading>
+              <Tag
+                w='fit-content'
+                cursor='pointer'
+                pointerEvents='none'
+                size='lg'
+                variant='subtle'
+                colorScheme='primary'
+                display='flex'
+                alignItems='center'
+                justifyContent='flex-start'
+              >
+                <TagLeftIcon as={ImPriceTag} />
+                <TagLabel>$ {price}</TagLabel>
+              </Tag>
+            </Stack>
+          )}
         </CardBody>
         <Divider />
-        { actualUser && !actualUser.admin && 
+        {actualUser && !actualUser.admin && (
           <CardFooter justifyContent='center' bg='primary.100' borderRadius='0 0 10px 10px'>
             {!availability ? (
               <Text fontWeight='600'>No available</Text>
@@ -322,7 +334,7 @@ const CardProduct = ({ image, id, name, price, stock, availability }) => {
               </Flex>
             )}
           </CardFooter>
-        }
+        )}
       </Card>
     </motion.div>
   )

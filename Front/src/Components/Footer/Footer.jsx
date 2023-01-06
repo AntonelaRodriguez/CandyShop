@@ -26,7 +26,7 @@ import emailjs from '@emailjs/browser';
 
 const ListHeader = ({ children }) => {
   return (
-    <Text fontWeight={"500"} fontSize={"lg"} mb={2}>
+    <Text color='tomato' fontWeight={"500"} fontSize={"lg"} mb={2}>
       {children}
     </Text>
   );
@@ -60,10 +60,10 @@ export default function LargeWithNewsletter() {
         height="full"
         margin="auto"
         boxShadow="2xl"
-        bg="gray.300"
+        border='1px solid #F6ACA3'
       >
         <Container as={Stack} maxW={"6xl"} py={10}>
-          <SimpleGrid templateColumns="repeat(4, 1fr)" spacing={8}>
+          <SimpleGrid templateColumns="repeat(3, 1fr)" spacing={8}>
             <Stack spacing={6}>
               <Box>
                 <img src={img} />
@@ -86,7 +86,9 @@ export default function LargeWithNewsletter() {
                 justifyContent={'center'}
                 transition={'background 0.3s ease'}
                 _hover={{
-                bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
+                  bg: "white",
+                  color: "primary.300",
+                  border: "1px solid #F6ACA3"
               }}>
                 <FaMailBulk />
               </chakra.button>
@@ -104,7 +106,9 @@ export default function LargeWithNewsletter() {
                 justifyContent={'center'}
                 transition={'background 0.3s ease'}
                 _hover={{
-                bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
+                  bg: "white",
+                  color: "primary.300",
+                  border: "1px solid #F6ACA3"
               }}>
                 <FaWhatsapp />
               </chakra.button>
@@ -122,70 +126,84 @@ export default function LargeWithNewsletter() {
                 justifyContent={'center'}
                 transition={'background 0.3s ease'}
                 _hover={{
-                bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
+                  bg: "white",
+                  color: "primary.300",
+                  border: "1px solid #F6ACA3"
               }}>
                 <FaInstagram />
               </chakra.button>
               </Stack>
             </Stack>
 
-            <GridItem align={"flex-start"}>
-              <ListHeader>Company</ListHeader>
-              <Link href={"#"}>Contact us</Link>
-            </GridItem>
-            <GridItem>
+            <Stack align={'flex-start'}>
               <ListHeader>Support</ListHeader>
+              <Link href={"#"}>Contact us</Link>
               <Link href={"#"}>Help Center</Link>
-            </GridItem>
-            <GridItem align={"flex-start"}>
+              <Link href={"#"}>Shipping</Link>
+            </Stack>
+
+            <Stack align={'flex-start'}>
               <ListHeader>Get in Touch</ListHeader>
               <Stack direction={"column"}>
               <form ref={form} onSubmit={sendEmail}>
               <Input
-                  placeholder={"Your name..."}
+                required
+                  placeholder={"Your full name..."}
                   name='name'
                   type='text'
                   bg={useColorModeValue("blackAlpha.100", "whiteAlpha.100")}
-                  border={0}
+                  border='1px solid #F6ACA3'
+                  mb={2}
                   _focus={{
                     bg: "whiteAlpha.300",
+                    border: "4px solid #F6ACA3",
                   }}
                 />
                 <Input
                   // onChange={(e) => setMail(e.target.value)}
                   // value = {mail}
+                  required
                   name='email'
                   type='email'
                   placeholder={"Your email address..."}
                   bg={useColorModeValue("blackAlpha.100", "whiteAlpha.100")}
-                  border={0}
+                  border='1px solid #F6ACA3'
+                  mb={2}
                   _focus={{
                     bg: "whiteAlpha.300",
+                    border: "4px solid #F6ACA3",
                   }}
                 />
                 <Textarea
+                  required
                   placeholder={"Your message..."}
                   name='message'
                   bg={useColorModeValue("blackAlpha.100", "whiteAlpha.100")}
-                  border={0}
+                  border='1px solid #F6ACA3'
+                  mb={2}
                   _focus={{
                     bg: "whiteAlpha.300",
+                    border: "4px solid #F6ACA3",
                   }}
                 />
                 <IconButton
                   type='submit'
-                  bg={useColorModeValue("primary.300", "green.800")}
+                  bg={"primary.300"}
                   color={useColorModeValue("white", "gray.800")}
                   _hover={{
-                    bg: "green.600",
+                    bg: "white",
+                    color: "primary.300",
+                    border: "1px solid #F6ACA3"
                   }}
                   icon={<BiMailSend />}
                 />
               </form>
               </Stack>
-            </GridItem>
+
+            </Stack>
           </SimpleGrid>
         </Container>
+        
       </Box>
     </Flex>
   );

@@ -37,9 +37,7 @@ const Filters = () => {
         <option value='aguila'>Aguila</option>
         <option value='arcor'>Arcor</option>
         <option value='bagley'>Bagley</option>
-        <option value='bon o bon' option>
-          Bon o Bon
-        </option>
+        <option value='bon o bon'>Bon o Bon</option>
         <option value='billiken'>Billiken</option>
         <option value='bonafide'>Bonafide</option>
         <option value='cofler'>Cofler</option>

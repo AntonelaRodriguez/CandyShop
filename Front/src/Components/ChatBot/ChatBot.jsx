@@ -21,6 +21,7 @@ import { BsChatDotsFill } from 'react-icons/bs'
 import { AiOutlineClose } from 'react-icons/ai'
 import axios from 'axios'
 import { IoIosSend } from 'react-icons/io'
+import { motion } from 'framer-motion'
 
 const ChatBot = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -57,11 +58,28 @@ const ChatBot = () => {
   }
 
   return (
-    <Stack position='fixed' maxH='full' bottom={0} p={10} right={0}>
+    <motion.div
+      initial={{ opacity: 1 }}
+      animate={{
+        scale: [1, 1.2, 1.2, 1, 1],
+        rotate: [0, 0, 270, 270, 0],
+        borderRadius: ['20%', '20%', '50%', '50%', '20%']
+      }}
+      transition={{ duration: 2 }}
+      whileHover={{ scale: 0.9 }}
+      style={{
+        position: 'fixed',
+        maxHeight: '100%',
+        bottom: 15,
+        padding: 10,
+        right: 15,
+        zIndex: 100
+      }}
+    >
       <Icon w={8} h={8} color='primary.300' as={BsChatDotsFill} onClick={onOpen} cursor='pointer' />
       <Drawer placement='right' onClose={onClose} colorScheme='primary' isOpen={isOpen} size='md'>
         <DrawerOverlay />
-        <DrawerContent bg='primary.100'  w='full' h='full' minW='30%' maxH='full'>
+        <DrawerContent bg='primary.100' w='full' h='full' minW='30%' maxH='full'>
           <Icon
             w={7}
             h={7}
@@ -111,7 +129,7 @@ const ChatBot = () => {
 
                       <ListItem
                         display='block'
-                        textTransform="capitalize"
+                        textTransform='capitalize'
                         color={`${message.from == 'me' ? 'gray.500' : 'blackAlpha.900'}`}
                       >
                         {message.meMessage}
@@ -166,7 +184,7 @@ const ChatBot = () => {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-    </Stack>
+    </motion.div>
   )
 }
 

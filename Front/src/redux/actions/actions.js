@@ -28,6 +28,7 @@ export const GET_ALL_CARTS = "GET_ALL_CARTS";
 export const DELETE_ALL_CARTS = "DELETE_ALL_CARTS";
 export const GET_ALL_USERS = "GET_ALL_USERS";
 export const UPDATE_USER_DETAIL = "UPDATE_USER_DETAIL";
+export const UPDATE_USER = "UPDATE_USER";
 export const GET_CART_PRODUCT_DETAIL = "GET_CART_PRODUCT_DETAIL";
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 
@@ -242,6 +243,13 @@ export const getAllUsers = () => {
     return dispatch({ type: GET_ALL_USERS, payload: users.data });
   };
 };
+
+export const updateUser = (data) => {
+  return async function (dispatch) {
+    const user = await axios.put(`${url}/users/admin/updateUser/`, data)
+    return dispatch({type: UPDATE_USER})
+  }
+}
 
 //Reviews
 export const getReviews = (productId) => {

@@ -1,4 +1,4 @@
-import applyFilters from '../../helpers/applyfilters'
+import applyFilters from '../../helpers/applyFilters.js'
 import {
   ALL_PRODUCTS,
   SEARCH_CANDY,

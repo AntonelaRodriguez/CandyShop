@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { getAllReviews, postReview } = require('../controllers/review');
+const { getAllReviews, postReview, updateReview, deleteReview } = require('../controllers/review');
 const reviewRouter = Router();
 const { Review } = require('../db.js');
 
@@ -26,5 +26,26 @@ reviewRouter.get("/:productId", async (req, res, next) => {
     next(error);
   }
 });
+
+reviewRouter.put("/admin/updateReview/:id", async (req, res, next) => {
+  const {id} = req.params;
+  const {author, title, description, rating} = req.body
+  try {
+    const review = updateReview(id, author, title, description, rating)
+    return res.status(200).send("Review updated")
+  } catch (error) {
+    next(error);
+  }
+})
+
+reviewRouter.delete("/admin/deleteReview/:id", async (req, res, next) => {
+  const {id} = req.params;
+  try {
+    await deleteReview(id);
+    res.status(200).send("Review deleted")
+  } catch (error) {
+    next(error);
+  }
+})
 
 module.exports = reviewRouter;

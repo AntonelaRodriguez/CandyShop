@@ -7,6 +7,7 @@ const detailRouter = require('./detailRouter.js')
 const mercadoPagoRouter = require('./mercadoPagoRouter')
 const reviewRouter = require('./reviewRouter.js')
 const chatbotRouter = require('./chatbotRouter.js')
+const subscribeRouter = require('./nodeMailer.js')
 const router = Router()
 /* const PaymentController = require('../Controllers/PaymentController')
 const PaymentService = require('../services/PaymentService')
@@ -21,5 +22,6 @@ router.use('/chatbot', chatbotRouter);
 //mercado pago get de info del producto
 router.use('/mercadopago', mercadoPagoRouter)
 router.use('/reviews', reviewRouter)
+router.use('/subscribe', subscribeRouter)
 
 module.exports = router

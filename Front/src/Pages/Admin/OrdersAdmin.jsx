@@ -85,6 +85,7 @@ const OrdersAdmin = () => {
                     totalPrice={p.totalPrice}
                     state={p.state}
                     trackingNumber={p.trackingNumber}
+                    UserEmail={p.UserEmail}
                     variable={"button"}
                   />
                 );

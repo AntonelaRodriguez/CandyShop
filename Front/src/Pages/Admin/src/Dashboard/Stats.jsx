@@ -5,7 +5,7 @@ const Statistics = () => {
   return (
     <Stat>
       <StatLabel>Collected Fees</StatLabel>
-      <StatNumber>$4721.80</StatNumber>
+      <StatNumber>$47421.80</StatNumber>
       <StatHelpText>January 1 - Feb 28</StatHelpText>
     </Stat>
   );

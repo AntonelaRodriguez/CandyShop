@@ -8,7 +8,7 @@ import Products from './Pages/Products/Products.jsx'
 import SignUp from './Pages/SignUp/SignUp.jsx'
 import SignIn from './Pages/SignIn/SignIn.jsx'
 
-import EditProduct from './Pages/Edit/EditProduct.jsx'
+import EditProduct from './Pages/EditProduct/EditProduct'
 import { Container } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
 import {
@@ -30,7 +30,7 @@ import NotFound from './Pages/NotFound/NotFound'
 import ReviewCard from './Pages/Reviews/ReviewCard'
 // import Reviews from './Pages/Reviews/Reviews'
 
-import Create from './Pages/Admin/Create/Create'
+import Create from './Pages/Admin/CreateProduct/CreateProduct'
 import { FaGlassMartiniAlt } from 'react-icons/fa'
 import { useLocalStorage } from '../src/Components/useLocalStorage/useLocalStorage'
 import axios from 'axios'
@@ -38,6 +38,7 @@ import CartOrderDetail from './Pages/Admin/CartOrderDetail'
 import UserShopping from './Pages/UserShopping/UserShopping'
 import CardProductShopping from './Pages/UserShopping/CardProductShopping/CardProductShopping'
 import ChatBotChatBot from './Components/ChatBot/ChatBot'
+import EditUser from './Pages/Admin/EditUser/EditUser'
 
 function App() {
   const usuario = useSelector((state) => state.user)
@@ -116,6 +117,7 @@ function App() {
         admin:
           user.email === 'bongiovanniivaan@gmail.com' ||
           user.email === 'pipeurien@gmail.com' ||
+          user.email === 'luca.mattbes@gmail.com' ||
           user.email === 'pepo@gmail.com'
       }
       dispatch(postUser(infoUser))
@@ -135,8 +137,7 @@ function App() {
   //si el estado de este último carrito es igual a "completed", "cancelled", "delivered" o "recived".
   useEffect(() => {
     if (isAuthenticated && userCarts.length) {
-      (async () => {
-        dispatch(getUserCart(user.email))
+      ;(async () => {
         let res = await axios(`/cart/${user.email}`)
         let optionStates = ['completed', 'cancelled', 'delivered', 'recived']
         if (optionStates.includes(res.data[res.data.length - 1]?.state)) {
@@ -145,7 +146,7 @@ function App() {
         }
       })()
     }
-  }, [isAuthenticated, userCarts.length, dispatch])
+  }, [isAuthenticated, userCarts.length])
 
   //Despacha la accion que resulta en el seteo del estado "userCart". Es muy importante que esta acción
   //se ejecute despues de la creación del usuario en DB.
@@ -155,7 +156,7 @@ function App() {
         dispatch(getUserCart(user.email))
       }, 3000)
     }
-  }, [isAuthenticated, userCarts.length, dispatch])
+  }, [isAuthenticated, userCarts.length])
 
   //Despacha la acción que resulta en el seteo de los estados "products" y "allCarts"
   useEffect(() => {
@@ -173,6 +174,10 @@ function App() {
       display='flex'
       flexDirection='column'
       alignItems='center'
+      justifyContent='center'
+      /* el overflow='hidden'  es pq footer rompe la pagina y le hace un scroll en X */
+      overflow='hidden'
+      gap={5}
     >
       <Nav />
       <ChatBotChatBot />
@@ -189,6 +194,26 @@ function App() {
         <Route
           path='/admin/UsersAdmin'
           element={usuario.admin ? <UsersAdmin /> : <Navigate to='/' />}
+        />
+        <Route
+          path='/admin/ProductsAdmin'
+          element={usuario.admin ? <ProductsAdmin /> : <Navigate to='/' />}
+        />
+        <Route
+          path='/admin/OrdersAdmin'
+          element={usuario.admin ? <OrdersAdmin /> : <Navigate to='/' />}
+        />
+        <Route
+          path='/editUser/:email'
+          element={usuario.admin ? <EditUser /> : <Navigate to='/' />}
+        />
+        <Route
+          path='/admin/UsersAdmin'
+          element={usuario.admin ? <UsersAdmin /> : <Navigate to='/' />}
+        />
+        <Route
+          path='/detail/:id'
+          element={usuario.admin ? <CartOrderDetail /> : <Navigate to='/' />}
         />
         <Route
           path='/admin/ProductsAdmin'

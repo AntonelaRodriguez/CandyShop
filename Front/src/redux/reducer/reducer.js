@@ -29,8 +29,8 @@ import {
   UPDATE_USER_DETAIL,
   GET_CART_PRODUCT_DETAIL,
   SET_CURRENT_PAGE,
-  updateUser,
-  UPDATE_USER
+  UPDATE_USER,
+  DELETED_REVIEW
 } from '../actions/actions'
 
 const initialState = {
@@ -207,6 +207,10 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         reviews: []
+      }
+    case DELETED_REVIEW:
+      return {
+        ...state
       }
     case GET_ALL_USERS: {
       return {

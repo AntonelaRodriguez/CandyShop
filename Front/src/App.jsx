@@ -117,7 +117,6 @@ function App() {
         admin:
           user.email === 'bongiovanniivaan@gmail.com' ||
           user.email === 'pipeurien@gmail.com' ||
-          user.email === 'luca.mattbes@gmail.com' ||
           user.email === 'pepo@gmail.com'
       }
       dispatch(postUser(infoUser))

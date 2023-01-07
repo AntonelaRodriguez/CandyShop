@@ -30,7 +30,8 @@ import {
   GET_CART_PRODUCT_DETAIL,
   SET_CURRENT_PAGE,
   UPDATE_USER,
-  DELETED_REVIEW
+  DELETED_REVIEW,
+  NEW_SUBSCRIPTION
 } from '../actions/actions'
 
 const initialState = {
@@ -232,6 +233,11 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         currentPage: payload
+      }
+    }
+    case NEW_SUBSCRIPTION: {
+      return{
+        ...state
       }
     }
     default:

@@ -31,8 +31,9 @@ export const UPDATE_USER_DETAIL = "UPDATE_USER_DETAIL";
 export const UPDATE_USER = "UPDATE_USER";
 export const GET_CART_PRODUCT_DETAIL = "GET_CART_PRODUCT_DETAIL";
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
-export const DELETED_REVIEW = "DELETED_REVIEW"
-export const UPDATED_REVIEW = "UPDATED_REVIEW"
+export const DELETED_REVIEW = "DELETED_REVIEW";
+export const UPDATED_REVIEW = "UPDATED_REVIEW";
+export const NEW_SUBSCRIPTION = "NEW_SUBSCRIPTION";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 // const url = "https://candyshop-production.up.railway.app";  usar url para db deployada
@@ -285,12 +286,9 @@ export const setCurrentPage = (page) => {
   return { type: SET_CURRENT_PAGE, payload: page }
 }
 
-
-// try {
-//   await axios.delete(`${url}/products/${id}`);
-//   return dispatch({
-//     type: DELETED_PRODUCT,
-//   });
-// } catch (error) {
-//   console.log(error);
-// }
+export const newSubscription = (email) => {
+  return async function(dispatch){
+    await axios.post(`${url}/subscribe/${email}`)
+    return dispatch({ type: NEW_SUBSCRIPTION, payload: email})
+  }
+}

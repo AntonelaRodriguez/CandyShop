@@ -9,6 +9,7 @@ import {
   Spinner,
   Stack,
   FormLabel,
+  Text
 } from "@chakra-ui/react";
 import CardProductAdmin from "./CardProductAdmin/CardProductAdmin.jsx";
 import CardOrderAdmin from './CardOrderAdmin/CardOrderAdmin'
@@ -86,12 +87,13 @@ const OrdersAdmin = () => {
                     state={p.state}
                     trackingNumber={p.trackingNumber}
                     UserEmail={p.UserEmail}
+                    delivery={p.delivery}
                     variable={"button"}
                   />
                 );
               })
             ) : (
-              <Spinner size="xl" />
+              <Text>There are no loaded carts yet.</Text>
             )}
           </Stack>
         </Stack>

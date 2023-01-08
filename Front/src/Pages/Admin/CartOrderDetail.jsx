@@ -53,6 +53,7 @@ import {
         totalPrice: cart.totalPrice, 
         date: cart.date,
         trackingNumber: cart.trackingNumber,
+        delivery: cart.delivery
       })
     },[cart]);
 
@@ -76,6 +77,7 @@ import {
     totalPrice: input.totalPrice,
     date: input.date,
     trackingNumber: input.trackingNumber,
+    delivery: input.delivery
   };
 
   function handleSubmit(e){
@@ -120,6 +122,9 @@ import {
             </Text>
             <Text fontWeight={"500"} fontSize={"lg"} mb={2}>
               Date: {cart.date}.
+            </Text>
+            <Text fontWeight={"500"} fontSize={"lg"} mb={2}>
+              Delivery: {cart.delivery}.
             </Text>
             <Text fontWeight={"500"} fontSize={"lg"} mb={2}>
               Tracking Number: {cart.trackingNumber}.

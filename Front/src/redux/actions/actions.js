@@ -31,6 +31,11 @@ export const UPDATE_USER_DETAIL = "UPDATE_USER_DETAIL";
 export const UPDATE_USER = "UPDATE_USER";
 export const GET_CART_PRODUCT_DETAIL = "GET_CART_PRODUCT_DETAIL";
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
+export const DELETED_REVIEW = "DELETED_REVIEW"
+export const UPDATED_REVIEW = "UPDATED_REVIEW"
+export const CLEAN_UP_FILTERS = "CLEAN_UP_FILTERS";
+export const CLEAN_UP_SEARCH = "CLEAN_UP_SEARCH";
+export const SET_LOADING = "SET_LOADING";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 // const url = "https://candyshop-production.up.railway.app";  usar url para db deployada
@@ -66,18 +71,27 @@ export function setFilters(payload) {
   };
 }
 
-export function applyFilters({ tacc, brand, category }) {
-  return async function (dispatch) {
-    const { data } = await axios.get(
-      `${url}/products/filters?tacc=${tacc || "TACC"}&brand=${
-        brand || "BRAND"
-      }&category=${category || "CATEGORY"}`
-    );
-    return dispatch({
-      type: APPLY_FILTERS,
-      payload: data,
-    });
-  };
+// export function applyFilters({ tacc, brand, category }) {
+//   return async function (dispatch) {
+//     const { data } = await axios.get(
+//       `${url}/products/filters?tacc=${tacc || "TACC"}&brand=${
+//         brand || "BRAND"
+//       }&category=${category || "CATEGORY"}`
+//     );
+//     return dispatch({
+//       type: APPLY_FILTERS,
+//       payload: data,
+//     });
+//   };
+// }
+export function applyFilters(payload) {
+  return { type: APPLY_FILTERS, payload };
+}
+export function cleanUpFilters() {
+  return { type: CLEAN_UP_FILTERS };
+}
+export function cleanUpSearch() {
+  return { type: CLEAN_UP_SEARCH };
 }
 
 export const sort = (payload) => {
@@ -268,11 +282,29 @@ export const postReview = (data) => {
     const newReview = await axios.post(
       `${url}/reviews/${data.productId}/${data.email}`,
       data
-    );
+    ).then(data => alert('Review posted succesfully')).catch(error => alert(error));
     return dispatch({ type: POST_REVIEW });
   };
 };
 
+export const deleteReview = (id) => {
+  return async function (dispatch) {
+    await axios.delete(`${url}/reviews/admin/deleteReview/${id}`)
+    return dispatch({ type: DELETED_REVIEW })
+  }
+}
 export const setCurrentPage = (page) => {
   return { type: SET_CURRENT_PAGE, payload: page }
 }
+export const setLoading = (payload) => {
+  return { type: SET_LOADING, payload }
+}
+
+// try {
+//   await axios.delete(`${url}/products/${id}`);
+//   return dispatch({
+//     type: DELETED_PRODUCT,
+//   });
+// } catch (error) {
+//   console.log(error);
+// }

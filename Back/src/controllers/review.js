@@ -21,7 +21,27 @@ const getAllReviews = async (productId) => {
   return allReviews;
 }
 
+const updateReview = async (id, author, title, description, rating) => {
+  await Review.update(
+    {
+      author, title, description, rating
+    },
+    {
+      where: {
+        id : id,
+      },
+    }
+  );
+};
+
+const deleteReview = async (id) => {
+ if (!id) throw new Error("id is required")
+ await Review.destroy({ where: { id: id } })
+}
+
 module.exports = {
   postReview,
-  getAllReviews
+  getAllReviews,
+  updateReview,
+  deleteReview
 };

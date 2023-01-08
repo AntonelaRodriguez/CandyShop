@@ -264,7 +264,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
 import { FaStar } from 'react-icons/fa'
-import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCart, editProductCart, deleteFromCart } from '../../redux/actions/actions'
+import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCart, editProductCart, deleteFromCart, cleanUpFilters } from '../../redux/actions/actions'
 import { useAuth0 } from "@auth0/auth0-react"
 import ReviewForm from '../Reviews/ReviewForm'
 import ReviewCard from '../Reviews/ReviewCard'
@@ -349,6 +349,7 @@ const ProductDetail = () => {
         )
         axios.delete(`/products/${id}`).then(() => {
           dispatch(getAllProducts())
+          dispatch(cleanUpFilters())
           navigate('/products')
         })
       }

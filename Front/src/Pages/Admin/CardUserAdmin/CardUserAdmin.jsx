@@ -91,8 +91,6 @@ const CardUserAdmin = ({
             <Text>Company: {companyName}</Text>
             <Text>PhoneNumber: {phoneNumber}</Text>
             <Text>Address: {address}</Text>
-            <Text>Banned: {banned === true ? 'Yes' : 'Not Banned'}</Text>
-            <Text>Admin: {admin === true ? 'Yes' : 'Not Admin'}</Text>
           </Flex>
         </CardBody>
 
@@ -109,13 +107,13 @@ const CardUserAdmin = ({
       <Tag
         variant="outline"
         size="sm"
-        colorScheme="green"
+        colorScheme= {banned === true ? 'red' : "green"}
         w="fit-content"
         position="absolute"
         top="5px"
         left="5px"
       >
-        <TagLabel> Active </TagLabel>
+        <TagLabel> {banned === true ? 'Banned' : admin === true ? 'Admin' : 'Active'} </TagLabel>
       </Tag>
     </Card>
   );

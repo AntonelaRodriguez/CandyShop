@@ -1,3 +1,4 @@
+import applyFilters from '../../helpers/applyFilters.js'
 import {
   ALL_PRODUCTS,
   SEARCH_CANDY,
@@ -29,17 +30,22 @@ import {
   UPDATE_USER_DETAIL,
   GET_CART_PRODUCT_DETAIL,
   SET_CURRENT_PAGE,
-  updateUser,
-  UPDATE_USER
+  UPDATE_USER,
+  DELETED_REVIEW,
+  CLEAN_UP_FILTERS,
+  CLEAN_UP_SEARCH,
+  SET_LOADING
 } from '../actions/actions'
 
 const initialState = {
   products: [],
+  allProducts: [],
   productDetail: [],
   categories: [],
   brands: [],
   categories: [],
-  filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
+  // filters: { tacc: 'TACC', brand: 'BRAND', category: 'CATEGORY' },
+  filters: { order: '', tacc: '', brand: '', category: '', reverse: false },
   cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [],
   user: {},
   users: [],
@@ -49,7 +55,10 @@ const initialState = {
   ratings: [],
   allCarts: [],
   productDetailCart: [],
-  currentPage: 1
+  currentPage: 1,
+  emptyAfterFiltering: false,
+  recentSearch: false,
+  loading: false,
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -58,8 +67,10 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         products: payload,
+        allProducts: [...payload],
         categories: Array.from(new Set([...payload.map( p => p.category).flat()])).sort(),
-        brands: Array.from(new Set([...payload.map( p => p.brand)])).sort()
+        brands: Array.from(new Set([...payload.map( p => p.brand)])).sort(),
+        loading: false,
       }
     }
     case ALL_CATEGORIES: {
@@ -71,7 +82,16 @@ const reducer = (state = initialState, { type, payload }) => {
     case SEARCH_CANDY: {
       return {
         ...state,
-        products: payload
+        products: payload,
+        recentSearch: true,
+        loading: false,
+      }
+    }
+    case CLEAN_UP_SEARCH: {
+      return {
+        ...state,
+        products: [...state.allProducts],
+        recentSearch: false
       }
     }
     case DETAILS_PRODUCT:
@@ -122,10 +142,22 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state,
         filters: payload
       }
+    case CLEAN_UP_FILTERS: 
+    return {
+      ...state,
+      products: [...state.allProducts],
+      emptyAfterFiltering: false,
+      currentPage: 1,
+      filters: initialState.filters
+    }
     case APPLY_FILTERS:
+      let productsFiltered = applyFilters(state);
       return {
         ...state,
-        products: payload
+        products: productsFiltered,
+        currentPage: 1,
+        emptyAfterFiltering: !productsFiltered.length,
+        loading: false,
       }
     case ADD_CART:
       return {
@@ -208,6 +240,10 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state,
         reviews: []
       }
+    case DELETED_REVIEW:
+      return {
+        ...state
+      }
     case GET_ALL_USERS: {
       return {
         ...state,
@@ -230,6 +266,11 @@ const reducer = (state = initialState, { type, payload }) => {
         currentPage: payload
       }
     }
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: payload
+      }
     default:
       return state
   }

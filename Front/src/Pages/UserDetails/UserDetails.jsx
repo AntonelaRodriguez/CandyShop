@@ -48,19 +48,21 @@ const UserDetails = (props) => {
   }
   const newDetail = {
     email: isAuthenticated ? user?.email : '',
-    name: input?.name,
-    lastName: input?.lastName,
-    companyName: input?.companyName,
-    phoneNumber: input?.phoneNumber,
-    address: input?.address,
+    name: input?.name ? input.name : '',
+    lastName: input?.lastName ? input.lastName : '',
+    companyName: input?.companyName ? input.companyName : '',
+    phoneNumber: input?.phoneNumber ? input.phoneNumber : '',
+    address: input?.address ? input.address : '',
     image: isAuthenticated ? user?.picture : ''
   }
 
-  // console.log(newDetail, 'NewDetail');
+  console.log('input',input);
+  console.log('newDetail',newDetail);
 
   function handleSubmit(e) {
     e.preventDefault()
     if (!currentUser?.UserDetail) {
+      console.log("entro al post")
       dispatch(postUserDetail(newDetail))
       setInput({
         name: '',
@@ -76,6 +78,7 @@ const UserDetails = (props) => {
       }, 1000)
       return
     } else if (currentUser?.UserDetail) {
+      console.log("entro al put")
       dispatch(updateUserDetail(newDetail))
       setInput({
         name: '',

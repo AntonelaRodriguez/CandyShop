@@ -40,8 +40,8 @@ export const NEW_SUBSCRIPTION = "NEW_SUBSCRIPTION";
 export const CHANGE_SUBSCRIPTION = "CHANGE_SUBSCRIPTION";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
-// const url = "https://candyshop-production.up.railway.app";  usar url para db deployada
-const url = "http://localhost:3001";//para usar la db local poner localhost en vez de url
+const url = "https://candyshop-production.up.railway.app";  usar url para db deployada
+// const url = "http://localhost:3001";//para usar la db local poner localhost en vez de url
 
 export const getAllProducts = () => {
   return async function (dispatch) {

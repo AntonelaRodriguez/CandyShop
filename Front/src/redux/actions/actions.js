@@ -36,7 +36,6 @@ export const UPDATED_REVIEW = "UPDATED_REVIEW"
 export const CLEAN_UP_FILTERS = "CLEAN_UP_FILTERS";
 export const CLEAN_UP_SEARCH = "CLEAN_UP_SEARCH";
 export const SET_LOADING = "SET_LOADING";
-export const NEW_SUBSCRIPTION = "NEW_SUBSCRIPTION";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 // const url = "https://candyshop-production.up.railway.app";  usar url para db deployada
@@ -299,13 +298,6 @@ export const setCurrentPage = (page) => {
 }
 export const setLoading = (payload) => {
   return { type: SET_LOADING, payload }
-}
-
-export const newSubscription = (email) => {
-  return async function(dispatch){
-    await axios.post(`${url}/subscribe/${email}`)
-    return dispatch({ type: NEW_SUBSCRIPTION, payload: email})
-  }
 }
 
 // try {

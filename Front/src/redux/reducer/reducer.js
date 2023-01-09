@@ -32,7 +32,6 @@ import {
   SET_CURRENT_PAGE,
   UPDATE_USER,
   DELETED_REVIEW,
-  NEW_SUBSCRIPTION,
   CLEAN_UP_FILTERS,
   CLEAN_UP_SEARCH,
   SET_LOADING
@@ -265,11 +264,6 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         currentPage: payload
-      }
-    }
-    case NEW_SUBSCRIPTION: {
-      return{
-        ...state
       }
     }
     case SET_LOADING:

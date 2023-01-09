@@ -307,3 +307,12 @@ export const newSubscription = (email) => {
     return dispatch({ type: NEW_SUBSCRIPTION, payload: email})
   }
 }
+
+// try {
+//   await axios.delete(`${url}/products/${id}`);
+//   return dispatch({
+//     type: DELETED_PRODUCT,
+//   });
+// } catch (error) {
+//   console.log(error);
+// }

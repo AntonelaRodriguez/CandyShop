@@ -33,13 +33,14 @@ const getAllUsers = async () => {
   return allUsers;
 };
 
-const updateUser = async (email, banned, admin) => {
+const updateUser = async (email, banned, admin, subscribed) => {
   // if (!email || !banned || !admin) throw new Error("All arguments are require");
 
   await User.update(
     {
       banned,
       admin,
+      subscribed
     },
     {
       where: {

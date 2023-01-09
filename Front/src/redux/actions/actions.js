@@ -37,6 +37,7 @@ export const CLEAN_UP_FILTERS = "CLEAN_UP_FILTERS";
 export const CLEAN_UP_SEARCH = "CLEAN_UP_SEARCH";
 export const SET_LOADING = "SET_LOADING";
 export const NEW_SUBSCRIPTION = "NEW_SUBSCRIPTION";
+export const CHANGE_SUBSCRIPTION = "CHANGE_SUBSCRIPTION";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 // const url = "https://candyshop-production.up.railway.app";  usar url para db deployada
@@ -305,6 +306,13 @@ export const newSubscription = (email) => {
   return async function(dispatch){
     await axios.post(`${url}/subscribe/${email}`)
     return dispatch({ type: NEW_SUBSCRIPTION, payload: email})
+  }
+}
+
+export const changeSubscription = (data) => {
+  return async function (dispatch){
+    await axios.put(`${url}/users/admin/updateUser`, data)
+    return dispatch({ type: CHANGE_SUBSCRIPTION})
   }
 }
 

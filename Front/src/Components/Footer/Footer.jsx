@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   Box,
   chakra,
@@ -20,7 +20,14 @@ import {
   Drawer,
   DrawerOverlay,
   DrawerContent,
-  DrawerBody
+  DrawerBody,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { FaInstagram, FaMailBulk, FaWhatsapp } from "react-icons/fa";
@@ -28,8 +35,10 @@ import { BiMailSend } from "react-icons/bi";
 import img from "../../assets/candy_logo.svg";
 import { useRef } from 'react';
 import emailjs from '@emailjs/browser';
-import { useDispatch } from 'react-redux';
-import { newSubscription } from '../../redux/actions/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeSubscription, getAllUsers, newSubscription, updateUser} from '../../redux/actions/actions';
+import Swal from 'sweetalert2';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const ListHeader = ({ children }) => {
   return (
@@ -42,17 +51,41 @@ const ListHeader = ({ children }) => {
 export default function LargeWithNewsletter() {
 
   const dispatch = useDispatch()
-
+  const { isAuthenticated, user } = useAuth0()
   const [email, setEmail] = useState("")
+  const users = useSelector(state => state.users)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
+  useEffect(() => {
+    dispatch(getAllUsers())
+  }, [dispatch])
+
+  const currentUser = users && users.filter(u => u.email === email)
+  
+  console.log(email)
+  console.log(user, 'usr')
+  console.log(currentUser, 'current')
+  const newDetail = {
+    email: 'agubarrionuevox@gmail.com',
+    subscribed: true
+  }
+  console.log(newDetail)
   function handleChange(e) {
     setEmail(e.target.value);
   }
 
   function handleSubmit(e){
     e.preventDefault()
-    dispatch(newSubscription(email))
-    setEmail('')
+      Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'You are now subscribed!',
+          showConfirmButton: false,
+          timer: 2000
+      })
+      dispatch(updateUser(newDetail))
+      dispatch(newSubscription(email))
+      setEmail('')  
   }
 
   const form = useRef();
@@ -68,7 +101,6 @@ export default function LargeWithNewsletter() {
       });
     e.target.reset()
   };
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <Flex as="nav" align="center" justify="center" wrap="wrap" py={6} w="full">
@@ -162,17 +194,27 @@ export default function LargeWithNewsletter() {
             </Stack>
             <Flex>
               <Stack>
-                  <Button onClick={onOpen}>Subscribe</Button>
-                  <Drawer isOpen={isOpen}placement='bottom'>
-                    <DrawerOverlay/>
-                    <DrawerContent>
-                      <DrawerBody>
-                        <Input placeholder='Type your email...' value={email} onChange={handleChange}></Input>
-                        <Button type='submit' onClick={handleSubmit}>Submit</Button>
-                        <Button onClick={onClose}>x</Button>
-                      </DrawerBody>
-                    </DrawerContent>
-                  </Drawer>
+                { isAuthenticated ? <> 
+                  <Button onClick={onOpen} bg={"primary.300"} color={useColorModeValue("white", "gray.800")}>Subscribe</Button>
+                  <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                    <ModalHeader bg={"primary.300"} color={useColorModeValue("white", "gray.800")}>Subscribe to our Newsletter!</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody pb={6}>
+                {/* <FormControl isRequired> */}
+                        <Input  name='subscribe' placeholder='Type your email...' value={email} onChange={handleChange}/>
+                {/* </FormControl> */}
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button bg={"primary.300"} color={useColorModeValue("white", "gray.800")} mr={3} type='submit' onClick={(e) => handleSubmit(e)} onClickCapture={onClose}>
+                      Submit
+                      </Button>
+                      <Button onClick={onClose}>Cancel</Button>
+                    </ModalFooter>
+                    </ModalContent>
+                  </Modal>
+                </> : <Button onClick={onOpen} bg={"primary.300"} color={useColorModeValue("white", "gray.800")}>Log in to Subscribe</Button> }
               </Stack>
             </Flex>
             <Stack align={'flex-start'}>

@@ -37,10 +37,11 @@ userRouter.get("/", async (req, res, next) => {
 
 userRouter.put("/admin/updateUser/", async (req, res,next) => {
   // const {email} = req.params;
-  const {banned, admin, email} = req.body;
+  const {banned, admin, email, subscribed} = req.body;
   try{
     // if(!email) res.status(400).json("Email is required");
-    const newUser = await updateUser(email, banned, admin)
+    const newUser = await updateUser(email, banned, admin, subscribed)
+    console.log(newUser)
     return res.status(200).send("Done");
   } catch(error) {
     next(error);

@@ -1,4 +1,11 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Badge,
   Button,
   Card,
@@ -11,19 +18,27 @@ import {
   Tag,
   TagLabel,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import img from '../../../assets/user-png-33842.png'
+import { getUser, updateUser } from "../../../redux/actions/actions";
+import EditUser from "../EditUser/EditUser";
 
 const CardUserAdmin = ({
+  email,
   name,
   lastName,
   companyName,
   phoneNumber,
   address,
   image,
+  banned,
+  admin
 }) => {
+
   return (
     <Card
       w="full"
@@ -47,7 +62,7 @@ const CardUserAdmin = ({
           w="full"
           margin="auto"
           h="full"
-          src="https://imgs.search.brave.com/r6TBQaVZ6R-YCIDK0ViahPr0maxIvQniZo5pzWBf2vs/rs:fit:1000:600:1/g:ce/aHR0cHM6Ly9pMi53/cC5jb20vd2lweS50/di93cC1jb250ZW50/L3VwbG9hZHMvMjAx/OS8wMS9NdXJpJUMz/JUIzLWVsLXBlcnJp/dG8tbSVDMyVBMXMt/ZmFtb3Nvcy1kZS1p/bnRlcm5ldC0yLmpw/Zz9maXQ9MTAwMCUy/QzYwMCZzc2w9MQ"
+          src={image ? image : img}
           loading="lazy"
           alt={name}
         />
@@ -85,27 +100,20 @@ const CardUserAdmin = ({
             variant="solid"
             colorScheme="blue"
           >
-            <Link to={"/edit/"}>Edit User</Link>
-          </Button>
-          <Button
-            size={{ base: "xs", lg: "sm" }}
-            variant="solid"
-            colorScheme="red"
-          >
-            <Link>Ban User</Link>
+            <Link to={`/editUser/${email}`}>Edit Status</Link>
           </Button>
         </Stack>
       </Stack>
       <Tag
         variant="outline"
         size="sm"
-        colorScheme="green"
+        colorScheme= {banned === true ? 'red' : "green"}
         w="fit-content"
         position="absolute"
         top="5px"
         left="5px"
       >
-        <TagLabel> Active </TagLabel>
+        <TagLabel> {banned === true ? 'Banned' : admin === true ? 'Admin' : 'Active'} </TagLabel>
       </Tag>
     </Card>
   );

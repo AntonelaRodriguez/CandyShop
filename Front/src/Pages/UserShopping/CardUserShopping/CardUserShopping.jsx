@@ -1,19 +1,22 @@
 import {
+    Badge,
     Button,
     Card,
     CardBody,
+    CardFooter,
     Heading,
     Image,
     Stack,
     Tag,
     TagLabel,
     Text,
+    FormLabel,
+    Select
   } from '@chakra-ui/react'
-  import React from 'react'
+  import React, {useState} from 'react'
   import { Link } from 'react-router-dom'
-  import image from '../../../assets/heroImage/1f6d2.png'
   
-  const CardProductAdmin = ({ orderN, date, totalPrice, state, trackingNumber, UserEmail, delivery}) => {
+  const CardProductAdmin = ({ orderN, date, totalPrice, state,}) => {
 
     return (
       <Card
@@ -37,7 +40,7 @@ import {
             w='full'
             margin='auto'
             h='full'
-            src={image}
+            src={'https://e7.pngegg.com/pngimages/833/426/png-clipart-shopping-cart-shopping-cart.png'}
             loading='lazy'
           />
         </Stack>
@@ -60,28 +63,29 @@ import {
             <Heading fontWeight={700} size='sm'>
             Order Number: {orderN}
             </Heading>
+  
+            <Text fontWeight={300} size='sm'>
+            Date: {date}
+            </Text>
 
-            <Text>User: {UserEmail}</Text>
-            <Text>Date: {date}.</Text>
-            <Text>Actual State: {state}.</Text>
-            <Text>Tracking Number: {trackingNumber}.</Text>
-            <Text>Delivery: {delivery}</Text>
+            <Text fontWeight={300} size='sm'>
+            Actual State: {state}
+            </Text>
   
             <Stack>
               <Tag variant='outline' size='sm' colorScheme='primary'>
                 <TagLabel>$ {totalPrice}</TagLabel>
               </Tag>
             </Stack>
-
           </CardBody>
+  
           <Stack h='full' direction='row'>
             <Button size={{ base: 'xs', lg: 'sm' }} variant='solid' colorScheme='blue'>
-              <Link to={'/detail/' + orderN}>Shopping Cart Detail</Link>
+              <Link to={'/detailShopping/' + orderN}>Shopping Cart</Link>
             </Button>
           </Stack>
         </Stack>
       </Card>
     )
   }
-  
   export default CardProductAdmin

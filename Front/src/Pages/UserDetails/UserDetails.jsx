@@ -1,153 +1,113 @@
 import React from 'react'
-import { useState, 
-  // useEffect
- } from 'react'
-import { useDispatch, useSelector, 
-  // useSelector 
-} from 'react-redux'
-// import axios from 'axios'
-import { 
-  FormControl,
-  FormLabel,
-  Stack,
-  Input,
-  Button,
-   } from "@chakra-ui/react";
-import { getUser, postUserDetail, updateUserDetail } from '../../redux/actions/actions';
-import { useNavigate } from 'react-router-dom';
-import {useAuth0} from "@auth0/auth0-react"
-import { useEffect } from 'react';
-import { useLocalStorage } from '../../Components/useLocalStorage/useLocalStorage';
+import { useState} from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { FormControl, FormLabel, Stack, Input, Button } from '@chakra-ui/react'
+import { getUser, postUserDetail, updateUserDetail } from '../../redux/actions/actions'
+import { useNavigate } from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react'
+import { useEffect } from 'react'
+import Swal from 'sweetalert2'
+// import { useLocalStorage } from '../../Components/useLocalStorage/useLocalStorage'
 
-// import userRouter from '../../../../Back/src/routes/userRouter';
+const Label = ({lname, name, value, cb}) => (
+  <>
+    <FormLabel pt={5} textIndent={12}>{lname}</FormLabel>
+    <Input
+      type='text'
+      value={value}
+      name={name}
+      onChange={cb}
+      placeholder={value}
+      bg='primary.100' 
+    />
+  </>
+)
 
-
-const UserDetails = (props) => {
-
-  const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
+const UserDetails = () => {
+  const { isAuthenticated, user } = useAuth0()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [storedValue, setStoredValue] = useLocalStorage('userDetail', {});
-  const currentUser = useSelector(state => state.user)
+  // const [storedValue, setStoredValue] = useLocalStorage('userDetail', {})
+  const usuario = useSelector((state) => state.user);
+  let initialInput = {
+    email: '',
+    name: '',
+    lastName: '',
+    companyName: '',
+    phoneNumber: '',
+    address: '',
+    image: ''
+  }
+  const [input, setInput] = useState(initialInput);
 
   useEffect(() => {
-      dispatch(getUser(user.email))
-  },[dispatch])
+    if(Object.entries(usuario).length && !usuario?.UserDetail && user) {
+      setInput({ ...input, email: usuario.email, image: user.picture})
+    }
+    if(usuario?.UserDetail) {
+      setInput({ 
+        ...input,
+        email: usuario.email,
+        name: usuario.UserDetail.name,
+        lastName: usuario.UserDetail.lastName,
+        companyName: usuario.UserDetail.companyName,
+        phoneNumber: usuario.UserDetail.phoneNumber,
+        address: usuario.UserDetail.address,
+        image: usuario.UserDetail.image
+      })
+    }
+  }, [usuario, isAuthenticated, user])
 
-  // function setValue(){
-  //   setStoredValue(currentUser.UserDetail)
-  // }
-
-  const [input, setInput] = useState({
-    name: "",
-    lastName: "",
-    companyName: "",
-    phoneNumber: null,
-    address: "",
-  });
-  console.log(currentUser, 'user ')
-  
   function handleChange(e) {
-    
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value,
-    });
+    setInput({ ...input, [e.target.name]: e.target.value})
   }
-  const newDetail = {
-    email: isAuthenticated ? user.email : "",
-    name: input.name,
-    lastName: input.lastName,
-    companyName: input.companyName,
-    phoneNumber: input.phoneNumber,
-    address: input.address,
-    image: isAuthenticated ? user.picture : ""
-  };
-
-  // console.log(newDetail, 'NewDetail');
 
   function handleSubmit(e) {
     e.preventDefault()
-    if(!currentUser.UserDetail){
-      dispatch(postUserDetail(newDetail))
-      setInput({
-        name: "",
-        lastName: "",
-        companyName: "",
-        phoneNumber: "",
-        address: "",
-      })
-      dispatch(getUser(user.email))
-      alert("User details updated successfully")
-      navigate('/products')
+    if(!usuario.UserDetail) {
+      dispatch(postUserDetail(input))
+    } else {
+      dispatch(updateUserDetail(input))
     }
-    dispatch(updateUserDetail(newDetail))
-    setInput({
-      name: "",
-      lastName: "",
-      companyName: "",
-      phoneNumber: "",
-      address: "",
-    })
-    dispatch(getUser(user.email))
-    alert("User details updated successfully")
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Your information  has been saved',
+      showConfirmButton: false,
+      timer: 1800
+    }).then(() => {
+      dispatch(getUser(usuario.email))
+      setInput(initialInput)
       navigate('/products')
+    })
   }
 
-
-
   return (
-    <Stack direction='row' align='center' justify='center' gap={15}>
-      <form action='submit' onSubmit={(e) => handleSubmit(e)}>
-        <Stack spacing={2}>
-          <FormControl isRequired>
-            <FormLabel>Name</FormLabel>
-            <Input 
-            type="text"
-            value={input.name}
-            name="name"
-            onChange={handleChange}
-            placeholder={currentUser.UserDetail ? currentUser.UserDetail.name : '...'} 
-            />
-
-            <FormLabel>Last Name</FormLabel>
-            <Input
-            type="text"
-            value={input.lastName}
-            name="lastName"
-            onChange={handleChange}
-            placeholder={currentUser.UserDetail ? currentUser.UserDetail.lastName : '...'} 
-            />
-
-            <FormLabel>Company</FormLabel>
-            <Input
-            type="text"
-            value={input.companyName}
-            name="companyName"
-            onChange={handleChange}
-            placeholder={currentUser.UserDetail ? currentUser.UserDetail.companyName : '...'} 
-            />
-
-            <FormLabel>Phone Number</FormLabel>
-            <Input
-            type="number"
-            value={input.phoneNumber}
-            name="phoneNumber"
-            onChange={handleChange}
-            placeholder={currentUser.UserDetail ? currentUser.UserDetail.phoneNumber : '...'} 
-            />
-
-            <FormLabel>Address</FormLabel>
-            <Input
-            type="text"
-            value={input.address}
-            name="address"
-            onChange={handleChange}
-            placeholder={currentUser.UserDetail ? currentUser.UserDetail.address : '...'} 
-            />
+    <Stack 
+      direction='row' 
+      align='center' 
+      justify='center' 
+      bg='primary.200' 
+      p='1em 3em 1em 3em'
+      borderRadius='md'
+    >
+      <form onSubmit={(e) => handleSubmit(e)} autoComplete='off'>
+        <Stack spacing={9}>
+          <FormControl isRequired >
+            <Label lname='Name' name='name' value={input?.name} cb={handleChange} />
+            <Label lname='Last name' name='lastName' value={input?.lastName} cb={handleChange}/>
+            <Label lname='Company name' name='companyName' value={input?.companyName} cb={handleChange}/>
+            <Label lname='Phone number' name='phoneNumber' value={input?.phoneNumber} cb={handleChange}/>
+            <Label lname='Address' name='address' value={input?.address} cb={handleChange}/>
           </FormControl>
-          <Button type="submit" colorScheme="primary">
-            Change details
+          <Button 
+            type='submit' 
+            variant='solid'
+            _hover={{ backgroundColor: 'primary.400' }}
+            color='whiteAlpha.900'
+            bg={'primary.300'}
+          > 
+            Change details 
           </Button>
         </Stack>
       </form>
@@ -155,4 +115,4 @@ const UserDetails = (props) => {
   )
 }
 
-export default UserDetails;
+export default UserDetails

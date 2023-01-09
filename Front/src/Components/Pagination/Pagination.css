@@ -1,4 +1,4 @@
-.page-number {
+/* .page-number {
 	font-size: 16px;
 	font-weight: 600;
 	color: black;
@@ -22,4 +22,60 @@
 .active:hover {
 	color: #FF6B6B;
 	background: rgba(255, 255, 255, 0.371);
+} */
+.pagination_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1em;
+  /* font-size: 12px; */
+  font-weight: bold;
+  line-height: 2em;
+  color:  #FF6B6B;
+}
+
+.pagination_container > ul {
+  display: flex;
+  flex-wrap: wrap;
+  padding: .5em;
+}
+.pagination_container > ul > li {
+  text-align: center;
+  list-style: none;
+  user-select: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.numb{
+  list-style: none;
+  height: 2em;
+  width: 2em;
+  margin: 0 3px;
+  border-radius: .5em;
+}
+.prev{
+  width: 4.5em;
+  margin: 0 .3em 0 .3em;
+  border-radius: .8em 0 0 .8em;
+  color:#FF6B6B;
+}
+.next{
+  width: 4.5em;
+  margin: 0 .3em 0 .3em;
+  border-radius: 0 .8em .8em 0;
+  color: #FF6B6B;
+}
+.active{
+  color: #fff;
+	background: #FF6B6B;
+}
+
+@media (hover: hover) {
+  .numb:hover,
+  .pagination_container > ul > li:first-child:hover,
+  .pagination_container > ul > li:last-child:hover{
+    color: #fff;
+    background: #FF6B6B;
+  }
 }

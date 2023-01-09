@@ -9,7 +9,9 @@ import {
   Text,
   Grid,
   GridItem,
-  Select
+  Select,
+  Spinner,
+  Box
 } from '@chakra-ui/react'
 import CardProduct from '../../Components/CardProduct/CardProduct'
 import * as actions from '../../redux/actions/actions'
@@ -18,11 +20,14 @@ import Pagination from '../../Components/Pagination/Pagination'
 import Footer from '../../Components/Footer/Footer'
 import { BsSearch } from 'react-icons/bs'
 import { ImCross } from 'react-icons/im'
+import Filters from '../../Components/Filters/Filters'
 // import { Link } from 'react-router-dom'
 
 const Products = () => {
   const [name, setName] = useState('')
-
+  const emptyAfterFiltering = useSelector((state) => state.emptyAfterFiltering)
+  const recentSearch = useSelector((state) => state.recentSearch)
+  const loading = useSelector((state) => state.loading)
   const handleChange = (event) => {
     setName(event.target.value)
   }
@@ -31,7 +36,8 @@ const Products = () => {
 
   const filters = useSelector((state) => state.filters)
   function handleFilters(event) {
-    setCurrentPage(1)
+    // setCurrentPage(1)
+    dispatch(actions.setCurrentPage(1))
     dispatch(actions.setFilters({ ...filters, [event.target.name]: event.target.value }))
     dispatch(actions.applyFilters({ ...filters, [event.target.name]: event.target.value }))
   }
@@ -39,9 +45,12 @@ const Products = () => {
   //--------filter
 
   const handleSumbit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
+    dispatch(actions.cleanUpFilters())
+    dispatch(actions.setLoading(true))
     if (name) {
-      setCurrentPage(1)
+      // setCurrentPage(1)
+      dispatch(actions.setCurrentPage(1))
       dispatch(actions.searchCandy(name))
       setName('')
     } else {
@@ -57,6 +66,7 @@ const Products = () => {
 
   const handlerSort = (e) => {
     setOrder(dispatch(actions.sort(e.target.value)))
+    dispatch(actions.setCurrentPage(1))
   }
 
   const handleClear = (e) => {
@@ -65,41 +75,53 @@ const Products = () => {
   }
 
   //--- pagination
-  const [currentPage, setCurrentPage] = useState(1)
+  // const [currentPage, setCurrentPage] = useState(1)
+  let currentPage = useSelector((state) => state.currentPage)
+  let categories = useSelector((state) => state.categories);
+  let brands = useSelector((state) => state.brands);
   const [productsPerPage] = useState(9)
 
   const indexOfLastPost = currentPage * productsPerPage
   const indexOfFirstPost = indexOfLastPost - productsPerPage
   const currentPosts = products.slice(indexOfFirstPost, indexOfLastPost)
 
- console.log("products", products)
 
   const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber)
+    // setCurrentPage(pageNumber)
+    dispatch(actions.setCurrentPage(pageNumber))
   }
 
-  const prevPage = () => {
-    if (currentPage !== 1) {
-      setCurrentPage(currentPage - 1)
-    }
-  }
+  // const prevPage = () => {
+  //   if (currentPage !== 1) {
+  //     setCurrentPage(currentPage - 1)
+  //   }
+  // }
 
-  const nextPage = () => {
-    if (currentPage !== Math.ceil(products.length / productsPerPage)) {
-      setCurrentPage(currentPage + 1)
-    }
-  }
+  // const nextPage = () => {
+  //   if (currentPage !== Math.ceil(products.length / productsPerPage)) {
+  //     setCurrentPage(currentPage + 1)
+  //   }
+  // }
   //----
+  function handleResetFilters() {
+    dispatch(actions.cleanUpFilters());
+    window.scroll(0, 0);
+  }
+  function handleResetSearch() {
+    dispatch(actions.cleanUpSearch());
+    window.scroll(0, 0);
+  }
 
   return (
     <Flex direction='column' justifyContent='center' align='center'>
-      <Heading as={'h2'} p={10}>
+      <Heading as={'h2'} p={5}>
         All Products
       </Heading>
       <form onSubmit={(event) => handleSumbit(event)}>
         <Flex
           bg='primary.200'
           p={2}
+          mb={8}
           borderRadius={'md'}
           justifyContent='center'
           width='fit-content'
@@ -132,134 +154,174 @@ const Products = () => {
           </Button>
         </Flex>
       </form>
-      <Flex direction='row' justifyContent='center' align='center' p={5}>
-        <Select
-          placeholder='Sort'
-          bg={'primary.200'}
-          _hover={{ backgroundColor: 'primary.400' }}
-          onChange={handlerSort}
-          m={2}
-        >
-          <option value='A-Z'>A-Z</option>
-          <option value='Z-A'>Z-A</option>
-          <option value='Price: Highest'>Price: Highest</option>
-          <option value='Price: Lowest'>Price: Lowest</option>
-        </Select>
-        <Button
-          variant='solid'
-          _hover={{ backgroundColor: 'primary.400' }}
-          color='whiteAlpha.900'
-          bg={'primary.300'}
-          onClick={handleClear}
-        >
-          <ImCross />
-        </Button>
-      </Flex>
 
-      {/* filters */}
-      <Flex direction='row' justifyContent='center' align='center' p={5}>
-        <Select
-          placeholder='T.A.C.C'
-          name='tacc'
-          value={filters.tacc}
-          bg={'primary.200'}
-          _hover={{ backgroundColor: 'primary.400' }}
-          onChange={handleFilters}
-          m={2}
-        >
-          <option value='tacc'>With TACC</option>
-          <option value='notacc'>No TACC</option>
-        </Select>
+      {
+        loading
+        ? <Spinner
+            thickness='10px'
+            speed='0.65s'
+            emptyColor='gray.200'
+            color={'primary.200'}
+            size='xl'
+            p={10}
+            m={10}
+          />
+        : recentSearch 
+          ? 
+            <>
+              <Flex alignItems='center' gap={4}>
+                <Text fontSize='lg' fontWeight={600}>Search results: {products.length}</Text>
+                <Button 
+                  id='clearAllFilterButton'
+                  onClick={(e) => {handleResetSearch()}}
+                  variant='solid'
+                  _hover={{ backgroundColor: 'primary.400' }}
+                  color='whiteAlpha.900'
+                  bg={'primary.300'}
+                  >
+                  Start Over
+                </Button>
+              </Flex>
+              <Grid
+                  p={20}
+                  pt={10}
+                  gridTemplateColumns={{
+                    sm: 'repeat(1,1fr)',
+                    md: 'repeat(2,1fr)',
+                    lg: 'repeat(3,1fr)'
+                  }}
+                  gap={20}
+                  minW='full'
+                >
+                  {currentPosts.length ? (
+                    currentPosts.map((product) => {
+                      return (
+                        <GridItem key={product.id}>
+                          <CardProduct
+                            id={product.id}
+                            image={product.image}
+                            name={product.name}
+                            price={product.price}
+                            stock={product.stock}
+                            availability={product.availability}
+                          />
+                        </GridItem>
+                      )
+                    }))
+                    : null
+                  }
+                </Grid>
+            </>
+          : <>
+              <Filters/>
+              { 
+                emptyAfterFiltering 
+                  ? <Stack justify='start' align='center' h='sm' pt={10} fontSize='lg' fontWeight={600} gap={7}>
+                      <Text>No filters result. :( </Text>
+                      <Text>There are no products that match your current filters. Try removing some of them to get better results.</Text>
+                      <Button 
+                        id='clearAllFilterButton'
+                        onClick={(e) => {handleResetFilters()}}
+                        variant='solid'
+                        _hover={{ backgroundColor: 'primary.400' }}
+                        color='whiteAlpha.900'
+                        bg={'primary.300'}
+                      >
+                        Clear All Filter + Start Over
+                      </Button>
+                    </Stack>
+                  : <Stack gap={3} justify='center' align='center' overflow='hidden'>
+                      <Grid
+                        p={20}
+                        pt={10}
+                        gridTemplateColumns={{
+                          sm: 'repeat(1,1fr)',
+                          md: 'repeat(2,1fr)',
+                          lg: 'repeat(3,1fr)'
+                        }}
+                        gap={20}
+                        minW='full'
+                      >
+                        {currentPosts.length ? (
+                          currentPosts.map((product) => {
+                            return (
+                              <GridItem key={product.image}>
+                                <CardProduct
+                                  key={product.image}
+                                  id={product.id}
+                                  image={product.image}
+                                  name={product.name}
+                                  price={product.price}
+                                  stock={product.stock}
+                                  availability={product.availability}
+                                />
+                              </GridItem>
+                            )
+                          }))
+                          : null
+                        }
+                      </Grid>
+                    </Stack>
+                }
+                      
+            </>
+      }
+      {/* { 
+       emptyAfterFiltering 
+        ? <Stack justify='start' align='center' h='sm' pt={10} fontSize='lg' fontWeight={600} gap={7}>
+            <Text>No filters result. :( </Text>
+            <Text>There are no products that match your current filters. Try removing some of them to get better results.</Text>
+            <Button 
+              id='clearAllFilterButton'
+              onClick={(e) => {handleResetFilters()}}
+              variant='solid'
+              _hover={{ backgroundColor: 'primary.400' }}
+              color='whiteAlpha.900'
+              bg={'primary.300'}
+            >
+              Clear All Filter + Start Over
+            </Button>
+          </Stack>
+        : <Stack gap={3} justify='center' align='center' overflow='hidden'>
+            <Grid
+              p={20}
+              pt={10}
+              gridTemplateColumns={{
+                sm: 'repeat(1,1fr)',
+                md: 'repeat(2,1fr)',
+                lg: 'repeat(3,1fr)'
+              }}
+              gap={20}
+              minW='full'
+            >
+              {currentPosts.length ? (
+                currentPosts.map((product) => {
+                  return (
+                    <GridItem key={product.id}>
+                      <CardProduct
+                        id={product.id}
+                        image={product.image}
+                        name={product.name}
+                        price={product.price}
+                        stock={product.stock}
+                        availability={product.availability}
+                      />
+                    </GridItem>
+                  )
+                }))
+                : null
+              }
+            </Grid>
+          </Stack>
+      } */}
 
-        <Select
-          placeholder='BRAND'
-          name='brand'
-          value={filters.brand}
-          bg={'primary.200'}
-          _hover={{ backgroundColor: 'primary.400' }}
-          onChange={handleFilters}
-          m={2}
-        >
-          <option value='aguila'>Aguila</option>
-          <option value='arcor'>Arcor</option>
-          <option value='bagley'>Bagley</option>
-          <option value='bon o bon' option>
-            Bon o Bon
-          </option>
-          <option value='billiken'>Billiken</option>
-          <option value='bonafide'>Bonafide</option>
-          <option value='cofler'>Cofler</option>
-          <option value='felfort'>Felfort</option>
-          <option value='ferrero'>Ferrero</option>
-          <option value='georgalos'>Georgalos</option>
-          <option value='godet'>Godet</option>
-          <option value='jorgito'>Jorgito</option>
-          <option value='milka'>Milka</option>
-          <option value='mogul'>Mogul</option>
-          <option value='nestle'>Nestle</option>
-          <option value='terrabusi'>Terrabusi</option>
-          <option value='tofi'>Tofi</option>
-          <option value='topline'>Topline</option>
-          <option value='trident'>Trident</option>
-          <option value='unknown'>Unknown</option>
-        </Select>
-        <Select
-          placeholder='CATEGORY'
-          value={filters.category}
-          name='category'
-          bg={'primary.200'}
-          _hover={{ backgroundColor: 'primary.400' }}
-          onChange={handleFilters}
-          m={2}
-        >
-          <option value='biscuits'>biscuits</option>
-          <option value='bubble gum'>bubble gum</option>
-          <option value='caramel cookie'>caramel cookie</option>
-          <option value='candy'>candy</option>
-          <option value='cerealbars'>cerealbars</option>
-          <option value='chocolate'>chocolate</option>
-          <option value='gummies'>gummies</option>
-          <option value='lollipop'>lollipop</option>
-          <option value='tablets'>tablets</option>
-          <option value='unknown'>unknown</option>
-        </Select>
-      </Flex>
-
-      <Stack gap={3} justify='center' align='center' overflow='hidden'>
-        <Grid
-          p={20}
-          gridTemplateColumns={{
-            sm: 'repeat(1,1fr)',
-            md: 'repeat(2,1fr)',
-            lg: 'repeat(3,1fr)'
-          }}
-          gap={20}
-          minW='full'
-        >
-          {currentPosts &&
-            currentPosts.map((product) => {
-              return (
-                <GridItem  key={product.id}>     
-                  <CardProduct
-                    id={product.id}
-                    image={product.image}
-                    name={product.name}
-                    price={product.price}
-                    stock={product.stock}
-                    availability= {product.availability}
-                  />
-                </GridItem>
-              )
-            })}
-        </Grid>
-      </Stack>
       <Pagination
         productsPerPage={productsPerPage}
         totalProducts={products.length}
         currentPage={currentPage}
         paginate={paginate}
-        prevPage={prevPage}
-        nextPage={nextPage}
+        // prevPage={prevPage}
+        // nextPage={nextPage}
       />
       <Footer />
     </Flex>

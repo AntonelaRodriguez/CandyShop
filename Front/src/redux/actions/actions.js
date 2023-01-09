@@ -305,7 +305,7 @@ export const setLoading = (payload) => {
 export const newSubscription = (email) => {
   return async function(dispatch){
     await axios.post(`${url}/subscribe/${email}`)
-    return dispatch({ type: NEW_SUBSCRIPTION, payload: email})
+    return dispatch({ type: NEW_SUBSCRIPTION })
   }
 }
 

@@ -62,14 +62,14 @@ export default function LargeWithNewsletter() {
 
   const currentUser = users && users.filter(u => u.email === email)
   
-  console.log(email)
-  console.log(user, 'usr')
-  console.log(currentUser, 'current')
+  // console.log(email)
+  // console.log(user, 'usr')
+  // console.log(currentUser, 'current')
   const newDetail = {
-    email: 'agubarrionuevox@gmail.com',
+    email: email,
     subscribed: true
   }
-  console.log(newDetail)
+  // console.log(newDetail)
   function handleChange(e) {
     setEmail(e.target.value);
   }
@@ -84,7 +84,7 @@ export default function LargeWithNewsletter() {
           timer: 2000
       })
       dispatch(updateUser(newDetail))
-      dispatch(newSubscription(email))
+      // dispatch(newSubscription(email))
       setEmail('')  
   }
 

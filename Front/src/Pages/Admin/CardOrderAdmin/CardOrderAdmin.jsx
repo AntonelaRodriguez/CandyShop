@@ -13,7 +13,7 @@ import {
   import { Link } from 'react-router-dom'
   import image from '../../../assets/heroImage/1f6d2.png'
   
-  const CardProductAdmin = ({ orderN, date, totalPrice, state, trackingNumber, UserEmail}) => {
+  const CardProductAdmin = ({ orderN, date, totalPrice, state, trackingNumber, UserEmail, delivery}) => {
 
     return (
       <Card
@@ -65,6 +65,7 @@ import {
             <Text>Date: {date}.</Text>
             <Text>Actual State: {state}.</Text>
             <Text>Tracking Number: {trackingNumber}.</Text>
+            <Text>Delivery: {delivery}</Text>
   
             <Stack>
               <Tag variant='outline' size='sm' colorScheme='primary'>

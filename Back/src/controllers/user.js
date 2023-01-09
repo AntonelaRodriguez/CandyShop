@@ -55,15 +55,16 @@ const deleteUser = async (email) => {
 };
 
 //-----------Normal User
-const createUserDetail = async (
-  email,
-  name,
-  lastName,
-  phoneNumber,
-  address,
-  image,
-  companyName
-) => {
+const createUserDetail = async (body) => {
+  let { 
+    email,
+    name,
+    lastName,
+    phoneNumber,
+    address,
+    image,
+    companyName 
+  } = body
   if (
     !email ||
     !name ||
@@ -80,6 +81,7 @@ const createUserDetail = async (
       UserEmail: email,
     },
     defaults: {
+      email,
       name,
       lastName,
       phoneNumber,
@@ -91,16 +93,16 @@ const createUserDetail = async (
   return newUser;
 };
 
-const updateUserDetail = async (
-  email,
-  name,
-  lastName,
-  phoneNumber,
-  address,
-  image,
-  companyName
-) => {
-  
+const updateUserDetail = async (body) => {
+  let {
+    email,
+    name,
+    lastName,
+    phoneNumber,
+    address,
+    image,
+    companyName
+  } = body;
 
   await UserDetail.update(
     {

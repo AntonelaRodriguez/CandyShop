@@ -31,8 +31,11 @@ export const UPDATE_USER_DETAIL = "UPDATE_USER_DETAIL";
 export const UPDATE_USER = "UPDATE_USER";
 export const GET_CART_PRODUCT_DETAIL = "GET_CART_PRODUCT_DETAIL";
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
-export const DELETED_REVIEW = "DELETED_REVIEW";
-export const UPDATED_REVIEW = "UPDATED_REVIEW";
+export const DELETED_REVIEW = "DELETED_REVIEW"
+export const UPDATED_REVIEW = "UPDATED_REVIEW"
+export const CLEAN_UP_FILTERS = "CLEAN_UP_FILTERS";
+export const CLEAN_UP_SEARCH = "CLEAN_UP_SEARCH";
+export const SET_LOADING = "SET_LOADING";
 export const NEW_SUBSCRIPTION = "NEW_SUBSCRIPTION";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
@@ -69,18 +72,27 @@ export function setFilters(payload) {
   };
 }
 
-export function applyFilters({ tacc, brand, category }) {
-  return async function (dispatch) {
-    const { data } = await axios.get(
-      `${url}/products/filters?tacc=${tacc || "TACC"}&brand=${
-        brand || "BRAND"
-      }&category=${category || "CATEGORY"}`
-    );
-    return dispatch({
-      type: APPLY_FILTERS,
-      payload: data,
-    });
-  };
+// export function applyFilters({ tacc, brand, category }) {
+//   return async function (dispatch) {
+//     const { data } = await axios.get(
+//       `${url}/products/filters?tacc=${tacc || "TACC"}&brand=${
+//         brand || "BRAND"
+//       }&category=${category || "CATEGORY"}`
+//     );
+//     return dispatch({
+//       type: APPLY_FILTERS,
+//       payload: data,
+//     });
+//   };
+// }
+export function applyFilters(payload) {
+  return { type: APPLY_FILTERS, payload };
+}
+export function cleanUpFilters() {
+  return { type: CLEAN_UP_FILTERS };
+}
+export function cleanUpSearch() {
+  return { type: CLEAN_UP_SEARCH };
 }
 
 export const sort = (payload) => {
@@ -284,6 +296,9 @@ export const deleteReview = (id) => {
 }
 export const setCurrentPage = (page) => {
   return { type: SET_CURRENT_PAGE, payload: page }
+}
+export const setLoading = (payload) => {
+  return { type: SET_LOADING, payload }
 }
 
 export const newSubscription = (email) => {

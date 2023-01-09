@@ -34,7 +34,8 @@ import {
   DELETED_REVIEW,
   CLEAN_UP_FILTERS,
   CLEAN_UP_SEARCH,
-  SET_LOADING
+  SET_LOADING,
+  NEW_SUBSCRIPTION
 } from '../actions/actions'
 
 const initialState = {
@@ -271,6 +272,11 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state,
         loading: payload
       }
+    case NEW_SUBSCRIPTION: {
+      return{
+        ...state
+      }
+    }
     default:
       return state
   }

@@ -47,7 +47,7 @@ export default function LargeWithNewsletter() {
       }, (error) => {
           console.log(error.text);
       });
-    console.log('submit')
+    e.target.reset()
   };
 
   return (

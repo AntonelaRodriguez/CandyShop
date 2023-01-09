@@ -99,7 +99,7 @@ const EditUser = (props) => {
         <Link to={'/admin/UsersAdmin'}>Back</Link>
       </Button>
     <Stack direction='column' align='center' justify='center' gap={15}>
-      <Heading fontWeight={700} size="lg" >{`Edit User: ${currentUser[0].UserDetail.name} ${currentUser[0].UserDetail.lastName}`}</Heading>
+      <Heading fontWeight={700} size="lg" > Edit User: {currentUser[0]?.UserDetail?.name && currentUser[0]?.UserDetail?.lastName ? `${currentUser[0].UserDetail.name} ${currentUser[0].UserDetail.lastName}` : currentUser[0].email}</Heading>
       <form action='submit' onSubmit={(e) => handleSubmit(e)}>
         <Stack spacing={7}>
           <FormControl isRequired>

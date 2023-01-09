@@ -4,18 +4,18 @@ const loadProductsAndCategories = require("../../loadDB.js");
 
 const searchCandy = async (name) => {    //busca products por matcheo parcial
 	let product = []
-	if(name !== "" && typeof name === "string"){
-	if(!name) throw new Error({message:"Value is undefined", status:400});
-	}
+	// if(name !== "" && typeof name === "string"){
+	// if(!name) throw new Error({message:"Value is undefined", status:400});
+	// }
 	let nameTrimed = name.replace(/^\s+|\s+$/, "");
 	if(!nameTrimed.length) throw new Error({message: "Value is empty string!", status:400});
 	let products = await Product.findAll({
-      where: { name: { [Op.iLike]: nameTrimed+"%" } },
+      where: { name: { [Op.iLike]: "%"+nameTrimed+"%" } },
       include: [
         { model: Category },
       ]
     });
-	if(!products.length) throw new Error({message: `No matches for ${nameTrimed}`, status: 404});
+	// if(!products.length) throw new Error({message: `No matches for ${nameTrimed}`, status: 404});
 
 	product = products.map((el)=>valuesToReturn(el.toJSON()));
 

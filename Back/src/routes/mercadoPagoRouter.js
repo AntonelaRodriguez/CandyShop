@@ -89,7 +89,7 @@ server.get("/pagos", async (req, res, next) => {
         },
         { where: { orderN: cartId } }
       );
-      return res.redirect(`http://localhost:5173/`);
+      return res.redirect(`https://candy-shop-nqa0tdnru-antonelarodriguez.vercel.app`);
     },[2000])
   } catch (error) {
     next(error);

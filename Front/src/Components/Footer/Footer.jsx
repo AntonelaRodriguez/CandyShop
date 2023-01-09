@@ -7,20 +7,13 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  VisuallyHidden,
   Input,
   IconButton,
   useColorModeValue,
   Flex,
-  GridItem,
   Textarea,
-  FormControl,
   Button,
   useDisclosure,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerBody,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -35,8 +28,8 @@ import { BiMailSend } from "react-icons/bi";
 import img from "../../assets/candy_logo.svg";
 import { useRef } from 'react';
 import emailjs from '@emailjs/browser';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeSubscription, getAllUsers, newSubscription, updateUser} from '../../redux/actions/actions';
+import { useDispatch } from 'react-redux';
+import { getAllUsers, newSubscription, updateUser} from '../../redux/actions/actions';
 import Swal from 'sweetalert2';
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -51,27 +44,21 @@ const ListHeader = ({ children }) => {
 export default function LargeWithNewsletter() {
 
   const dispatch = useDispatch()
-  const { isAuthenticated, user } = useAuth0()
+  const { isAuthenticated } = useAuth0()
   const [email, setEmail] = useState("")
-  const users = useSelector(state => state.users)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
     dispatch(getAllUsers())
   }, [dispatch])
-
-  const currentUser = users && users.filter(u => u.email === email)
   
-  // console.log(email)
-  // console.log(user, 'usr')
-  // console.log(currentUser, 'current')
   const newDetail = {
     email: email,
     subscribed: true
   }
-  // console.log(newDetail)
   function handleChange(e) {
     setEmail(e.target.value);
+    validate(e.target.value)
   }
 
   function handleSubmit(e){
@@ -79,12 +66,12 @@ export default function LargeWithNewsletter() {
       Swal.fire({
           position: 'center',
           icon: 'success',
-          title: 'You are now subscribed!',
+          title: 'You are now subscribed! Check spam inbox',
           showConfirmButton: false,
-          timer: 2000
+          timer: 3000
       })
       dispatch(updateUser(newDetail))
-      // dispatch(newSubscription(email))
+      dispatch(newSubscription(email))
       setEmail('')  
   }
 
@@ -101,6 +88,11 @@ export default function LargeWithNewsletter() {
       });
     e.target.reset()
   };
+
+  function validate(email) {
+    const validation = /\S+@\S+\.\S+/.test(email)
+    return validation
+  }
 
   return (
     <Flex as="nav" align="center" justify="center" wrap="wrap" py={6} w="full">
@@ -202,12 +194,10 @@ export default function LargeWithNewsletter() {
                     <ModalHeader bg={"primary.300"} color={useColorModeValue("white", "gray.800")}>Subscribe to our Newsletter!</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
-                {/* <FormControl isRequired> */}
-                        <Input  name='subscribe' placeholder='Type your email...' value={email} onChange={handleChange}/>
-                {/* </FormControl> */}
+                        <Input type='email'  name='subscribe' placeholder='Type your email...' value={email} onChange={handleChange} />
                     </ModalBody>
                     <ModalFooter>
-                      <Button bg={"primary.300"} color={useColorModeValue("white", "gray.800")} mr={3} type='submit' onClick={(e) => handleSubmit(e)} onClickCapture={onClose}>
+                      <Button bg={"primary.300"} color={useColorModeValue("white", "gray.800")} mr={3} type='submit' onClick={(e) => handleSubmit(e)} onClickCapture={onClose} disabled={!email.length || !validate(email)}>
                       Submit
                       </Button>
                       <Button onClick={onClose}>Cancel</Button>

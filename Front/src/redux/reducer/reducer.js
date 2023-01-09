@@ -32,6 +32,7 @@ import {
   SET_CURRENT_PAGE,
   UPDATE_USER,
   DELETED_REVIEW,
+  NEW_SUBSCRIPTION,
   CLEAN_UP_FILTERS,
   CLEAN_UP_SEARCH,
   SET_LOADING
@@ -266,16 +267,16 @@ const reducer = (state = initialState, { type, payload }) => {
         currentPage: payload
       }
     }
-    case SET_LOADING:
-      return {
-        ...state,
-        loading: payload
-      }
     case NEW_SUBSCRIPTION: {
       return{
         ...state
       }
     }
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: payload
+      }
     default:
       return state
   }

@@ -1,4 +1,4 @@
-import { Button, Heading, Spinner, Stack, Tag, TagLabel, Text } from '@chakra-ui/react'
+import { Button, Heading, Spinner, Stack, Tag, TagLabel, Text, HStack,FormLabel, RadioGroup,Radio, textDecoration } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector} from 'react-redux'
 import CardProductCart from '../../Components/CardProductCart/CardProductCart'
@@ -6,6 +6,7 @@ import axios from 'axios'
 import { paymentToCart, getUserCart, getCartByPk,updateCart } from '../../redux/actions/actions'
 import { useLocalStorage } from '../../Components/useLocalStorage/useLocalStorage'
 import {useAuth0} from "@auth0/auth0-react"
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
   const dispatch = useDispatch()
@@ -35,9 +36,31 @@ const Cart = () => {
   }, [cart])
 
   const [orderN, setorderN] = useState(0);
+  const [input, setInput] = useState({});
   useEffect(() => {
     setorderN(userCart[userCart?.length - 1]?.orderN)
   }, [userCart.length])
+
+  useEffect(() => {
+    dispatch(getCartByPk(orderN))
+  }, [orderN])
+
+  console.log("cartPK", cartByPk)
+
+  useEffect(()=>{
+    setTimeout(() => {
+    setInput({
+      orderN: cartByPk?.orderN, 
+      state: cartByPk?.state, 
+      totalPrice: cartByPk?.totalPrice, 
+      date: cartByPk?.date,
+      trackingNumber: cartByPk?.trackingNumber,
+      delivery: cartByPk?.delivery,
+    })
+  }, 5000)
+  },[cartByPk])
+
+  console.log("input", input)
 
   useEffect(() => {
     document.getElementById('form1').textContent = "";
@@ -71,6 +94,26 @@ const Cart = () => {
     document.getElementById('form1').appendChild(script);
   }
 
+  function handleChange(e) {
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  // const newDetail = {
+  //   orderN: input.orderN, 
+  //   state: input.state, 
+  //   totalPrice: input.totalPrice, 
+  //   date: input.date,
+  //   trackingNumber: input.trackingNumber,
+  //   delivery: input.delivery === 'true' ? true : false,
+  // };
+
+  const handleDeliverySubmit = () => {
+    dispatch(updateCart(input));
+  }
+
   return (
     <Stack width='full' spacing={5} h='full' justifyContent='space-between' flexDirection='row'>
       <Stack width='full' margin="3em 0 5em 0">
@@ -86,6 +129,30 @@ const Cart = () => {
             variable="cart"
           />
         ))}
+      {
+        priceTotal >= 5000 ?
+          !cartByPk?.UserEmail ?
+            <Spinner /> :
+            <Stack>
+            <Text as='b' mt={3} fontSize={'1.5rem'}>If you buy more than $5,000 in products, shipping is free!</Text>
+            <FormLabel as='legend' marginTop='2rem'>Do you want home delivery?</FormLabel>
+            <RadioGroup defaultValue={cartByPk.delivery === "no" ? 'no' : 'yes'}>
+              <HStack spacing='24px'>
+                <Radio name='delivery' onChange={(e) => handleChange(e)} value='no'>
+                  No
+                </Radio>
+                <Radio name='delivery' onChange={(e) => handleChange(e)} value='yes'>
+                  Yes
+                </Radio>
+              </HStack>
+            </RadioGroup>
+            {input?.delivery === "yes" ?             
+            <Text>Please, complete your information for the shipment <Link to="/userDetails" style={{ color: 'red', textDecoration: 'underline' }}>here</Link>.</Text> :
+            <></>
+            }
+            </Stack> :
+          <></>
+      }
       </Stack>
       <Stack height='full' w='40%' p={15} spacing={15} justifyContent='center' align='center'>
         <Heading>Payment</Heading>
@@ -100,7 +167,7 @@ const Cart = () => {
               {loading 
                 ? <Spinner /> 
                 : showOrderReady 
-                  ? <Button variant='ghost' bg='primary.300' onClick={() => handlerOrderReady()} disabled={!orderN}>
+                  ? <Button variant='ghost' bg='primary.300' onClick={() => {handlerOrderReady(); handleDeliverySubmit()}} disabled={!orderN}>
                       Order ready! 
                     </Button>
                   : ""

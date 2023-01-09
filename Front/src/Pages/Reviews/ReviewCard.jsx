@@ -24,7 +24,7 @@ const ReviewCard = () => {
   if(window.location.pathname === `/product/${id}`){
     reviews = reviews.slice(0,3)
   }
-
+  
   const sum = (current, last) => {
     return current + last
   }
@@ -35,6 +35,7 @@ const ReviewCard = () => {
 
   const handlerDelete = (id) => {
     dispatch(deleteReview(id))
+    // dispatch(getReviews(pId))
   }
 
   // const handlerUpdate = (id) => {

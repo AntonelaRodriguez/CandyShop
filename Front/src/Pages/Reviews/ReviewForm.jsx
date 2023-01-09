@@ -4,7 +4,7 @@ import { Button, Flex, FormControl, FormLabel, Heading, Input, Select, Stack, Te
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getReviews, getProductDetails, postReview } from '../../redux/actions/actions';   
 
 
@@ -12,7 +12,7 @@ import { getReviews, getProductDetails, postReview } from '../../redux/actions/a
 
 const ReviewForm = () => {
   const dispatch = useDispatch();
-  const { loginWithRedirect,  isAuthenticated, user, logout } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
   const { id } = useParams();
   const currentUser = useSelector(state => state.user)
   useEffect(() => {
@@ -34,7 +34,7 @@ const ReviewForm = () => {
     description: input.description, 
     rating: input.rating,
   }
-  console.log(currentUser)
+
   function handleChange(e) {
     
     setInput({

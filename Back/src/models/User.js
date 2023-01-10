@@ -18,6 +18,10 @@ module.exports = (sequelize) => {
       banned: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+      },
+      subscribed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
       }
     },
     {

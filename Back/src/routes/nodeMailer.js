@@ -2,31 +2,42 @@ const { Router } = require('express')
 const nodeMailer = require('nodemailer')
 const subscribeRouter = Router()
 
-subscribeRouter.post('/', async (req, res, next) => {
-	const { email } = req.body
-	const transporter = nodeMailer.createTransport({
-		host: 'smtp.ethereal.email',
-		port: 587,
-		auth: {
-			user: 'gerald.schaden69@ethereal.email',
-			pass: '9PWEPmz1VeV2ujvSSW'
-		}
-	});
+subscribeRouter.post('/:email', async (req, res, next) => {
+	const { email } = req.params
+	try {
+		const transporter = nodeMailer.createTransport({
+			service: 'hotmail',
+			port: 587,
+			auth: {
+				user: 'candyshop127@outlook.com',
+				pass: 'Palabra3'
+			}
+		});
 
-	var mailOptions = {
-		from: "CandyShop",
-		to: email,
-		subject: "New Subscription",
-		text: "You have subscribed to the Candyshop Newsletter"
-	}
-	transporter.sendMail(mailOptions, (error, info) => {
-		if(error) {
-			res.status(500).send(error.message)
-		} else {
-			console.log("Email sent")
-			res.status(200).json(email)
+		// transporter.verify(function (error, success) {
+		// 	if (error) {
+		// 	  console.log(error);
+		// 	} else {
+		// 	  console.log("Server is ready to take our messages");
+		// 	}
+		//   });
+	
+		var mailOptions = {
+			from: 'candyshop127@outlook.com',
+			to: email,
+			subject: "New Subscription",
+			text: "<b>You have subscribed to the Candyshop Newsletter</b>"
 		}
-	})
+		transporter.sendMail(mailOptions, (error, info) => {
+			if(error) {
+				throw new Error(error)
+			} else {
+				res.status(200).json('Sent' + info.response)
+			}
+		})
+	} catch (error) {
+		next(error)
+	}
 })
 
 

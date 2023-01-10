@@ -36,10 +36,12 @@ export const UPDATED_REVIEW = "UPDATED_REVIEW"
 export const CLEAN_UP_FILTERS = "CLEAN_UP_FILTERS";
 export const CLEAN_UP_SEARCH = "CLEAN_UP_SEARCH";
 export const SET_LOADING = "SET_LOADING";
+export const NEW_SUBSCRIPTION = "NEW_SUBSCRIPTION";
+export const CHANGE_SUBSCRIPTION = "CHANGE_SUBSCRIPTION";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
-// const url = "https://candyshop-production.up.railway.app";  usar url para db deployada
-const url = "http://localhost:3001";//para usar la db local poner localhost en vez de url
+const url = "https://candyshop-production.up.railway.app";  // usar url para db deployada
+/* const url = "http://localhost:3001";//para usar la db local poner localhost en vez de url */
 
 export const getAllProducts = () => {
   return async function (dispatch) {
@@ -59,7 +61,7 @@ export const searchCandy = (name) => {
   return async function (dispatch) {
     const searchedProducts = await axios.get(
       `${url}/products/search?name=${name}`
-    );
+      );
     return dispatch({ type: SEARCH_CANDY, payload: searchedProducts.data });
   };
 };
@@ -279,25 +281,39 @@ export const cleanReviews = () => {
 
 export const postReview = (data) => {
   return async function (dispatch) {
-    const newReview = await axios.post(
-      `${url}/reviews/${data.productId}/${data.email}`,
-      data
-    ).then(data => alert('Review posted succesfully')).catch(error => alert(error));
+    const newReview = await axios
+      .post(`${url}/reviews/${data.productId}/${data.email}`, data)
+      .then((data) => alert('Review posted succesfully'))
+      .catch((error) => alert(error));
     return dispatch({ type: POST_REVIEW });
   };
 };
 
 export const deleteReview = (id) => {
   return async function (dispatch) {
-    await axios.delete(`${url}/reviews/admin/deleteReview/${id}`)
-    return dispatch({ type: DELETED_REVIEW })
-  }
-}
+    await axios.delete(`${url}/reviews/admin/deleteReview/${id}`);
+    return dispatch({ type: DELETED_REVIEW });
+  };
+};
 export const setCurrentPage = (page) => {
-  return { type: SET_CURRENT_PAGE, payload: page }
-}
+  return { type: SET_CURRENT_PAGE, payload: page };
+};
 export const setLoading = (payload) => {
-  return { type: SET_LOADING, payload }
+  return { type: SET_LOADING, payload };
+};
+
+export const newSubscription = (email) => {
+  return async function (dispatch) {
+    await axios.post(`${url}/subscribe/${email}`);
+    return dispatch({ type: NEW_SUBSCRIPTION });
+  };
+};
+
+export const changeSubscription = (data) => {
+  return async function (dispatch){
+    await axios.put(`${url}/users/admin/updateUser`, data)
+    return dispatch({ type: CHANGE_SUBSCRIPTION})
+  }
 }
 
 // try {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   Button,
   Drawer,
@@ -15,47 +15,48 @@ import {
   Stack,
   Text,
   useDisclosure,
-  VStack
-} from '@chakra-ui/react'
-import { BsChatDotsFill } from 'react-icons/bs'
-import { AiOutlineClose } from 'react-icons/ai'
-import axios from 'axios'
-import { IoIosSend } from 'react-icons/io'
-import { motion } from 'framer-motion'
+  VStack,
+} from '@chakra-ui/react';
+import { BsChatDotsFill } from 'react-icons/bs';
+import { AiOutlineClose } from 'react-icons/ai';
+import axios from 'axios';
+import { IoIosSend } from 'react-icons/io';
+import { motion } from 'framer-motion';
 
 const ChatBot = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [messages, setMessages] = useState([
     {
       response: '',
       from: '',
-      meMessage: ''
-    }
-  ])
+      meMessage: '',
+    },
+  ]);
 
-  const [input, setInput] = useState('')
+  const [input, setInput] = useState('');
 
   const sendMessage = async (message) => {
     const url = 'https://candyshop-production.up.railway.app/chatbot/send'
-    const res = await axios.post(url, { message })
+    /* const url = 'http://localhost:3001/chatbot/send'; */
+    const res = await axios.post(url, { message });
     setMessages([
       ...messages,
       {
         response: res.data.response,
         from: 'me',
-        meMessage: res.data.meMesssage
-      }
-    ])
-  }
+        meMessage: res.data.meMesssage,
+      },
+    ]);
+  };
 
-  let mensajes = messages.slice(1)
+  let mensajes = messages.slice(1);
 
   const handleSubmit = (event) => {
-    event.preventDefault()
-    sendMessage(input)
-    setInput('')
-  }
+    event.preventDefault();
+    sendMessage(input);
+    setInput('');
+  };
 
   return (
     <motion.div
@@ -63,7 +64,7 @@ const ChatBot = () => {
       animate={{
         scale: [1, 1.2, 1.2, 1, 1],
         rotate: [0, 0, 270, 270, 0],
-        borderRadius: ['20%', '20%', '50%', '50%', '20%']
+        borderRadius: ['20%', '20%', '50%', '50%', '20%'],
       }}
       transition={{ duration: 2 }}
       whileHover={{ scale: 0.9 }}
@@ -73,7 +74,7 @@ const ChatBot = () => {
         bottom: 15,
         padding: 10,
         right: 15,
-        zIndex: 100
+        zIndex: 100,
       }}
     >
       <Icon w={8} h={8} color='primary.300' as={BsChatDotsFill} onClick={onOpen} cursor='pointer' />
@@ -151,7 +152,7 @@ const ChatBot = () => {
                       </ListItem>
                     </HStack>
                   </List>
-                )
+                );
               })}
             </VStack>
 
@@ -185,7 +186,7 @@ const ChatBot = () => {
         </DrawerContent>
       </Drawer>
     </motion.div>
-  )
-}
+  );
+};
 
-export default ChatBot
+export default ChatBot;

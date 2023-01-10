@@ -27,7 +27,12 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 'none'
-      }
+      },
+      delivery: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "no",
+      },
     },
     {
       timestamps: false,

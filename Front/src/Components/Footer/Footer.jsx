@@ -3,7 +3,7 @@ import {
   Box,
   chakra,
   Container,
-  Link,
+  // Link,
   SimpleGrid,
   Stack,
   Text,
@@ -32,6 +32,7 @@ import { useDispatch } from 'react-redux';
 import { getAllUsers, newSubscription, updateUser} from '../../redux/actions/actions';
 import Swal from 'sweetalert2';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ListHeader = ({ children }) => {
   return (
@@ -75,20 +76,6 @@ export default function LargeWithNewsletter() {
       setEmail('')  
   }
 
-  const form = useRef();
-
-  const sendEmail = (e) => {
-    e.preventDefault();
-
-    emailjs.sendForm('service_sdiq8ha', 'template_p4byrfe', form.current, 'cFTVIeO15aAImKxlv')
-      .then((result) => {
-          console.log(result.text);
-      }, (error) => {
-          console.log(error.text);
-      });
-    e.target.reset()
-  };
-
   function validate(email) {
     const validation = /\S+@\S+\.\S+/.test(email)
     return validation
@@ -107,7 +94,7 @@ export default function LargeWithNewsletter() {
         border='1px solid #F6ACA3'
       >
         <Container as={Stack} maxW={"6xl"} py={10}>
-          <SimpleGrid templateColumns="repeat(4, 1fr)" spacing={8}>
+          <SimpleGrid templateColumns="repeat(3, 1fr)" spacing={8}>
             <Stack spacing={8}>
               <Box>
                 <img src={img} />
@@ -178,13 +165,13 @@ export default function LargeWithNewsletter() {
               </chakra.button>
               </Stack>
             </Stack>
-            <Stack align={'flex-start'}>
+            <Stack align={'center'}>
               <ListHeader>Support</ListHeader>
-              <Link href={"#"}>Contact us</Link>
-              <Link href={"#"}>Help Center</Link>
-              <Link href={"#"}>Shipping</Link>
+              <Link to='/contactUs'>Contact us</Link>
+              <Link to='/howToBuy'>How to buy</Link>
+              <Link to='/candyStores'>Our Candy Stores</Link>
             </Stack>
-            <Flex>
+            <Flex alignItems='center' justifyContent={'center'}>
               <Stack>
                 { isAuthenticated ? <> 
                   <Button onClick={onOpen} bg={"primary.300"} color={useColorModeValue("white", "gray.800")}>Subscribe</Button>
@@ -207,65 +194,7 @@ export default function LargeWithNewsletter() {
                 </> : <Button onClick={onOpen} bg={"primary.300"} color={useColorModeValue("white", "gray.800")}>Log in to Subscribe</Button> }
               </Stack>
             </Flex>
-            <Stack align={'flex-start'}>
-              <ListHeader>Get in Touch</ListHeader>
-              <Stack direction={"column"}>
-              <form ref={form} onSubmit={sendEmail}>
-              <Input
-                required
-                  placeholder={"Your full name..."}
-                  name='name'
-                  type='text'
-                  bg={useColorModeValue("blackAlpha.100", "whiteAlpha.100")}
-                  border='1px solid #F6ACA3'
-                  mb={2}
-                  _focus={{
-                    bg: "whiteAlpha.300",
-                    border: "4px solid #F6ACA3",
-                  }}
-                />
-                <Input
-                  // onChange={(e) => setMail(e.target.value)}
-                  // value = {mail}
-                  required
-                  name='email'
-                  type='email'
-                  placeholder={"Your email address..."}
-                  bg={useColorModeValue("blackAlpha.100", "whiteAlpha.100")}
-                  border='1px solid #F6ACA3'
-                  mb={2}
-                  _focus={{
-                    bg: "whiteAlpha.300",
-                    border: "4px solid #F6ACA3",
-                  }}
-                />
-                <Textarea
-                  required
-                  placeholder={"Your message..."}
-                  name='message'
-                  bg={useColorModeValue("blackAlpha.100", "whiteAlpha.100")}
-                  border='1px solid #F6ACA3'
-                  mb={2}
-                  _focus={{
-                    bg: "whiteAlpha.300",
-                    border: "4px solid #F6ACA3",
-                  }}
-                />
-                <IconButton
-                  type='submit'
-                  bg={"primary.300"}
-                  color={useColorModeValue("white", "gray.800")}
-                  _hover={{
-                    bg: "white",
-                    color: "primary.300",
-                    border: "1px solid #F6ACA3"
-                  }}
-                  icon={<BiMailSend />}
-                />
-              </form>
-              </Stack>
-
-            </Stack>
+            
           </SimpleGrid>
         </Container>
         

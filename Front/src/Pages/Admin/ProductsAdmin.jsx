@@ -66,8 +66,7 @@ const ProductsAdmin = () => {
       flexDirection={{ base: "column", md: "column" }}
       gap={10}
     >
-        <Stack justifyContent="space-between" direction="row">
-          {/* <SimpleSidebar /> */}
+      
       {/* filtors */}
 
       <Stack
@@ -83,6 +82,8 @@ const ProductsAdmin = () => {
         {/* <Order /> */}
 
         {/* // productos y sidebar */}
+        <Stack justifyContent="space-between" direction="row">
+          <SimpleSidebar />
           <Stack w="full" h="full" gap={4} p={5}>
             <Filters />
             {currentPosts.length ? (

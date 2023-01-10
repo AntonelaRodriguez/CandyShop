@@ -9,7 +9,7 @@ import SignUp from './Pages/SignUp/SignUp.jsx'
 import SignIn from './Pages/SignIn/SignIn.jsx'
 
 import EditProduct from './Pages/EditProduct/EditProduct'
-import { Container } from '@chakra-ui/react'
+import { Container, Stack } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
 import {
   getAllProducts,
@@ -40,6 +40,7 @@ import UserShopping from './Pages/UserShopping/UserShopping'
 import CardProductShopping from './Pages/UserShopping/CardProductShopping/CardProductShopping'
 import ChatBotChatBot from './Components/ChatBot/ChatBot'
 import EditUser from './Pages/Admin/EditUser/EditUser'
+import SimpleSidebar from './Pages/Admin/src/NavAdmin/NavAdmin'
 import ContactUs from './Pages/ContactUs/ContactUs'
 import CandyStores from './Pages/CandyStores/CandyStores'
 import HowToBuy from './Pages/HowToBuy/HowToBuy'
@@ -230,28 +231,109 @@ function App() {
         <Route path='/product/:id' element={!usuario.banned ? <ProductDetail /> : <Navigate to='/' />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/signin' element={<SignIn />} />
-        <Route path='/admin' element={usuario.admin ? <Admin /> : <Navigate to='/' />} />
-        <Route path='/create' element={usuario.admin ? <Create /> : <Navigate to='/' />} />
-        <Route path='/edit/:id' element={usuario.admin ? <EditProduct /> : <Navigate to='/' />} />
+        <Route
+          path='/admin'
+          element={
+            usuario.admin ? (
+              <Stack w='full' direction='row-reverse' justifyContent='center' >
+                <Admin />
+                {usuario.admin ? <SimpleSidebar /> : <></>}
+              </Stack>
+            ) : (
+              <Navigate to='/' />
+            )
+          }
+        />
+        <Route
+          path='/create'
+          element={
+            usuario.admin ? (
+              <Stack w='full' direction='row-reverse' justifyContent='center' >
+                <Create />
+                {usuario.admin ? <SimpleSidebar /> : <></>}
+              </Stack>
+            ) : (
+              <Navigate to='/' />
+            )
+          }
+        />
+        <Route
+          path='/edit/:id'
+          element={
+            usuario.admin ? (
+              <Stack w='full' direction='row-reverse' justifyContent='center' >
+                <EditProduct />
+                {usuario.admin ? <SimpleSidebar /> : <></>}
+              </Stack>
+            ) : (
+              <Navigate to='/' />
+            )
+          }
+        />
         <Route
           path='/admin/UsersAdmin'
-          element={usuario.admin ? <UsersAdmin /> : <Navigate to='/' />}
+          element={
+            usuario.admin ? (
+              <Stack w='full' direction='row-reverse' justifyContent='center' >
+                <UsersAdmin />
+                {usuario.admin ? <SimpleSidebar /> : <></>}
+              </Stack>
+            ) : (
+              <Navigate to='/' />
+            )
+          }
         />
         <Route
           path='/admin/ProductsAdmin'
-          element={usuario.admin ? <ProductsAdmin /> : <Navigate to='/' />}
+          element={
+            usuario.admin ? (
+              <Stack w='full' direction='row-reverse' justifyContent='center' >
+                <ProductsAdmin />
+                {usuario.admin ? <SimpleSidebar /> : <></>}
+              </Stack>
+            ) : (
+              <Navigate to='/' />
+            )
+          }
         />
         <Route
           path='/admin/OrdersAdmin'
-          element={usuario.admin ? <OrdersAdmin /> : <Navigate to='/' />}
+          element={
+            usuario.admin ? (
+              <Stack w='full' direction='row-reverse' justifyContent='center' >
+                <OrdersAdmin />
+                {usuario.admin ? <SimpleSidebar /> : <></>}
+              </Stack>
+            ) : (
+              <Navigate to='/' />
+            )
+          }
         />
         <Route
           path='/editUser/:email'
-          element={usuario.admin ? <EditUser /> : <Navigate to='/' />}
+          element={
+            usuario.admin ? (
+              <Stack w='full' direction='row-reverse' justifyContent='center' >
+                <EditUser />
+                {usuario.admin ? <SimpleSidebar /> : <></>}
+              </Stack>
+            ) : (
+              <Navigate to='/' />
+            )
+          }
         />
         <Route
           path='/admin/UsersAdmin'
-          element={usuario.admin ? <UsersAdmin /> : <Navigate to='/' />}
+          element={
+            usuario.admin ? (
+              <Stack w='full' direction='row-reverse' justifyContent='center' >
+                <UsersAdmin />
+                {usuario.admin ? <SimpleSidebar /> : <></>}
+              </Stack>
+            ) : (
+              <Navigate to='/' />
+            )
+          }
         />
         <Route
           path='/detail/:id'
@@ -259,11 +341,29 @@ function App() {
         />
         <Route
           path='/admin/ProductsAdmin'
-          element={usuario.admin ? <ProductsAdmin /> : <Navigate to='/' />}
+          element={
+            usuario.admin ? (
+              <Stack w='full' direction='row' align='center' justifyContent='space-between'>
+                <ProductsAdmin />
+                {usuario.admin ? <SimpleSidebar /> : <></>}
+              </Stack>
+            ) : (
+              <Navigate to='/' />
+            )
+          }
         />
         <Route
           path='/admin/OrdersAdmin'
-          element={usuario.admin ? <OrdersAdmin /> : <Navigate to='/' />}
+          element={
+            usuario.admin ? (
+              <Stack w='full' direction='row' align='center' justifyContent='space-between'>
+                <OrdersAdmin />
+                {usuario.admin ? <SimpleSidebar /> : <></>}
+              </Stack>
+            ) : (
+              <Navigate to='/' />
+            )
+          }
         />
         <Route
           path='/detail/:id'

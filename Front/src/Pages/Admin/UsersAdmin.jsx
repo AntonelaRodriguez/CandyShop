@@ -27,7 +27,6 @@ const UsersAdmin = () => {
       <Stack direction='column' w='full' align='center' justifyContent='space-between'>
         {/* // productos y sidebar */}
         <Stack justifyContent='space-between' direction='row'>
-          <SimpleSidebar />
           <Stack w='full' h='full' gap={4} p={5}>
             {users.length ? (
               users.map((u) => {
@@ -36,8 +35,8 @@ const UsersAdmin = () => {
                   <CardUserAdmin
                     key={u.email}
                     email={u.email}
-                    banned = {u.banned}
-                    admin = {u.admin}
+                    banned={u.banned}
+                    admin={u.admin}
                     name={u.UserDetail ? u.UserDetail.name : ''}
                     lastName={u.UserDetail ? u.UserDetail.lastName : ''}
                     companyName={u.UserDetail ? u.UserDetail.companyName : ''}

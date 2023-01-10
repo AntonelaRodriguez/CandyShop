@@ -58,10 +58,12 @@ const ProductsAdmin = () => {
       flexDirection={{ base: 'column', md: 'column' }}
       gap={10}
     >
+      
       {/* filtors */}
 
       <Stack direction='column' w='full' align='center' justifyContent='space-between'>
         {/* busqueda */}
+
         <Searchname name={name} handleChange={handleChange} setName={setName} />
         {/*  ordenamientos */}
         {/* <Order /> */}
@@ -81,11 +83,11 @@ const ProductsAdmin = () => {
                     id={p.id}
                     price={p.price}
                   />
-                )
-              })
-            ) : (
-              <Spinner size='xl' />
-            )}
+                  )
+                })
+                ) : (
+                  <Spinner size='xl' />
+                  )}
           </Stack>
         </Stack>
 

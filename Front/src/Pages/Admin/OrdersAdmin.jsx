@@ -13,39 +13,44 @@ import { useDispatch } from 'react-redux'
 import { getAllCarts } from '../../redux/actions/actions'
 
 const OrdersAdmin = () => {
-  let dispatch = useDispatch()
-  let carts = useSelector((state) => state.allCarts)
-  console.log(carts)
-  carts = carts.filter((c) => c.state !== 'created')
-
-  useEffect(() => {
-    dispatch(getAllCarts())
-  }, [])
-
-  //--- pagination
-  const [currentPage, setCurrentPage] = useState(1)
-  const [productsPerPage] = useState(9)
-
-  const indexOfLastPost = currentPage * productsPerPage
-  const indexOfFirstPost = indexOfLastPost - productsPerPage
-  const currentPosts = carts.slice(indexOfFirstPost, indexOfLastPost)
-
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber)
-  }
-
-  const prevPage = () => {
-    if (currentPage !== 1) {
-      setCurrentPage(currentPage - 1)
+    let dispatch = useDispatch();
+    let carts = useSelector((state) => state.allCarts)
+    const [loading, setLoading] = useState(true);
+    console.log(carts)
+    carts = carts.filter((c) => c.state !== 'created');
+    
+    useEffect(()=>{
+      dispatch(getAllCarts())
+  },[])
+  
+    //--- pagination
+    const [currentPage, setCurrentPage] = useState(1)
+    const [productsPerPage] = useState(9)
+  
+    const indexOfLastPost = currentPage * productsPerPage
+    const indexOfFirstPost = indexOfLastPost - productsPerPage
+    const currentPosts = carts.slice(indexOfFirstPost, indexOfLastPost)
+  
+    const paginate = (pageNumber) => {
+      setCurrentPage(pageNumber)
     }
-  }
-
-  const nextPage = () => {
-    if (currentPage !== Math.ceil(carts.length / productsPerPage)) {
-      setCurrentPage(currentPage + 1)
+  
+    const prevPage = () => {
+      if (currentPage !== 1) {
+        setCurrentPage(currentPage - 1)
+      }
     }
-  }
-  //----
+  
+    const nextPage = () => {
+      if (currentPage !== Math.ceil(carts.length / productsPerPage)) {
+        setCurrentPage(currentPage + 1)
+      }
+    }
+    //----
+    //Stop spinner
+    setTimeout(()=>{
+      setLoading(false)
+    }, 6000)
 
   return (
     <Container
@@ -80,8 +85,12 @@ const OrdersAdmin = () => {
                   />
                 );
               })
-            ) : (
-              <Text>There are no loaded carts yet.</Text>
+            ) : (        
+              loading === true ? 
+                <Spinner size="xl" />
+              :
+              <Text fontWeight='600'>No orders found</Text>
+              
             )}
           </Stack>
         </Stack>

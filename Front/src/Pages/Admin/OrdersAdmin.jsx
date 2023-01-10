@@ -24,6 +24,7 @@ import {getAllCarts} from '../../redux/actions/actions'
 const OrdersAdmin = () => {
     let dispatch = useDispatch();
     let carts = useSelector((state) => state.allCarts)
+    const [loading, setLoading] = useState(true);
     console.log(carts)
     carts = carts.filter((c) => c.state !== 'created');
     
@@ -55,7 +56,10 @@ const OrdersAdmin = () => {
       }
     }
     //----
-  
+    //Stop spinner
+    setTimeout(()=>{
+      setLoading(false)
+    }, 6000)
 
   return (
     <Container
@@ -92,8 +96,12 @@ const OrdersAdmin = () => {
                   />
                 );
               })
-            ) : (
-              <Text>There are no loaded carts yet.</Text>
+            ) : (        
+              loading === true ? 
+                <Spinner size="xl" />
+              :
+              <Text fontWeight='600'>No orders found</Text>
+              
             )}
           </Stack>
         </Stack>

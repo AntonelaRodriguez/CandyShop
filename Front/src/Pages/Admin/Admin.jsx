@@ -7,18 +7,14 @@ import {
   Box,
   Flex,
   Container,
-} from '@chakra-ui/react';
-import React from 'react';
-import DashBoard from './Dashboard';
-import SimpleSidebar from './src/NavAdmin/NavAdmin';
+  Stack
+} from '@chakra-ui/react'
+import React from 'react'
+import DashBoard from './Dashboard'
+import SimpleSidebar from './src/NavAdmin/NavAdmin'
 
 const Admin = () => {
-  return (
-    <>
-      <SimpleSidebar marginRight='auto' />
-      <DashBoard />
-    </>
-  );
-};
+  return <DashBoard />
+}
 
-export default Admin;
+export default Admin

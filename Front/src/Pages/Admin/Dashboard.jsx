@@ -1,13 +1,13 @@
-import { Container, Stack, Stat } from '@chakra-ui/react';
-import React from 'react';
-import Chart from './src/Dashboard/ChartTest';
-import Statistics from './src/Dashboard/Stats';
-import LineChart from './src/Dashboard/ChartOrders';
-import TopChart from './src/Dashboard/ChartTopSales';
+import { Container, Stack, Stat } from '@chakra-ui/react'
+import React from 'react'
+import Chart from './src/Dashboard/ChartTest'
+import Statistics from './src/Dashboard/Stats'
+import LineChart from './src/Dashboard/ChartOrders'
+import TopChart from './src/Dashboard/ChartTopSales'
 
 const DashBoard = () => {
   return (
-    <Container marginBottom={10} align={'center'}>
+    <Container w='full'>
       <Stack
         w='100%'
         marginBottom={'8'}
@@ -50,7 +50,7 @@ const DashBoard = () => {
         <Chart />
       </Stack>
     </Container>
-  );
-};
+  )
+}
 
-export default DashBoard;
+export default DashBoard

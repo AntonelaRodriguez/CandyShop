@@ -40,6 +40,9 @@ import UserShopping from './Pages/UserShopping/UserShopping'
 import CardProductShopping from './Pages/UserShopping/CardProductShopping/CardProductShopping'
 import ChatBotChatBot from './Components/ChatBot/ChatBot'
 import EditUser from './Pages/Admin/EditUser/EditUser'
+import ContactUs from './Pages/ContactUs/ContactUs'
+import CandyStores from './Pages/CandyStores/CandyStores'
+import HowToBuy from './Pages/HowToBuy/HowToBuy'
 
 function App() {
   const usuario = useSelector((state) => state.user)
@@ -234,6 +237,9 @@ function App() {
 
         <Route path='/UserShopping' element={<UserShopping />} />
         <Route path='/detailShopping/:id' element={<CardProductShopping />} />
+        <Route path='/contactUs' element={<ContactUs />} />
+        <Route path='/candyStores' element={<CandyStores />} />
+        <Route path='/howToBuy' element={<HowToBuy />} />
       </Routes>
     </Container>
   )

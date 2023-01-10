@@ -73,7 +73,7 @@ const OrdersAdmin = () => {
 
         {/* // productos y sidebar */}
         <Stack justifyContent="space-between" direction="row">
-          <SimpleSidebar />
+          {/* <SimpleSidebar /> */}
           <Stack w="full" h="full" gap={4} p={5}>
             {currentPosts.length ? (
               currentPosts.map((p, i) => {

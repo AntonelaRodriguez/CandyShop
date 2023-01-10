@@ -57,8 +57,9 @@ const ProductsAdmin = () => {
       flexDirection={{ base: "column", md: "column" }}
       gap={10}
     >
+        <Stack justifyContent="space-between" direction="row">
+          {/* <SimpleSidebar /> */}
       {/* filtors */}
-      <Filters />
 
       <Stack
         direction="column"
@@ -67,30 +68,29 @@ const ProductsAdmin = () => {
         justifyContent="space-between"
       >
         {/* busqueda */}
+
         <Searchname name={name} handleChange={handleChange} setName={setName} />
         {/*  ordenamientos */}
+            <Filters />
         <Order />
-
         {/* // productos y sidebar */}
-        <Stack justifyContent="space-between" direction="row">
-          <SimpleSidebar />
           <Stack w="full" h="full" gap={4} p={5}>
             {currentPosts.length ? (
               currentPosts.map((p, i) => {
                 return (
                   <CardProductAdmin
-                    key={p.id + i}
-                    name={p.name}
-                    description={p.description}
-                    image={p.image}
-                    id={p.id}
-                    price={p.price}
+                  key={p.id + i}
+                  name={p.name}
+                  description={p.description}
+                  image={p.image}
+                  id={p.id}
+                  price={p.price}
                   />
-                );
-              })
-            ) : (
-              <Spinner size="xl" />
-            )}
+                  );
+                })
+                ) : (
+                  <Spinner size="xl" />
+                  )}
           </Stack>
         </Stack>
 

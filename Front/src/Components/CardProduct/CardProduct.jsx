@@ -308,7 +308,7 @@ const CardProduct = ({ image, id, name, price, stock, availability }) => {
             bg='primary.100'
             borderRadius='0 0 10px 10px'
           >
-            {!availability ? (
+            {!availability || !stock ? (
               <Text fontWeight='600'>No available</Text>
             ) : (
               <Flex width='100%' alignItems='center' justifyContent='space-between' size='md'>

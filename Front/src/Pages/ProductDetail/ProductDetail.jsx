@@ -504,7 +504,7 @@ const ProductDetail = () => {
           bg='primary.100' 
           borderRadius='0 0 10px 10px'
         >
-          {!product.availability ? (
+          {!product.availability || !product.stock ? (
             <Text fontWeight='600'>No available</Text>
           ) : (
             <Flex width='100%' alignItems='center' justifyContent='flex-end' size='md' gap='5'>

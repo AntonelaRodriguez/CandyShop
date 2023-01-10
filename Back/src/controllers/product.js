@@ -8,7 +8,7 @@ const searchCandy = async (name) => {    //busca products por matcheo parcial
 	// if(!name) throw new Error({message:"Value is undefined", status:400});
 	// }
 	let nameTrimed = name.replace(/^\s+|\s+$/, "");
-	if(!nameTrimed.length) throw new Error({message: "Value is empty string!", status:400});
+	if(!nameTrimed.length) return [];
 	let products = await Product.findAll({
       where: { name: { [Op.iLike]: "%"+nameTrimed+"%" } },
       include: [

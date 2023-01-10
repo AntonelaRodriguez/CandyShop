@@ -36,7 +36,8 @@ import {
   CLEAN_UP_SEARCH,
   SET_LOADING,
   NEW_SUBSCRIPTION,
-  CHANGE_SUBSCRIPTION
+  CHANGE_SUBSCRIPTION,
+  GET_ALL_USER_CARTS
 } from '../actions/actions'
 
 const initialState = {
@@ -57,6 +58,7 @@ const initialState = {
   ratings: [],
   allCarts: [],
   productDetailCart: [],
+  reviewsDetailCarts: [],
   currentPage: 1,
   emptyAfterFiltering: false,
   recentSearch: false,
@@ -281,6 +283,12 @@ const reducer = (state = initialState, { type, payload }) => {
     case CHANGE_SUBSCRIPTION: {
       return{
         ...state
+      }
+    }
+    case GET_ALL_USER_CARTS: {
+      return{
+        ...state,
+        reviewsDetailCarts: payload
       }
     }
     default:

@@ -37,7 +37,7 @@ const ChatBot = () => {
   const [input, setInput] = useState('')
 
   const sendMessage = async (message) => {
-    const url = 'http://localhost:3001/chatbot/send'
+    const url = 'https://candyshop-production.up.railway.app/chatbot/send'
     const res = await axios.post(url, { message })
     setMessages([
       ...messages,

@@ -264,7 +264,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
 import { FaStar } from 'react-icons/fa'
-import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCart, editProductCart, deleteFromCart, cleanUpFilters } from '../../redux/actions/actions'
+import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCart, editProductCart, deleteFromCart, cleanUpFilters, getCartProductDetail } from '../../redux/actions/actions'
 import { useAuth0 } from "@auth0/auth0-react"
 import ReviewForm from '../Reviews/ReviewForm'
 import ReviewCard from '../Reviews/ReviewCard'
@@ -285,7 +285,16 @@ const ProductDetail = () => {
   const cart = useSelector((state) => state.cart.slice());
   const reviews = useSelector((state) => state.reviews)
   const ratings = reviews && reviews.map(r => r.rating)
+  let detailCart = useSelector((state) => state.productDetailCart);
+  let userCart = useSelector((state) => state.userCart)
+  let completed = userCart.filter((u) => u.state === 'completed')
+  let orderN = completed.map((u) => u.orderN)
+  let canReview = detailCart.filter(e => `/product/${e.ProductId}` === window.location.pathname);
 
+
+
+
+  
   const dispatch = useDispatch()
   const navigate = useNavigate()
   let { id } = useParams()
@@ -319,6 +328,9 @@ const ProductDetail = () => {
 
   useEffect(() => {
     dispatch(getProductDetails(id))
+    orderN.map(e => {
+      dispatch(getCartProductDetail(e))
+    });
     if (isAuthenticated) {
       dispatch(getUser(user.email));
     }
@@ -359,6 +371,8 @@ const ProductDetail = () => {
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
+
+  console.log(canReview.length);
 
   return (
     <>
@@ -546,7 +560,10 @@ const ProductDetail = () => {
 
 
       <Flex alignItems='flex-start'>
-        <ReviewForm />
+
+      { canReview.length === 1 ?
+      <ReviewForm /> : <></>
+}
         <ReviewCard />
       </Flex>
       <Stack mb='1rem'>

@@ -66,6 +66,8 @@ const ProductsAdmin = () => {
       flexDirection={{ base: "column", md: "column" }}
       gap={10}
     >
+        <Stack justifyContent="space-between" direction="row">
+          {/* <SimpleSidebar /> */}
       {/* filtors */}
 
       <Stack
@@ -75,13 +77,12 @@ const ProductsAdmin = () => {
         justifyContent="space-between"
       >
         {/* busqueda */}
+
         <Searchname name={name} handleChange={handleChange} setName={setName} />
         {/*  ordenamientos */}
         {/* <Order /> */}
 
         {/* // productos y sidebar */}
-        <Stack justifyContent="space-between" direction="row">
-          <SimpleSidebar />
           <Stack w="full" h="full" gap={4} p={5}>
             <Filters />
             {currentPosts.length ? (
@@ -95,11 +96,11 @@ const ProductsAdmin = () => {
                     id={p.id}
                     price={p.price}
                   />
-                );
-              })
-            ) : (
-              <Spinner size="xl" />
-            )}
+                  );
+                })
+                ) : (
+                  <Spinner size="xl" />
+                  )}
           </Stack>
         </Stack>
 

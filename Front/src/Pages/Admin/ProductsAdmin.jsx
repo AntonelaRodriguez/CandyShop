@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SimpleSidebar from "./src/NavAdmin/NavAdmin";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Container,
@@ -14,11 +14,15 @@ import Pagination from "../../Components/Pagination/Pagination";
 import { ImCross } from "react-icons/im";
 import Searchname from "../../Components/SearchName/Searchname";
 import Filters from "../../Components/Filters/Filters";
-import Order from "../../Components/Order/Order";
+import { cleanUpFilters } from "../../redux/actions/actions";
+// import Order from "../../Components/Order/Order";
 
 const ProductsAdmin = () => {
+  const dispatch = useDispatch()
+  
   let products = useSelector((state) => state.products);
   const [name, setName] = useState("");
+
 
   const handleChange = (event) => {
     setName(event.target.value);
@@ -48,6 +52,11 @@ const ProductsAdmin = () => {
     }
   };
   //----
+  useEffect(() => {
+    return () => {
+      dispatch(cleanUpFilters())
+    };
+  }, []);
 
   return (
     <Container
@@ -71,20 +80,21 @@ const ProductsAdmin = () => {
 
         <Searchname name={name} handleChange={handleChange} setName={setName} />
         {/*  ordenamientos */}
-            <Filters />
-        <Order />
+        {/* <Order /> */}
+
         {/* // productos y sidebar */}
           <Stack w="full" h="full" gap={4} p={5}>
+            <Filters />
             {currentPosts.length ? (
               currentPosts.map((p, i) => {
                 return (
                   <CardProductAdmin
-                  key={p.id + i}
-                  name={p.name}
-                  description={p.description}
-                  image={p.image}
-                  id={p.id}
-                  price={p.price}
+                    key={p.description}
+                    name={p.name}
+                    description={p.description}
+                    image={p.image}
+                    id={p.id}
+                    price={p.price}
                   />
                   );
                 })

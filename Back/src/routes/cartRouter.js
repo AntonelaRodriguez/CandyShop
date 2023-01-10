@@ -44,8 +44,8 @@ cartRouter.get("/", async (req, res, next) => {
 
 cartRouter.put("/", async (req, res, next) => {
     try {
-        const {orderN, state,totalPrice,date,trackingNumber} = req.body;
-        const updatedCart = await updateCart(orderN,state,totalPrice,date,trackingNumber);
+        const {orderN, state,totalPrice,date,trackingNumber, delivery} = req.body;
+        const updatedCart = await updateCart(orderN,state,totalPrice,date,trackingNumber, delivery);
         res.status(201).send("Cart succesfully updated!");
     }catch(error){
         next(error);

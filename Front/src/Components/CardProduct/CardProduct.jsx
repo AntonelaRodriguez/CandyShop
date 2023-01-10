@@ -263,7 +263,14 @@ const CardProduct = ({ image, id, name, price, stock, availability }) => {
             )}
           </Link>
           {actualUser && !actualUser.admin ? (
-            <Stack mt='6' spacing='3'>
+            <Stack
+              direction='column'
+              justifyContent='center'
+              alignItems='flex-start'
+              maxW={{ base: 250, md: '100%' }}
+              mt='6'
+              spacing='3'
+            >
               <Heading minH='50px' size='md'>
                 {name}
               </Heading>
@@ -295,7 +302,12 @@ const CardProduct = ({ image, id, name, price, stock, availability }) => {
         </CardBody>
         <Divider />
         {actualUser && !actualUser.admin && (
-          <CardFooter justifyContent='center' bg='primary.100' borderRadius='0 0 10px 10px'>
+          <CardFooter
+            w='full'
+            justifyContent='center'
+            bg='primary.100'
+            borderRadius='0 0 10px 10px'
+          >
             {!availability ? (
               <Text fontWeight='600'>No available</Text>
             ) : (

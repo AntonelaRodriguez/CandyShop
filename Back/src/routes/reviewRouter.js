@@ -8,7 +8,7 @@ const { Review } = require('../db.js');
 reviewRouter.post("/:productId/:email", async (req, res, next) => {
   const { author, title, description, rating} = req.body;
   const { productId, email } = req.params
-  const equalReview = await Review.findOne({where : {author : author}})
+  const equalReview = await Review.findOne({where : {UserEmail : email, ProductId: productId}})
   try {
     if(equalReview) throw new Error('You can only post one review per product.')
     const newReview = await postReview(productId, email, author, title, description, rating)

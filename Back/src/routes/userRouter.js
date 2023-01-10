@@ -37,10 +37,11 @@ userRouter.get("/", async (req, res, next) => {
 
 userRouter.put("/admin/updateUser/", async (req, res,next) => {
   // const {email} = req.params;
-  const {banned, admin, email} = req.body;
+  const {banned, admin, email, subscribed} = req.body;
   try{
     // if(!email) res.status(400).json("Email is required");
-    const newUser = await updateUser(email, banned, admin)
+    const newUser = await updateUser(email, banned, admin, subscribed)
+    console.log(newUser)
     return res.status(200).send("Done");
   } catch(error) {
     next(error);
@@ -59,9 +60,9 @@ userRouter.delete("/admin/deleteUser/:email", async(req, res, next) => {
 
 //---------Normal user
 userRouter.post("/userDetail", async (req, res, next) => {
-  const {email,name,lastName, phoneNumber, address, image, companyName} = req.body;
+  // const {email,name,lastName, phoneNumber, address, image, companyName} = req.body;
   try {
-    const user = await createUserDetail(email,name, lastName, phoneNumber, address, image,companyName);
+    const user = await createUserDetail(req.body);
     return res.status(200).json(user);
   } catch (error) {
     next(error);
@@ -69,9 +70,9 @@ userRouter.post("/userDetail", async (req, res, next) => {
 });
 
 userRouter.put("/userDetail", async (req, res, next) => {
-  const {email,name,lastName, phoneNumber, address, image, companyName} = req.body;
+  // const {email,name,lastName, phoneNumber, address, image, companyName} = req.body;
   try {
-    const user = await updateUserDetail(email,name, lastName, phoneNumber, address, image,companyName);
+    const user = await updateUserDetail(req.body);
     return res.status(200).send("Done");
   } catch (error) {
     next(error);

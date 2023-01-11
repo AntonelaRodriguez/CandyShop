@@ -9,13 +9,21 @@ import {
   Stack,
   Tag,
   TagLabel,
-  Text
-} from '@chakra-ui/react'
-import React from 'react'
-import { useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+  Text,
+} from '@chakra-ui/react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { getAllProducts, deleteProduct } from '../../../redux/actions/actions';
 
 const CardProductAdmin = ({ name, description, image, id, price }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const removeProduct = (id) => {
+    dispatch(deleteProduct(id));
+    dispatch(getAllProducts());
+    navigate('/admin/ProductsAdmin');
+  };
   return (
     <Card
       w='full'
@@ -79,17 +87,17 @@ const CardProductAdmin = ({ name, description, image, id, price }) => {
             <Link to={'/edit/' + id}>Edit Product</Link>
           </Button>
           <Button
-            onClick={() => deleteProduct(id)}
+            onClick={() => removeProduct(id)}
             size={{ base: 'xs', lg: 'sm' }}
             variant='solid'
             colorScheme='red'
           >
-            <Link>Delete Product</Link>
+            Delete Product
           </Button>
         </Stack>
       </Stack>
     </Card>
-  )
-}
+  );
+};
 
-export default CardProductAdmin
+export default CardProductAdmin;

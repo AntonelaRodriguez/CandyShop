@@ -343,7 +343,6 @@ const ProductDetail = () => {
   useEffect(() => {
     if(user && user.email){
       dispatch(getProductDetails(id))
-      dispatch(getAllUserCarts(user.email))
       if (isAuthenticated) {
         dispatch(getUser(user.email));
       }

@@ -78,7 +78,7 @@ const Create = () => {
         Swal.fire({
           position: 'center',
           icon: 'error',
-          title: 'no podes poner mas de 4 cifras',
+          title: 'Cannot contain more than 4 digits.',
           showConfirmButton: false,
           timer: 1400,
         });
@@ -113,9 +113,24 @@ const Create = () => {
       }
     }
 
+    if (e.target.name === 'stock') {
+      if (!/^[0-9]{0,4}$/.test(e.target.value)) {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'Cannot contain more than 4 digits.',
+          showConfirmButton: false,
+          timer: 1400,
+        });
+        return;
+      }
+      
+    }
+    
+
     setInput({
       ...input,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value.replace(/^\s+|\s+$/, " "),
     });
   }
 
@@ -191,7 +206,7 @@ const Create = () => {
             <FormControl isRequired>
               <FormLabel>Name</FormLabel>
               <Input
-                maxLength={40}
+               // maxLength={40}
                 type='text'
                 value={input.name}
                 name='name'
@@ -202,7 +217,7 @@ const Create = () => {
             <FormControl isRequired>
               <FormLabel>Description</FormLabel>
               <Textarea
-                maxLength={55}
+               // maxLength={55}
                 placeholder='Type a Description'
                 value={input.description}
                 name='description'
@@ -291,7 +306,7 @@ const Create = () => {
               />
             </FormControl>
 
-            <Button type='submit' colorScheme='primary'>
+            <Button disabled={!input?.category.length || input?.brand === ""} type='submit' colorScheme='primary'>
               Crear
             </Button>
           </Stack>

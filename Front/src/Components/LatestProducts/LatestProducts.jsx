@@ -3,7 +3,7 @@ import { Button, Grid, GridItem, Heading, Image, Stack } from '@chakra-ui/react'
 import CardProduct from '../CardProduct/CardProduct'
 import { Link, NavLink } from 'react-router-dom'
 import { useSelector,useDispatch } from 'react-redux'
-import { setLoading, setFilters, applyFilters } from '../../redux/actions/actions'
+import { cleanUpFilters } from '../../redux/actions/actions'
 
 const LatestProducts = () => {
   const dispatch = useDispatch()
@@ -11,9 +11,7 @@ const LatestProducts = () => {
   products = products.slice(0, 3)
 
   useLayoutEffect(() => {
-    dispatch(setLoading(true));
-    dispatch(setFilters({ order: '', tacc: '', brand: '', category: '', reverse: false }))
-    dispatch(applyFilters());
+    dispatch(cleanUpFilters())
     return () => {
       window.scroll(0, 0)
     }
@@ -29,7 +27,9 @@ const LatestProducts = () => {
       align='center'
       overflow='hidden'
     >
-      <Heading as={'h2'}>Our Latest Products</Heading>
+      <Heading as='h2' fontWeight={700} textColor='primary.300'>
+        Our Latest Products
+      </Heading>
       <Grid
         py={20}
         gridTemplateColumns={{

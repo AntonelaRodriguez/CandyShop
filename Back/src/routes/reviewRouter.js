@@ -17,6 +17,7 @@ reviewRouter.post("/:productId/:email", async (req, res, next) => {
     next(error)
   }
 });
+
 reviewRouter.get("/:productId", async (req, res, next) => {
   const {productId} = req.params;
   try {

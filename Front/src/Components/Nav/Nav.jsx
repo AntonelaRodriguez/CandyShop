@@ -65,6 +65,7 @@ const MenuToggle = ({ toggle, isOpen }) => {
       alignItems='center'
       display={{ base: 'flex', md: 'none' }}
       direction='row'
+      w="full"
       onClick={toggle}
     >
       {isOpen ? <CloseIcon /> : <MenuIcon />}
@@ -280,6 +281,7 @@ const MenuLinks = ({ isOpen }) => {
 const NavBarContainer = ({ children, ...props }) => {
   return (
     <Flex
+      zIndex={{ base: 0, lg: 150 }}
       as='nav'
       align='center'
       justify={{ base: 'flex-start', md: 'center' }}
@@ -287,7 +289,7 @@ const NavBarContainer = ({ children, ...props }) => {
       w='100%'
       py={6}
       px={{ base: 5, md: 0 }}
-      bg={['blackAlpha.900', 'blackAlpha.900', 'transparent', 'transparent']}
+      bg={['primary.300', 'primary.300', 'transparent', 'transparent']}
       color={['whiteAlpha.900', 'whiteAlpha.900', 'primary.700', 'primary.700']}
       {...props}
     >

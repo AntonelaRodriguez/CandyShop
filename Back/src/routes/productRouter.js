@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const productRouter = Router()
-const { getAllProducts, searchCandy, searchById, updateProduct, deleteProduct, createProduct, filteringProducts } = require('../controllers/product')
+const { getAllProducts, searchCandy, searchById, updateProduct, deleteProduct, createProduct, filteringProducts, IdspurchasedProducts } = require('../controllers/product')
 // const { Product, Category } = require('../db.js')
 // const dbProducts = require("../../dbProducts.json");
 // const dbCategories = require("../../dbCategories.json");
@@ -40,7 +40,15 @@ productRouter.get("/filters", async (req, res, next) => {
 	  next(error);
 	}
   });
-
+	productRouter.get("/purchasedProducts/:email", async (req, res, next) => {
+		try {
+			let results = await IdspurchasedProducts(req.params.email);
+			res.json(results);
+		} catch (error) {
+			next(error);
+		}
+	});
+	
 
 productRouter.get("/:id", async (req, res, next) => {   //busca productos por id
 	try {

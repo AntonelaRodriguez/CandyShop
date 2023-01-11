@@ -85,9 +85,10 @@ const CardUserAdmin = ({
           flexDirection="column"
         >
           <Flex fontWeight={300} size="sm" flexDirection="column" w="100%">
-            <Heading fontWeight={700} size="sm">
-              {name} {lastName}
+            <Heading fontWeight={700} size="md">
+              {email}
             </Heading>
+            <Text>Name: {name} {lastName}</Text>
             <Text>Company: {companyName}</Text>
             <Text>PhoneNumber: {phoneNumber}</Text>
             <Text>Address: {address}</Text>

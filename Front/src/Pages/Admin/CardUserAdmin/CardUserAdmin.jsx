@@ -85,9 +85,10 @@ const CardUserAdmin = ({
           flexDirection="column"
         >
           <Flex fontWeight={300} size="sm" flexDirection="column" w="100%">
-            <Heading fontWeight={700} size="sm">
-              {name} {lastName}
+            <Heading fontWeight={700} size="md">
+              {email}
             </Heading>
+            <Text>Name: {name} {lastName}</Text>
             <Text>Company: {companyName}</Text>
             <Text>PhoneNumber: {phoneNumber}</Text>
             <Text>Address: {address}</Text>
@@ -113,7 +114,7 @@ const CardUserAdmin = ({
         top="5px"
         left="5px"
       >
-        <TagLabel> {banned === true ? 'Banned' : admin === true ? 'Admin' : 'Active'} </TagLabel>
+        <TagLabel> {email === 'pepo@gmail.com' ? 'Main Admin' : banned === true ? 'Banned' : admin === true ? 'Admin' : 'Active'} </TagLabel>
       </Tag>
     </Card>
   );

@@ -45,16 +45,15 @@ const Carrousel = ({ brands }) => {
       <HStack h='full' w='full' align='center'>
         {brands?.map((brand, i) => (
           <motion.div
-            translate={{ translateX: 650 }}
-           
-            animate={{ translateX: -1300 }}
-            exit={{ translateX: 0 }}
+             initial={{ translateX: 500 }}
+            animate={{ translateX: -300 }}
+            exit={{ translateX: -200 }}
             transition={{
               duration: 3.5,
               repeat: Infinity,
               repeatType: 'reverse',
               repeatDelay: 1,
-              type: 'keyframes',
+              type: 'tween',
             }}
           >
             <Tag size='lg' colorScheme='facebook'>

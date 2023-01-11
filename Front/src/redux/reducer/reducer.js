@@ -36,7 +36,9 @@ import {
   CLEAN_UP_SEARCH,
   SET_LOADING,
   NEW_SUBSCRIPTION,
-  CHANGE_SUBSCRIPTION
+  CHANGE_SUBSCRIPTION,
+  PURCHASED_PRODUCTS
+
 } from '../actions/actions'
 
 const initialState = {
@@ -61,6 +63,7 @@ const initialState = {
   emptyAfterFiltering: false,
   recentSearch: false,
   loading: false,
+  idPurchasedProducts: []
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -281,6 +284,12 @@ const reducer = (state = initialState, { type, payload }) => {
     case CHANGE_SUBSCRIPTION: {
       return{
         ...state
+      }
+    }
+    case PURCHASED_PRODUCTS: {
+      return {
+        ...state,
+        idPurchasedProducts: payload
       }
     }
     default:

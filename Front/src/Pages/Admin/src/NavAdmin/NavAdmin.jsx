@@ -38,18 +38,20 @@ export default function SimpleSidebar({ children }) {
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        size='md'
+        size='xs'
       >
         <DrawerContent
-          p={35}
-          w='full'
-          h='full'
+          bg={{ base: 'transparent', lg: 'none' }}
           display='flex'
           flexDirection='column'
-          alignItems='flex-start'
-          justifyContent='space-between'
+          alignItems={{ base: 'center', lg: 'flex-start' }}
+          justifyContent='center'
+          backdropFilter='auto'
+          backdropBlur='md'
         >
           <IconButton
+            colorScheme='primary'
+            size='lg'
             variant='outline'
             onClick={onClose}
             aria-label='open menu'
@@ -67,15 +69,16 @@ export default function SimpleSidebar({ children }) {
 const SidebarContent = ({ onClose, ...rest }) => {
   return (
     <Stack
-      borderRight='1px'
-      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w='full'
+      height='100vh'
+      w='fit-content'
       direction='column'
       align='center'
       justifyContent='center'
       position={{ base: 'unset', sm: 'unset', lg: 'fixed' }}
-      top={{ base: '20', lg: '50%' }}
-      transform={{ base: 'translate(-45%, -50%)', lg: 'translate(-45%, -42%)' }}
+      top={{ base: 0, lg: '50%' }}
+      bottom={{ base: 0, lg: '50%' }}
+      left={{ base: 0, md: 0 }}
+      transform={{ base: 'translate(0, 0)', lg: 'translate(0%, -50%)' }}
       {...rest}
     >
       {LinkItems.map((link) => (

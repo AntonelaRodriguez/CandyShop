@@ -37,7 +37,7 @@ import {
   SET_LOADING,
   NEW_SUBSCRIPTION,
   CHANGE_SUBSCRIPTION,
-  GET_ALL_USER_CARTS
+  PURCHASED_PRODUCTS
 } from '../actions/actions'
 
 const initialState = {
@@ -63,6 +63,7 @@ const initialState = {
   emptyAfterFiltering: false,
   recentSearch: false,
   loading: false,
+  idPurchasedProducts: []
 }
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -285,10 +286,10 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state
       }
     }
-    case GET_ALL_USER_CARTS: {
-      return{
+    case PURCHASED_PRODUCTS: {
+      return {
         ...state,
-        reviewsDetailCarts: payload
+        idPurchasedProducts: payload
       }
     }
     default:

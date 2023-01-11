@@ -38,16 +38,18 @@ export const CLEAN_UP_SEARCH = "CLEAN_UP_SEARCH";
 export const SET_LOADING = "SET_LOADING";
 export const NEW_SUBSCRIPTION = "NEW_SUBSCRIPTION";
 export const CHANGE_SUBSCRIPTION = "CHANGE_SUBSCRIPTION";
-export const GET_ALL_USER_CARTS = "GET_ALL_USER_CARTS"
+export const PURCHASED_PRODUCTS = "PURCHASED_PRODUCTS";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
-//const url = "https://candyshop-production.up.railway.app";  // usar url para db deployada
-const url = "http://localhost:3001";//para usar la db local poner localhost en vez de url 
+// const url = "https://candyshop-production.up.railway.app";  // usar url para db deployada
+ const url = "http://localhost:3001";//para usar la db local poner localhost en vez de url 
 
 export const getAllProducts = () => {
   return async function (dispatch) {
+    dispatch({ type: SET_LOADING, payload: true });
     const allProducts = await axios.get(`${url}/products`);
-    return dispatch({ type: ALL_PRODUCTS, payload: allProducts.data });
+    dispatch({ type: ALL_PRODUCTS, payload: allProducts.data });
+    return dispatch({ type: SET_LOADING, payload: false });
   };
 };
 
@@ -317,13 +319,13 @@ export const newSubscription = (email) => {
   };
 };
 
-export const changeSubscription = (data) => {
-  return async function (dispatch){
-    await axios.put(`${url}/users/admin/updateUser`, data)
-    return dispatch({ type: CHANGE_SUBSCRIPTION})
-  }
-}
 
+export const purchasedProducts = (email) => {
+  return async function (dispatch) {
+    let res = await axios(`/products/purchasedProducts/${email}`);
+    return dispatch({ type: PURCHASED_PRODUCTS, payload: res.data });
+  };
+};
 // try {
 //   await axios.delete(`${url}/products/${id}`);
 //   return dispatch({

@@ -16,7 +16,8 @@ import {
   postCart,
   getAllCarts,
   deleteallCarts,
-  setLoading
+  setLoading,
+  getAllCategories
 } from './redux/actions/actions'
 import Admin from './Pages/Admin/Admin'
 import ProductsAdmin from './Pages/Admin/ProductsAdmin'
@@ -174,6 +175,7 @@ function App() {
   //Despacha la acción que resulta en el seteo de los estados "products" y "allCarts"
   useEffect(() => {
     dispatch(getAllProducts())
+    dispatch(getAllCategories())
     dispatch(setLoading(true))
     setTimeout(() => {
       dispatch(getAllCarts())

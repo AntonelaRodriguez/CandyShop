@@ -51,11 +51,11 @@ const Hero = () => {
             color='blackAlpha.900'
             display='block'
           >
-            Discover Most Delicious Candy
+            Discover our Delicious Array of Candy
           </Heading>
           <Text display='block' textAlign='left' w='full' fontWeight={300} color='gray.500'>
-            Find the best and delicious candy here. We focus on product quality. Here you can find
-            candy of almost all brands. So why you are waiting? Just order now!
+            Fulfill all your candy needs here. At CandyShop we focus on product quality, where you can find
+            almost all of the best brands. Make your order now!
           </Text>
         </Flex>
       </Flex>

@@ -1,12 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { Button, Grid, GridItem, Heading, Image, Stack } from '@chakra-ui/react'
 import CardProduct from '../CardProduct/CardProduct'
 import { Link, NavLink } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector,useDispatch } from 'react-redux'
+import { setLoading, setFilters, applyFilters } from '../../redux/actions/actions'
+
 const LatestProducts = () => {
+  const dispatch = useDispatch()
   let products = useSelector((state) => state.products)
   products = products.slice(0, 3)
-  useEffect(() => {
+
+  useLayoutEffect(() => {
+    dispatch(setLoading(true));
+    dispatch(setFilters({ order: '', tacc: '', brand: '', category: '', reverse: false }))
+    dispatch(applyFilters());
     return () => {
       window.scroll(0, 0)
     }

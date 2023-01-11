@@ -38,7 +38,6 @@ import {
   NEW_SUBSCRIPTION,
   CHANGE_SUBSCRIPTION,
   PURCHASED_PRODUCTS
-
 } from '../actions/actions'
 
 const initialState = {
@@ -59,6 +58,7 @@ const initialState = {
   ratings: [],
   allCarts: [],
   productDetailCart: [],
+  reviewsDetailCarts: [],
   currentPage: 1,
   emptyAfterFiltering: false,
   recentSearch: false,

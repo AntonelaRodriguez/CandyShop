@@ -97,6 +97,7 @@ UserDetail.belongsTo(User);
 
 Product.hasMany(Detail);
 Detail.belongsTo(Product)
+Detail.belongsTo(User)
 
 Product.belongsToMany(Category, {through: 'product_category'}) 
 Category.belongsToMany(Product, {through: 'product_category'})

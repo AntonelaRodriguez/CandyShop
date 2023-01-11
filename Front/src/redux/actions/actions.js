@@ -225,6 +225,13 @@ export const getCartProductDetail = (order) => {
   }
 }
 
+export const getAllUserCarts = (email) => {
+  return async function(dispatch){
+    const userCarts = await axios.get(`${url}/detail/reviews/${email}`)
+    return dispatch({type: GET_ALL_USER_CARTS, payload: userCarts.data})
+  }
+}
+
 //Users
 
 export const postUser = (data) => {
@@ -312,12 +319,6 @@ export const newSubscription = (email) => {
   };
 };
 
-export const changeSubscription = (data) => {
-  return async function (dispatch){
-    await axios.put(`${url}/users/admin/updateUser`, data)
-    return dispatch({ type: CHANGE_SUBSCRIPTION})
-  }
-}
 
 export const purchasedProducts = (email) => {
   return async function (dispatch) {

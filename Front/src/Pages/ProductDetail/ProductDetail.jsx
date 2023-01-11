@@ -288,12 +288,10 @@ const ProductDetail = () => {
   const cart = useSelector((state) => state.cart.slice());
   const reviews = useSelector((state) => state.reviews)
   const ratings = reviews && reviews.map(r => r.rating)
-  let detailCart = useSelector((state) => state.productDetailCart);
-  let userCart = useSelector((state) => state.userCart)
-  let completed = userCart.filter((u) => u.state === 'completed')
-  let orderN = completed.map((u) => u.orderN)
-  let canReview = detailCart.filter(e => `/product/${e.ProductId}` === window.location.pathname);
-
+  const userCarts = useSelector(state => state.reviewsDetailCarts )
+  const userEmail = reviews && reviews.map(r => r.UserEmail)
+  const userEmailFilter = userEmail.filter(e => e === user.email)
+  let canReview = userCarts.filter(e => `/product/${e.ProductId}` === window.location.pathname);
 
   let idPurchasedProducts = useSelector((state) => state.idPurchasedProducts)
   useEffect(() => {
@@ -343,15 +341,14 @@ const ProductDetail = () => {
 
 
   useEffect(() => {
-    dispatch(getProductDetails(id))
-    orderN.map(e => {
-      dispatch(getCartProductDetail(e))
-    });
-    if (isAuthenticated) {
-      dispatch(getUser(user.email));
+    if(user && user.email){
+      dispatch(getProductDetails(id))
+      dispatch(getAllUserCarts(user.email))
+      if (isAuthenticated) {
+        dispatch(getUser(user.email));
+      }
     }
-
-  }, [dispatch, id])
+  }, [dispatch, id, user])
 
   const sum = (current, last) => {
     return current + last
@@ -388,7 +385,6 @@ const ProductDetail = () => {
     window.scroll(0, 0);
   }, []);
 
-  console.log(canReview.length);
 
   return (
     <>
@@ -576,9 +572,7 @@ const ProductDetail = () => {
 
 
       <Flex alignItems='flex-start'>
-
       { purhased && !reviewed ? <ReviewForm /> : <></> }
-
         <ReviewCard />
       </Flex>
       <Stack mb='1rem'>

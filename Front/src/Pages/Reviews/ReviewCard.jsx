@@ -38,9 +38,6 @@ const ReviewCard = () => {
     // dispatch(getReviews(pId))
   }
 
-  // const handlerUpdate = (id) => {
-  //   dispatch(updateReview(id))
-  // }
 
     return(
         <Stack  direction={{ base: 'column', lg: 'column' }} marginTop='3rem' marginBottom='2rem' >

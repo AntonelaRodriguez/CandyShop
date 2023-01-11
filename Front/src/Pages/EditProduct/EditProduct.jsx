@@ -27,6 +27,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import CardProductAdmin from '../Admin/CardProductAdmin/CardProductAdmin';
 import CardProductCreateAndEdit from '../../Components/CardProductCreateAndEdit/CardProductCreateAndEdit';
+import Swal from 'sweetalert2';
 
 const EditProduct = () => {
   const dispatch = useDispatch();
@@ -61,8 +62,47 @@ const EditProduct = () => {
     price: null,
     stock: null,
   });
-
+  console.log(input);
   function handleChange(e) {
+    if (e.target.name === 'price') {
+      if (!/^[0-9]{0,6}$/.test(e.target.value)) {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'no podes poner mas de 4 cifras',
+          showConfirmButton: false,
+          timer: 1400,
+        });
+        return;
+      }
+    }
+
+    if (e.target.name === 'name') {
+      if (!/^[a-zA-Z0-9\u00C0-\u017F()" "]{0,31}$/.test(e.target.value)) {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'The name must be between 1 and 21 characters',
+          showConfirmButton: false,
+          timer: 1400,
+        });
+        return;
+      }
+    }
+
+    if (e.target.name === 'description') {
+      if (!/^[a-zA-Z0-9\u00C0-\u017F()" "]{0,51}$/.test(e.target.value)) {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'The description must be between 1 and 51 characters',
+          showConfirmButton: false,
+          timer: 1400,
+        });
+        return;
+      }
+    }
+
     setInput({
       ...input,
       [e.target.name]: e.target.value,
@@ -82,12 +122,23 @@ const EditProduct = () => {
   }, [productDetail]);
 
   function handleSelectCategories(e) {
+    if (input?.category.includes(e.target.value) || input?.category.length > 2) {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Selected category',
+        showConfirmButton: false,
+        timer: 1400,
+      });
+      return;
+    }
     setInput({
       ...input,
       category: [...input.category, e.target.value],
     });
   }
 
+  console.log(input.category);
   function handleDeleteCategories(e) {
     setInput({
       ...input,
@@ -117,7 +168,6 @@ const EditProduct = () => {
       <Stack direction='row' m='auto' w='full' justify='center'>
         <form action='submit' onSubmit={(e) => handleSubmit(e)}>
           <Stack spacing={10}>
-
             <FormControl>
               <FormLabel>Name</FormLabel>
               <Input type='text' value={input.name} name='name' onChange={handleChange} />
@@ -126,6 +176,7 @@ const EditProduct = () => {
             <FormControl>
               <FormLabel>Description</FormLabel>
               <Textarea
+                maxLength={70}
                 placeholder='Type a Description'
                 value={input.description}
                 name='description'
@@ -143,7 +194,7 @@ const EditProduct = () => {
               </select>
               {/* DELETE CATEGORY */}
               {input.category && (
-                <Flex p={3} gap={5}>
+                <Flex flexWrap='wrap' maxW={300} p={3} gap={5}>
                   {input.category?.map((e, i) => {
                     return (
                       <Stack
@@ -167,7 +218,7 @@ const EditProduct = () => {
                 </Flex>
               )}
             </FormControl>
-            
+
             <FormControl>
               <FormLabel>Brand</FormLabel>
               <select name='brand' onChange={(e) => handleChange(e)}>

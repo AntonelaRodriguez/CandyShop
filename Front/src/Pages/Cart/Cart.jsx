@@ -101,15 +101,6 @@ const Cart = () => {
     });
   }
 
-  // const newDetail = {
-  //   orderN: input.orderN, 
-  //   state: input.state, 
-  //   totalPrice: input.totalPrice, 
-  //   date: input.date,
-  //   trackingNumber: input.trackingNumber,
-  //   delivery: input.delivery === 'true' ? true : false,
-  // };
-
   const handleDeliverySubmit = () => {
     dispatch(updateCart(input));
   }
@@ -146,7 +137,8 @@ const Cart = () => {
                 </Radio>
               </HStack>
             </RadioGroup>
-            {input?.delivery === "yes" ?             
+            { JSON.stringify(input) === '{}' ? <Spinner/> :
+            input?.delivery === "yes" ?             
             <Text>Please, complete your information for the shipment <Link to="/userDetails" style={{ color: 'red', textDecoration: 'underline' }}>here</Link>.</Text> :
             <></>
             }

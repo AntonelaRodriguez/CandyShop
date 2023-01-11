@@ -14,7 +14,8 @@ import {
     useColorModeValue,
     Textarea,
   } from "@chakra-ui/react";
-  import { FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { useLocalStorage } from "../../Components/useLocalStorage/useLocalStorage";
 
 const ContactUs = () => {
 
@@ -30,6 +31,25 @@ const ContactUs = () => {
           console.log(error.text);
       });
     e.target.reset()
+  };
+
+  const [name, setName] = useLocalStorage('name', '');
+  const [email, setEmail] = useLocalStorage('email', '');
+  const [text, setText] = useLocalStorage('text', '');
+
+  function validate(email) {
+    const validation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return validation
+  };
+
+  function validateName(name) {
+    const validation = /^(.{23}[^ ]*).*/.test(name);
+    return validation
+  };
+
+  function validateText(text) {
+    const validation = /^(.{150}[^ ]*).*/.test(text);
+    return validation
   };
 
     return(
@@ -54,6 +74,9 @@ const ContactUs = () => {
               <Input
                 m={'1rem'}
                 required
+                isInvalid={validateName(name)}
+                  value={name}
+                  onChange={e=> setName(e.target.value)}
                   placeholder={"Your full name..."}
                   name='name'
                   type='text'
@@ -66,6 +89,8 @@ const ContactUs = () => {
                   }}
                 />
                 <Input
+                  value={email}
+                  onChange={e=> setEmail(e.target.value)}
                   m={'1rem'}
                   required
                   name='email'
@@ -80,6 +105,9 @@ const ContactUs = () => {
                   }}
                 />
                 <Textarea
+                  isInvalid={validateText(text)}
+                  value={text}
+                  onChange={e=> setText(e.target.value)}
                   m={'1rem'}
                   required
                   placeholder={"Your message..."}
@@ -104,6 +132,7 @@ const ContactUs = () => {
                     border: "1px solid #F6ACA3"
                   }}
                   icon={<BiMailSend />}
+                  disabled={!validate(email) || !name.length || validateName(name) || validateText(text) || !text.length}
                 />
               </form>
               </Stack>

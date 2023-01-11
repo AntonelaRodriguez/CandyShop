@@ -38,10 +38,11 @@ export const CLEAN_UP_SEARCH = "CLEAN_UP_SEARCH";
 export const SET_LOADING = "SET_LOADING";
 export const NEW_SUBSCRIPTION = "NEW_SUBSCRIPTION";
 export const CHANGE_SUBSCRIPTION = "CHANGE_SUBSCRIPTION";
+export const PURCHASED_PRODUCTS = "PURCHASED_PRODUCTS";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
-const url = "https://candyshop-production.up.railway.app";  // usar url para db deployada
-/* const url = "http://localhost:3001";//para usar la db local poner localhost en vez de url */
+// const url = "https://candyshop-production.up.railway.app";  // usar url para db deployada
+ const url = "http://localhost:3001";//para usar la db local poner localhost en vez de url 
 
 export const getAllProducts = () => {
   return async function (dispatch) {
@@ -318,6 +319,12 @@ export const changeSubscription = (data) => {
   }
 }
 
+export const purchasedProducts = (email) => {
+  return async function (dispatch) {
+    let res = await axios(`/products/purchasedProducts/${email}`);
+    return dispatch({ type: PURCHASED_PRODUCTS, payload: res.data });
+  };
+};
 // try {
 //   await axios.delete(`${url}/products/${id}`);
 //   return dispatch({

@@ -264,7 +264,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
 import { FaStar } from 'react-icons/fa'
-import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCart, editProductCart, deleteFromCart, cleanUpFilters, getCartProductDetail } from '../../redux/actions/actions'
+import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCart, editProductCart, deleteFromCart, cleanUpFilters, getCartProductDetail, purchasedProducts } from '../../redux/actions/actions'
 import { useAuth0 } from "@auth0/auth0-react"
 import ReviewForm from '../Reviews/ReviewForm'
 import ReviewCard from '../Reviews/ReviewCard'
@@ -276,7 +276,10 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 
 const ProductDetail = () => {
-  
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  let { id } = useParams()
+  id = Number(id)
   const {isAuthenticated, user } = useAuth0();
 
   const product = useSelector((state) => state.productDetail);
@@ -292,13 +295,26 @@ const ProductDetail = () => {
   let canReview = detailCart.filter(e => `/product/${e.ProductId}` === window.location.pathname);
 
 
-
+  let idPurchasedProducts = useSelector((state) => state.idPurchasedProducts)
+  useEffect(() => {
+    if(actualUser && actualUser.email && actualUser.email.length) {
+      dispatch(purchasedProducts(actualUser.email))
+    }
+  }, [actualUser])
+  
+  const [purhased, setPurhased] = useState(false);
+  const [reviewed, setReviewed] = useState(false);
+  useEffect(() => {
+    if(actualUser?.email?.length) {
+      setPurhased(idPurchasedProducts.some((ProductId) => ProductId === id ));
+      setReviewed(reviews.some((r) => r.author === actualUser.email))
+      console.log("LO COMPRE: ", purhased)
+      console.log("HICE REVIEW: ", reviewed)
+    }
+  }, [idPurchasedProducts, actualUser])
 
   
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  let { id } = useParams()
-  id = Number(id)
+
   
   let inCart = (id) => cart.some((c) => c.id === id)
   let indexOfCart = (id) => cart.findIndex((c) => c.id === id)
@@ -561,9 +577,8 @@ const ProductDetail = () => {
 
       <Flex alignItems='flex-start'>
 
-      { canReview.length === 1 ?
-      <ReviewForm /> : <></>
-}
+      { purhased && !reviewed ? <ReviewForm /> : <></> }
+
         <ReviewCard />
       </Flex>
       <Stack mb='1rem'>

@@ -41,8 +41,8 @@ export const CHANGE_SUBSCRIPTION = "CHANGE_SUBSCRIPTION";
 export const PURCHASED_PRODUCTS = "PURCHASED_PRODUCTS";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
-// const url = "https://candyshop-production.up.railway.app";  // usar url para db deployada
- const url = "http://localhost:3001";//para usar la db local poner localhost en vez de url 
+const url = "https://candyshop-production.up.railway.app";  // usar url para db deployada
+/* const url = "http://localhost:3001"; //para usar la db local poner localhost en vez de url */
 
 export const getAllProducts = () => {
   return async function (dispatch) {
@@ -225,13 +225,6 @@ export const getCartProductDetail = (order) => {
   }
 }
 
-export const getAllUserCarts = (email) => {
-  return async function(dispatch){
-    const userCarts = await axios.get(`${url}/detail/reviews/${email}`)
-    return dispatch({type: GET_ALL_USER_CARTS, payload: userCarts.data})
-  }
-}
-
 //Users
 
 export const postUser = (data) => {
@@ -319,6 +312,12 @@ export const newSubscription = (email) => {
   };
 };
 
+export const changeSubscription = (data) => {
+  return async function (dispatch){
+    await axios.put(`${url}/users/admin/updateUser`, data)
+    return dispatch({ type: CHANGE_SUBSCRIPTION})
+  }
+}
 
 export const purchasedProducts = (email) => {
   return async function (dispatch) {

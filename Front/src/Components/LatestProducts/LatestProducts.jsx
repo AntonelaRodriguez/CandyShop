@@ -29,7 +29,9 @@ const LatestProducts = () => {
       align='center'
       overflow='hidden'
     >
-      <Heading as={'h2'}>Our Latest Products</Heading>
+      <Heading as='h2' fontWeight={700} textColor='primary.300'>
+        Our Latest Products
+      </Heading>
       <Grid
         py={20}
         gridTemplateColumns={{

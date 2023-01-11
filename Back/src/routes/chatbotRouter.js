@@ -35,7 +35,9 @@ chatBot.post('/send', (req, res) => {
     procesoDePago:
       'El proceso de pago es seguro y se realiza a través de nuestro sistema de pago en línea. Aceptamos tarjetas de crédito y débito, así como también pagos con PayPal.',
     metodosDePago: 'Aceptamos tarjetas de crédito y débito, así como también pagos con PayPal.',
-    desconocido: 'Lo siento, no entiendo tu pregunta. ¿Podrías reformularla?'
+    desconocido: 'Lo siento, no entiendo tu pregunta. ¿Podrías reformularla?',
+    agradecimiento:"Estamos encantados de haber podido ayudarlo.",
+    agradecido:"Nos complace haber sido de ayuda."
   }
 
   return res.json({ response: responses[classification], meMesssage: message })

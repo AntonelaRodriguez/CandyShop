@@ -45,8 +45,10 @@ const url = "https://candyshop-production.up.railway.app";  // usar url para db 
 
 export const getAllProducts = () => {
   return async function (dispatch) {
+    dispatch({ type: SET_LOADING, payload: true });
     const allProducts = await axios.get(`${url}/products`);
-    return dispatch({ type: ALL_PRODUCTS, payload: allProducts.data });
+    dispatch({ type: ALL_PRODUCTS, payload: allProducts.data });
+    return dispatch({ type: SET_LOADING, payload: false });
   };
 };
 

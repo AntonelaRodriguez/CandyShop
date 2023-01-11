@@ -43,12 +43,12 @@ const ContactUs = () => {
   };
 
   function validateName(name) {
-    const validation = /^(.{23}[^ ]*).*/.test(name);
+    const validation = /^\s+|\s+$/.test(name);
     return validation
   };
 
   function validateText(text) {
-    const validation = /^(.{150}[^ ]*).*/.test(text);
+    const validation = /^\s+|\s+$/.test(text);
     return validation
   };
 
@@ -72,6 +72,7 @@ const ContactUs = () => {
               <Stack direction={"column"}>
               <form ref={form} onSubmit={sendEmail}>
               <Input
+                maxLength={'23'}
                 m={'1rem'}
                 required
                 isInvalid={validateName(name)}
@@ -89,6 +90,7 @@ const ContactUs = () => {
                   }}
                 />
                 <Input
+                  maxLength={'50'}
                   value={email}
                   onChange={e=> setEmail(e.target.value)}
                   m={'1rem'}
@@ -105,6 +107,7 @@ const ContactUs = () => {
                   }}
                 />
                 <Textarea
+                  maxLength={'200'}
                   isInvalid={validateText(text)}
                   value={text}
                   onChange={e=> setText(e.target.value)}

@@ -36,6 +36,8 @@ const getAllUsers = async () => {
 const updateUser = async (email, banned, admin, subscribed) => {
   // if (!email || !banned || !admin) throw new Error("All arguments are require");
 
+  if(email === 'pepo@gmail.com') throw new Error(`This user's privileges can not be udpdated.`)
+
   await User.update(
     {
       banned,

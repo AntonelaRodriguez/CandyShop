@@ -567,7 +567,7 @@ const ProductDetail = () => {
 
       <Flex alignItems='flex-start'>
 
-      { canReview.length >= 1 && !userEmailFilter ?
+      { canReview.length >= 1 ?
       <ReviewForm /> : <></>
 }
         <ReviewCard />

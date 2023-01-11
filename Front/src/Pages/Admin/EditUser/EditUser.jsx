@@ -125,9 +125,13 @@ const EditUser = (props) => {
               </HStack>
             </RadioGroup> }
           </FormControl>
-          <Button onClick={onOpen} colorScheme="primary">
+          { currentUser[0].email === 'pepo@gmail.com' ? 
+          <Button onClick={onOpen} colorScheme="primary" disabled>
             Change details
-          </Button>
+          </Button> :
+          <Button onClick={onOpen} colorScheme="primary">
+          Change details
+          </Button>  }
 
           <AlertDialog
         isOpen={isOpen}

@@ -286,8 +286,6 @@ export const postReview = (data) => {
   return async function (dispatch) {
     const newReview = await axios
       .post(`/reviews/${data.productId}/${data.email}`, data)
-      .then((data) => alert('Review posted succesfully'))
-      .catch((error) => alert(error));
     return dispatch({ type: POST_REVIEW });
   };
 };

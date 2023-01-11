@@ -288,10 +288,10 @@ const ProductDetail = () => {
   const cart = useSelector((state) => state.cart.slice());
   const reviews = useSelector((state) => state.reviews)
   const ratings = reviews && reviews.map(r => r.rating)
-  const userCarts = useSelector(state => state.reviewsDetailCarts )
-  const userEmail = reviews && reviews.map(r => r.UserEmail)
-  const userEmailFilter = userEmail.filter(e => e === user.email)
-  let canReview = userCarts.filter(e => `/product/${e.ProductId}` === window.location.pathname);
+  // const userCarts = useSelector(state => state.reviewsDetailCarts )
+  // const userEmail = reviews && reviews.map(r => r.UserEmail)
+  // const userEmailFilter = userEmail.filter(e => e === user.email)
+  // let canReview = userCarts.filter(e => `/product/${e.ProductId}` === window.location.pathname);
 
   let idPurchasedProducts = useSelector((state) => state.idPurchasedProducts)
   useEffect(() => {

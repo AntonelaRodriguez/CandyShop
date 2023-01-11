@@ -82,7 +82,6 @@ const EditUser = (props) => {
     // e.preventDefault()
     dispatch(updateUser(newDetail))
     // dispatch(getUser(currentUser[0].email))
-    navigate('/admin/UsersAdmin')
   }
 
   const { isOpen, onOpen, onClose } = useDisclosure()

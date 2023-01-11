@@ -113,7 +113,7 @@ const CardUserAdmin = ({
         top="5px"
         left="5px"
       >
-        <TagLabel> {banned === true ? 'Banned' : admin === true ? 'Admin' : 'Active'} </TagLabel>
+        <TagLabel> {email === 'pepo@gmail.com' ? 'Main Admin' : banned === true ? 'Banned' : admin === true ? 'Admin' : 'Active'} </TagLabel>
       </Tag>
     </Card>
   );

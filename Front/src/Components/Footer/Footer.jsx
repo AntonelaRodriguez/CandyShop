@@ -94,7 +94,7 @@ export default function LargeWithNewsletter() {
         border='1px solid #F6ACA3'
       >
         <Container as={Stack} maxW={"6xl"} py={10}>
-          <SimpleGrid templateColumns="repeat(3, 1fr)" spacing={8}>
+          <SimpleGrid templateColumns="repeat(3, 1fr)" spacing={8} columns={[1, null, 3]}>
             <Stack spacing={8}>
               <Box>
                 <img src={img} />
@@ -167,9 +167,35 @@ export default function LargeWithNewsletter() {
             </Stack>
             <Stack align={'center'}>
               <ListHeader>Support</ListHeader>
-              <Link to='/contactUs'>Contact us</Link>
-              <Link to='/howToBuy'>How to buy</Link>
-              <Link to='/candyStores'>Our Candy Stores</Link>
+              <Link to='/contactUs'>
+                <Text
+                cursor={'pointer'}
+                transition={'background 0.3s ease'}
+                _hover={{
+                  color: "primary.300",
+              }}
+                >Contact us</Text>
+              </Link>
+              <Link to='/howToBuy'>
+                <Text
+                cursor={'pointer'}
+                transition={'background 0.3s ease'}
+                _hover={{
+                  color: "primary.300",
+                }}
+                >How to buy
+                </Text>
+              </Link>
+              <Link to='/candyStores'>
+                <Text
+                cursor={'pointer'}
+                transition={'background 0.3s ease'}
+                _hover={{
+                  color: "primary.300",
+                }}
+                >Our Candy Stores
+                </Text>
+              </Link>
             </Stack>
             <Flex alignItems='center' justifyContent={'center'}>
               <Stack>

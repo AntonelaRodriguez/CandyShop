@@ -126,9 +126,10 @@ const Products = () => {
 
   return (
     <Flex direction='column' justifyContent='center' align='center'>
-      <Heading p={5} w='full'>
+      <Stack display="flex" flexDirection="column" align="center" gap={5} w='full' >
+        <Heading fontSize="4xl" as="h2" textAlign="center" fontWeight={700} color="blackAlpha.900">Store</Heading>
         <Banner />
-      </Heading>
+      </Stack>
       <form onSubmit={(event) => handleSumbit(event)}>
         <Flex
           bg='primary.200'

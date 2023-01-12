@@ -20,6 +20,7 @@ import {
 
 import CardProductCreateAndEdit from '../../../Components/CardProductCreateAndEdit/CardProductCreateAndEdit';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 //nombre
 //descripción
@@ -72,9 +73,62 @@ const Create = () => {
   }, []);
  */
   function handleChange(e) {
+    if (e.target.name === 'price') {
+      if (!/^[0-9]{0,4}$/.test(e.target.value)) {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'Cannot contain more than 4 digits.',
+          showConfirmButton: false,
+          timer: 1400,
+        });
+        return;
+      }
+    }
+
+    if (e.target.name === 'name') {
+      if (e.target.value.length >= 70 || e.target.value.includes('  ')) {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'The name must be between 1 and 70 characters or you have two spaces in a row ',
+          showConfirmButton: false,
+          timer: 1400,
+        });
+        return;
+      }
+    }
+
+    if (e.target.name === 'description') {
+      if (e.target.value.length >= 100 || e.target.value.includes('  ')) {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title:
+            'The description must be between 1 and 100 characters or you have two spaces in a row ',
+          showConfirmButton: false,
+          timer: 1400,
+        });
+        return;
+      }
+    }
+
+    if (e.target.name === 'stock') {
+      if (!/^[0-9]{0,4}$/.test(e.target.value)) {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'Cannot contain more than 4 digits.',
+          showConfirmButton: false,
+          timer: 1400,
+        });
+        return;
+      }
+    }
+
     setInput({
       ...input,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value.replace(/^\s+|\s+$/, ' '),
     });
   }
 
@@ -83,6 +137,16 @@ const Create = () => {
   }, []);
 
   function handleSelectCategories(e) {
+    if (input?.category.includes(e.target.value) || input?.category.length > 2) {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Selected category',
+        showConfirmButton: false,
+        timer: 1400,
+      });
+      return;
+    }
     setInput({
       ...input,
       category: [...input.category, e.target.value],
@@ -134,17 +198,24 @@ const Create = () => {
   }
   return (
     <Stack direction='row' m='auto' w='full' align='center' justify='center' gap={15}>
-      <Stack direction='row' m='auto' w='full' justify='center'>
+      <Stack maxW='100%' direction='row' m='auto' w='full' justify='center'>
         <form action='submit' onSubmit={(e) => handleSubmit(e)}>
-          <Stack spacing={10}>
+          <Stack w='full' maxW='full' spacing={10}>
             <FormControl isRequired>
               <FormLabel>Name</FormLabel>
-              <Input type='text' value={input.name} name='name' onChange={handleChange} />
+              <Input
+                // maxLength={40}
+                type='text'
+                value={input.name}
+                name='name'
+                onChange={handleChange}
+              />
             </FormControl>
 
             <FormControl isRequired>
               <FormLabel>Description</FormLabel>
               <Textarea
+                // maxLength={55}
                 placeholder='Type a Description'
                 value={input.description}
                 name='description'
@@ -161,7 +232,7 @@ const Create = () => {
                 })}
               </select>
               {/* DELETE CATEGORY */}
-              <Flex p={3} gap={5}>
+              <Flex flexWrap='wrap' maxW={300} p={3} gap={5}>
                 {input.category?.map((e, i) => {
                   return (
                     <Stack
@@ -233,7 +304,11 @@ const Create = () => {
               />
             </FormControl>
 
-            <Button type='submit' colorScheme='primary'>
+            <Button
+              disabled={!input?.category.length || input?.brand === ''}
+              type='submit'
+              colorScheme='primary'
+            >
               Crear
             </Button>
           </Stack>

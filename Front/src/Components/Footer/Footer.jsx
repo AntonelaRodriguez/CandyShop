@@ -28,7 +28,7 @@ import { BiMailSend } from "react-icons/bi";
 import img from "../../assets/candy_logo.svg";
 import { useRef } from 'react';
 import emailjs from '@emailjs/browser';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers, newSubscription, updateUser} from '../../redux/actions/actions';
 import Swal from 'sweetalert2';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -45,21 +45,17 @@ const ListHeader = ({ children }) => {
 export default function LargeWithNewsletter() {
 
   const dispatch = useDispatch()
-  const { isAuthenticated } = useAuth0()
-  const [email, setEmail] = useState("")
+  const { isAuthenticated, user, loginWithRedirect } = useAuth0()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const subscribeUser = useSelector(state => state.user)
 
   useEffect(() => {
     dispatch(getAllUsers())
   }, [dispatch])
-  
+
   const newDetail = {
-    email: email,
+    email: subscribeUser.email,
     subscribed: true
-  }
-  function handleChange(e) {
-    setEmail(e.target.value);
-    validate(e.target.value)
   }
 
   function handleSubmit(e){
@@ -72,18 +68,12 @@ export default function LargeWithNewsletter() {
           timer: 3000
       })
       dispatch(updateUser(newDetail))
-      dispatch(newSubscription(email))
+      dispatch(newSubscription(subscribeUser.email))
       setEmail('')  
   }
-
-  function validate(email) {
-    const validation = /\S+@\S+\.\S+/.test(email)
-    return validation
-  }
-
   return (
     <Flex as="nav" align="center" justify="center" wrap="wrap" py={6} w="full">
-      <Box
+      { subscribeUser.admin === false || !isAuthenticated ? <><Box
         w="full"
         direction={{ base: "column", sm: "column", md: "row", lg: "row" }}
         justifyContent="space-between"
@@ -94,7 +84,7 @@ export default function LargeWithNewsletter() {
         border='1px solid #F6ACA3'
       >
         <Container as={Stack} maxW={"6xl"} py={10}>
-          <SimpleGrid templateColumns="repeat(3, 1fr)" spacing={8}>
+          <SimpleGrid templateColumns="repeat(3, 1fr)" spacing={8} columns={[1, null, 3]}>
             <Stack spacing={8}>
               <Box>
                 <img src={img} />
@@ -167,9 +157,35 @@ export default function LargeWithNewsletter() {
             </Stack>
             <Stack align={'center'}>
               <ListHeader>Support</ListHeader>
-              <Link to='/contactUs'>Contact us</Link>
-              <Link to='/howToBuy'>How to buy</Link>
-              <Link to='/candyStores'>Our Candy Stores</Link>
+              <Link to='/contactUs'>
+                <Text
+                cursor={'pointer'}
+                transition={'background 0.3s ease'}
+                _hover={{
+                  color: "primary.300",
+              }}
+                >Contact us</Text>
+              </Link>
+              <Link to='/howToBuy'>
+                <Text
+                cursor={'pointer'}
+                transition={'background 0.3s ease'}
+                _hover={{
+                  color: "primary.300",
+                }}
+                >How to buy
+                </Text>
+              </Link>
+              <Link to='/candyStores'>
+                <Text
+                cursor={'pointer'}
+                transition={'background 0.3s ease'}
+                _hover={{
+                  color: "primary.300",
+                }}
+                >Our Candy Stores
+                </Text>
+              </Link>
             </Stack>
             <Flex alignItems='center' justifyContent={'center'}>
               <Stack>
@@ -181,24 +197,23 @@ export default function LargeWithNewsletter() {
                     <ModalHeader bg={"primary.300"} color={useColorModeValue("white", "gray.800")}>Subscribe to our Newsletter!</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
-                        <Input type='email'  name='subscribe' placeholder='Type your email...' value={email} onChange={handleChange} />
+                        <Input type='email'  name='subscribe' placeholder='Type your email...' value={subscribeUser.email}  />
                     </ModalBody>
                     <ModalFooter>
-                      <Button bg={"primary.300"} color={useColorModeValue("white", "gray.800")} mr={3} type='submit' onClick={(e) => handleSubmit(e)} onClickCapture={onClose} disabled={!email.length || !validate(email)}>
+                      <Button bg={"primary.300"} color={useColorModeValue("white", "gray.800")} mr={3} type='submit' onClick={(e) => handleSubmit(e)} onClickCapture={onClose}>
                       Submit
                       </Button>
                       <Button onClick={onClose}>Cancel</Button>
                     </ModalFooter>
                     </ModalContent>
                   </Modal>
-                </> : <Button onClick={onOpen} bg={"primary.300"} color={useColorModeValue("white", "gray.800")}>Log in to Subscribe</Button> }
+                </> : <Button onClick={() => {onOpen(); loginWithRedirect()}} bg={"primary.300"} color={useColorModeValue("white", "gray.800")}>Log in to Subscribe</Button> }
               </Stack>
             </Flex>
             
           </SimpleGrid>
         </Container>
         
-      </Box>
-    </Flex>
-  );
+      </Box></> : <></>}
+    </Flex> )
 }

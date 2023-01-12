@@ -38,21 +38,24 @@ export const CLEAN_UP_SEARCH = "CLEAN_UP_SEARCH";
 export const SET_LOADING = "SET_LOADING";
 export const NEW_SUBSCRIPTION = "NEW_SUBSCRIPTION";
 export const CHANGE_SUBSCRIPTION = "CHANGE_SUBSCRIPTION";
+export const PURCHASED_PRODUCTS = "PURCHASED_PRODUCTS";
 
 /* const url = 'https://deploydbcandy-production.up.railway.app' //usar url para db deployada */
 const url = "https://candyshop-production.up.railway.app";  // usar url para db deployada
-/* const url = "http://localhost:3001";//para usar la db local poner localhost en vez de url */
+/* const url = "http://localhost:3001"; //para usar la db local poner localhost en vez de url */
 
 export const getAllProducts = () => {
   return async function (dispatch) {
-    const allProducts = await axios.get(`${url}/products`);
-    return dispatch({ type: ALL_PRODUCTS, payload: allProducts.data });
+    dispatch({ type: SET_LOADING, payload: true });
+    const allProducts = await axios.get(`/products`);
+    dispatch({ type: ALL_PRODUCTS, payload: allProducts.data });
+    return dispatch({ type: SET_LOADING, payload: false });
   };
 };
 
 export const getAllCategories = () => {
   return async function (dispatch) {
-    const allCategories = await axios.get(`${url}/categories`);
+    const allCategories = await axios.get(`/categories`);
     return dispatch({ type: ALL_CATEGORIES, payload: allCategories.data });
   };
 };
@@ -60,7 +63,7 @@ export const getAllCategories = () => {
 export const searchCandy = (name) => {
   return async function (dispatch) {
     const searchedProducts = await axios.get(
-      `${url}/products/search?name=${name}`
+      `/products/search?name=${name}`
       );
     return dispatch({ type: SEARCH_CANDY, payload: searchedProducts.data });
   };
@@ -102,14 +105,14 @@ export const sort = (payload) => {
 
 export const getProductDetails = (id) => {
   return async function (dispatch) {
-    const detailProduct = await axios(`${url}/products/${id}`);
+    const detailProduct = await axios(`/products/${id}`);
     return dispatch({ type: DETAILS_PRODUCT, payload: detailProduct.data });
   };
 };
 
 export const postProduct = (value) => {
   return async function (dispatch) {
-    const result = await axios.post(`${url}/products/`, value);
+    const result = await axios.post(`/products/`, value);
     return dispatch({
       type: POST_PRODUCT,
     });
@@ -119,7 +122,7 @@ export const postProduct = (value) => {
 export function editProduct(id, productEdit) {
   return async function (dispatch) {
     try {
-      await axios.put(`${url}/products/${id}`, productEdit);
+      await axios.put(`/products/${id}`, productEdit);
       return dispatch({
         type: EDIT_PRODUCT,
       });
@@ -132,7 +135,7 @@ export function editProduct(id, productEdit) {
 export const deleteProduct = (id) => {
   return async function (dispatch) {
     try {
-      await axios.delete(`${url}/products/${id}`);
+      await axios.delete(`/products/${id}`);
       return dispatch({
         type: DELETED_PRODUCT,
       });
@@ -158,7 +161,7 @@ export const paymentToCart = (detailsProduct) => {
       userId: "10asd1q23",
       cartID: "aeasd255",
     };
-    const result = await axios.post(`${url}/mercadopago`, data);
+    const result = await axios.post(`/mercadopago`, data);
     console.log(result.data);
     return dispatch({
       type: PAYMENT_TO_CART,
@@ -175,35 +178,35 @@ export const deleteFromCart = (id) => {
 
 export const getUserCart = (email) => {
   return async function (dispatch) {
-    const userCart = await axios(`${url}/cart/${email}`);
+    const userCart = await axios(`/cart/${email}`);
     return dispatch({ type: GET_USER_CART, payload: userCart.data });
   };
 };
 
 export const postCart = (cart) => {
   return async function (dispatch) {
-    const userCart = await axios.post(`${url}/cart/`, cart);
+    const userCart = await axios.post(`/cart/`, cart);
     return dispatch({ type: POST_CART });
   };
 };
 
 export const getCartByPk = (order) => {
   return async function (dispatch) {
-    const cart = await axios.get(`${url}/cart/byPk/${order}`);
+    const cart = await axios.get(`/cart/byPk/${order}`);
     return dispatch({ type: GET_CART_BY_PK, payload: cart.data });
   };
 };
 
 export const updateCart = (value) => {
   return async function (dispatch) {
-    const result = await axios.put(`${url}/cart`, value);
+    const result = await axios.put(`/cart`, value);
     return dispatch({ type: UPDATE_CART });
   };
 };
 
 export const getAllCarts = () => {
   return async function (dispatch) {
-    const carts = await axios(`${url}/cart`);
+    const carts = await axios(`/cart`);
     return dispatch({ type: GET_ALL_CARTS, payload: carts.data });
   };
 };
@@ -217,7 +220,7 @@ export const deleteallCarts = () => {
 
 export const getCartProductDetail = (order) => {
   return async function(dispatch){
-    const details = await axios(`${url}/detail/${order}`);
+    const details = await axios(`/detail/${order}`);
     return dispatch({type: GET_CART_PRODUCT_DETAIL, payload: details.data})
   }
 }
@@ -226,7 +229,7 @@ export const getCartProductDetail = (order) => {
 
 export const postUser = (data) => {
   return async function (dispatch) {
-    const { data: usuario } = await axios.post(`${url}/users`, data);
+    const { data: usuario } = await axios.post(`/users`, data);
     return dispatch({ type: POST_USER, payload: usuario });
   };
 };
@@ -234,35 +237,35 @@ export const postUser = (data) => {
 export const postUserDetail = (data) =>{
   console.log(data, 'action')
   return async function(dispatch){
-    const result = await axios.post(`${url}/users/userDetail`, data);
+    const result = await axios.post(`/users/userDetail`, data);
     return dispatch({type: POST_USER_DETAIL})
   }
 }
 
 export const updateUserDetail = (data) => {
   return async function(dispatch){
-    await axios.put(`${url}/users/userDetail`, data);
+    await axios.put(`/users/userDetail`, data);
     return dispatch({type: UPDATE_USER_DETAIL})
   }
 }
 
 export const getUser = (email) => {
   return async function (dispatch) {
-    const user = await axios.get(`${url}/users/${email}`);
+    const user = await axios.get(`/users/${email}`);
     return dispatch({ type: GET_USER, payload: user.data });
   };
 };
 
 export const getAllUsers = () => {
   return async function (dispatch) {
-    const users = await axios.get(`${url}/users`);
+    const users = await axios.get(`/users`);
     return dispatch({ type: GET_ALL_USERS, payload: users.data });
   };
 };
 
 export const updateUser = (data) => {
   return async function (dispatch) {
-    const user = await axios.put(`${url}/users/admin/updateUser/`, data)
+    const user = await axios.put(`/users/admin/updateUser/`, data)
     return dispatch({type: UPDATE_USER})
   }
 }
@@ -270,7 +273,7 @@ export const updateUser = (data) => {
 //Reviews
 export const getReviews = (productId) => {
   return async function (dispatch) {
-    const reviews = await axios.get(`${url}/reviews/${productId}`);
+    const reviews = await axios.get(`/reviews/${productId}`);
     return dispatch({ type: GET_REVIEWS, payload: reviews.data });
   };
 };
@@ -282,16 +285,14 @@ export const cleanReviews = () => {
 export const postReview = (data) => {
   return async function (dispatch) {
     const newReview = await axios
-      .post(`${url}/reviews/${data.productId}/${data.email}`, data)
-      .then((data) => alert('Review posted succesfully'))
-      .catch((error) => alert(error));
+      .post(`/reviews/${data.productId}/${data.email}`, data)
     return dispatch({ type: POST_REVIEW });
   };
 };
 
 export const deleteReview = (id) => {
   return async function (dispatch) {
-    await axios.delete(`${url}/reviews/admin/deleteReview/${id}`);
+    await axios.delete(`/reviews/admin/deleteReview/${id}`);
     return dispatch({ type: DELETED_REVIEW });
   };
 };
@@ -304,18 +305,24 @@ export const setLoading = (payload) => {
 
 export const newSubscription = (email) => {
   return async function (dispatch) {
-    await axios.post(`${url}/subscribe/${email}`);
+    await axios.post(`/subscribe/${email}`);
     return dispatch({ type: NEW_SUBSCRIPTION });
   };
 };
 
 export const changeSubscription = (data) => {
   return async function (dispatch){
-    await axios.put(`${url}/users/admin/updateUser`, data)
+    await axios.put(`/users/admin/updateUser`, data)
     return dispatch({ type: CHANGE_SUBSCRIPTION})
   }
 }
 
+export const purchasedProducts = (email) => {
+  return async function (dispatch) {
+    let res = await axios(`/products/purchasedProducts/${email}`);
+    return dispatch({ type: PURCHASED_PRODUCTS, payload: res.data });
+  };
+};
 // try {
 //   await axios.delete(`${url}/products/${id}`);
 //   return dispatch({

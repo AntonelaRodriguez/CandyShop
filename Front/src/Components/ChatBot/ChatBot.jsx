@@ -59,7 +59,7 @@ const ChatBot = () => {
   };
 
   return (
-    <motion.div
+    <motion.div 
       initial={{ opacity: 1 }}
       animate={{
         scale: [1, 1.2, 1.2, 1, 1],
@@ -74,13 +74,13 @@ const ChatBot = () => {
         bottom: 15,
         padding: 10,
         right: 15,
-        zIndex: 100,
+        zIndex: 1000000,
       }}
     >
       <Icon w={8} h={8} color='primary.300' as={BsChatDotsFill} onClick={onOpen} cursor='pointer' />
-      <Drawer placement='right' onClose={onClose} colorScheme='primary' isOpen={isOpen} size='md'>
+      <Drawer zIndex={100000000}  placement='right' onClose={onClose} colorScheme='primary' isOpen={isOpen} size='md'>
         <DrawerOverlay />
-        <DrawerContent bg='primary.100' w='full' h='full' minW='30%' maxH='full'>
+        <DrawerContent  zIndex={10000000} bg='gray.200' w='full' h='full' minW='30%' maxH='full'>
           <Icon
             w={7}
             h={7}
@@ -108,7 +108,8 @@ const ChatBot = () => {
               {mensajes?.map((message, i) => {
                 return (
                   <List
-                    bg='primary.200'
+                    bg='gray.400'
+                    borderRadius="lg"
                     key={i}
                     p={5}
                     display='flex'
@@ -169,14 +170,14 @@ const ChatBot = () => {
                     placeholder='Mensaje'
                     w='full'
                     border='1px'
-                    borderColor='primary.300'
+                    borderColor='gray.500'
                     color='blackAlpha.900'
                     _placeholder={{ color: 'blackAlpha.900' }}
                     value={input}
-                    focusBorderColor='primary.500'
+                    focusBorderColor='gray.900'
                     onChange={(event) => setInput(event.target.value)}
                   />
-                  <Button colorScheme='primary' variant='outline' w='auto' type='submit'>
+                  <Button colorScheme='blackAlpha' variant='outline' w='auto' type='submit'>
                     <Icon w='full' h={6} as={IoIosSend} cursor='pointer' />
                   </Button>
                 </FormControl>

@@ -62,7 +62,7 @@ const EditUser = (props) => {
     banned: currentUser[0].banned,
     admin: currentUser[0].admin
   });
-  console.log(currentUser[0], 'user ')
+  console.log(currentUser[0].email, 'user ')
 // console.log(user);
   
   function handleChange(e) {
@@ -77,8 +77,6 @@ const EditUser = (props) => {
     banned: input.banned === 'true' ? true : false,
     admin: input.admin === 'true' ? true : false
   };
-
-  console.log(newDetail, 'NewDetail');
 
   function handleSubmit(e) {
     // e.preventDefault()
@@ -103,7 +101,7 @@ const EditUser = (props) => {
         <Stack spacing={7}>
           <FormControl isRequired>
           <FormLabel as='legend' marginTop='1rem'>Ban</FormLabel>
-            <RadioGroup defaultValue={currentUser[0].banned === true ? 'true' : 'false'}>
+             { currentUser[0].email === 'pepo@gmail.com' ? <>You can not ban our Main Admin.</> : <RadioGroup defaultValue={currentUser[0].banned === true ? 'true' : 'false'}>
               <HStack spacing='24px'>
                 <Radio name='banned' onChange={(e) => handleChange(e)} value='false'>
                   No
@@ -112,10 +110,9 @@ const EditUser = (props) => {
                   Yes
                 </Radio>
               </HStack>
-            </RadioGroup>
-
-
+            </RadioGroup> }
             <FormLabel as='legend' marginTop='2rem'>Admin</FormLabel>
+            { currentUser[0].email === 'pepo@gmail.com' ? <>You can not take privileges from our Main Admin.</> :
             <RadioGroup defaultValue={currentUser[0].admin === true ? 'true' : 'false'}>
               <HStack spacing='24px'>
                 <Radio name='admin' onChange={(e) => handleChange(e)} value='false'>
@@ -125,11 +122,15 @@ const EditUser = (props) => {
                   Yes
                 </Radio>
               </HStack>
-            </RadioGroup>
+            </RadioGroup> }
           </FormControl>
-          <Button onClick={onOpen} colorScheme="primary">
+          { currentUser[0].email === 'pepo@gmail.com' ? 
+          <Button onClick={onOpen} colorScheme="primary" disabled>
             Change details
-          </Button>
+          </Button> :
+          <Button onClick={onOpen} colorScheme="primary">
+          Change details
+          </Button>  }
 
           <AlertDialog
         isOpen={isOpen}

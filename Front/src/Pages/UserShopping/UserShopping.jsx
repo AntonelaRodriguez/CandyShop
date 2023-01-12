@@ -23,7 +23,7 @@ const UserShopping = () => {
 
     const dispatch = useDispatch();
     let carts = useSelector((state) => state.userCart)
-
+    console.log(carts, 'carts')
     carts = carts.filter((c) => c.state === 'completed' ||  c.state === 'delivered' ||  c.state === 'recived' );
     
      

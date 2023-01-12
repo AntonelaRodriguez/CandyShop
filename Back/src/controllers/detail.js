@@ -20,7 +20,21 @@ const getDetailCart = async (CartOrderN) => {
     return detailCart;
 }
 
+const getAllUserOrders = async (email) => {
+    if(!email) throw new Error('Email parameter is missing')
+    const allUserOrders = await Detail.findAll({
+        where: {
+            UserEmail: email
+        },
+        include: [{
+            model: Product
+        }]
+    })
+    return allUserOrders;
+}
+
 module.exports = {
 	postDetailCart,
-    getDetailCart
+    getDetailCart,
+    getAllUserOrders
 };

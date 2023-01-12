@@ -17,7 +17,7 @@ import {
 
     return (
       <Card
-        w='full'
+        w='55rem'
         h='full'
         display='flex'
         justifyContent='space-between'
@@ -36,7 +36,7 @@ import {
             objectFit='cover'
             w='full'
             margin='auto'
-            h='full'
+            h='8rem'
             src={image}
             loading='lazy'
           />
@@ -64,8 +64,8 @@ import {
             <Text>User: {UserEmail}</Text>
             <Text>Date: {date}.</Text>
             <Text>Actual State: {state}.</Text>
-            <Text>Tracking Number: {trackingNumber}.</Text>
-            <Text>Delivery: {delivery}</Text>
+            {/* <Text>Tracking Number: {trackingNumber}.</Text>
+            <Text>Delivery: {delivery}</Text> */}
   
             <Stack>
               <Tag variant='outline' size='sm' colorScheme='primary'>

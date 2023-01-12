@@ -76,7 +76,7 @@ import {
     state: input.state,
     totalPrice: input.totalPrice,
     date: input.date,
-    trackingNumber: input.trackingNumber,
+    trackingNumber: input.trackingNumber === '' ? cart.trackingNumber : input.trackingNumber,
     delivery: input.delivery
   };
 
@@ -140,7 +140,7 @@ import {
           <Stack>
           <form action='submit' onSubmit={(e) => handleSubmit(e)}>
                 <FormLabel>Tracking Number:</FormLabel>
-                <Input type='text' value={input.trackingNumber} name='trackingNumber' onChange={(e)=> handleChange(e)} mb={"1rem"} htmlSize={30} width='auto'></Input>
+                <Input maxLength={'23'} type='text' value={input.trackingNumber} name='trackingNumber' onChange={(e)=> handleChange(e)} mb={"1rem"} htmlSize={30} width='auto'></Input>
                 <FormLabel>Order Status:</FormLabel>
                 <RadioGroup mb={"1rem"} value={input.state}>
                   <HStack spacing='24px'>

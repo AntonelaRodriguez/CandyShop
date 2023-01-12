@@ -49,6 +49,7 @@ server.get("/pagos", async (req, res, next) => {
   let reference = req.query.external_reference.split("-");
   let external_reference = req.query.external_reference.toString();
   let cartId = Number(reference[0]);
+  let userId = reference[1];
   try {
     let cart = await Cart.findByPk(cartId);
     setTimeout(async () => {
@@ -77,6 +78,7 @@ server.get("/pagos", async (req, res, next) => {
             price: Number(carrito[i].price) * Number(carrito[i].quantity),
             CartOrderN: Number(cartId),
             ProductId: Number(carrito[i].ProductId),
+            UserEmail: userId
           });
         }
       }
@@ -89,7 +91,7 @@ server.get("/pagos", async (req, res, next) => {
         },
         { where: { orderN: cartId } }
       );
-      return res.redirect(`https://candy-shop-sage.vercel.app`);
+      return res.redirect(REACT_APP_FRONT_URL);
     },[2000])
   } catch (error) {
     next(error);

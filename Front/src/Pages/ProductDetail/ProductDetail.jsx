@@ -245,18 +245,22 @@ import {
   CardFooter,
   Divider,
   Flex,
+  FormControl,
+  FormLabel,
   GridItem,
   Heading,
   HStack,
   Icon,
   Image,
   Input,
+  Select,
   Spinner,
   Stack,
   Tag,
   TagLabel,
   TagLeftIcon,
   Text,
+  Textarea,
   useToast
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
@@ -264,7 +268,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ImPriceTag } from 'react-icons/im'
 import { FaStar } from 'react-icons/fa'
-import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCart, editProductCart, deleteFromCart, cleanUpFilters, getCartProductDetail, purchasedProducts, } from '../../redux/actions/actions'
+import { getProductDetails, deleteProduct, getAllProducts, getUser, addProductCart, editProductCart, deleteFromCart, cleanUpFilters, getCartProductDetail, purchasedProducts, getReviews, postReview, } from '../../redux/actions/actions'
 import { useAuth0 } from "@auth0/auth0-react"
 import ReviewForm from '../Reviews/ReviewForm'
 import ReviewCard from '../Reviews/ReviewCard'
@@ -302,14 +306,7 @@ const ProductDetail = () => {
   
   const [purhased, setPurhased] = useState(false);
   const [reviewed, setReviewed] = useState(false);
-  useEffect(() => {
-    if(actualUser?.email?.length) {
-      setPurhased(idPurchasedProducts.some((ProductId) => ProductId === id ));
-      setReviewed(reviews.some((r) => r.author === actualUser.email))
-      console.log("LO COMPRE: ", purhased)
-      console.log("HICE REVIEW: ", reviewed)
-    }
-  }, [idPurchasedProducts, actualUser])
+
 
   
 
@@ -384,6 +381,86 @@ const ProductDetail = () => {
     window.scroll(0, 0);
   }, []);
 
+
+  const currentUser = useSelector(state => state.user)
+  useEffect(() => {
+    dispatch(getProductDetails(id))
+  }, [dispatch, id])
+  const [input, setInput] = useState({
+    productId: "",
+    email: "",
+    author: "",
+    title: "",
+    description: "", 
+    rating: null,
+  });
+  const newReview = {
+    productId: id,
+    email: isAuthenticated ? user.email : "",
+    author: isAuthenticated ? user.name : "",
+    title: input.title,
+    description: input.description, 
+    rating: input.rating,
+  }
+
+  function handleChange(e) {
+    
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  const [clickSubmit, setClickSubmit] = useState(false);
+  function handleSubmit(e) {
+    e.preventDefault()
+    dispatch(postReview(newReview))
+    setInput({
+      title: "",
+      description: "", 
+      rating: "",
+    })
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Your Review was submitted succesfully!',
+      showConfirmButton: false,
+      timer: 1000
+    })
+    setTimeout(() => {
+      dispatch(getReviews(id))
+      setClickSubmit(true)
+      dispatch(purchasedProducts(actualUser.email))
+      setPurhased(idPurchasedProducts.some((ProductId) => ProductId === id ));
+      setReviewed(true)
+    }, 2000)
+    setTimeout(() => {
+      setPurhased(idPurchasedProducts.some((ProductId) => ProductId === id ));
+      setReviewed(true)
+    }, 2500)
+    setTimeout(() => {
+      setReviewed(true)
+    }, 3000);
+  } 
+
+  useEffect(() => {
+    if(actualUser?.email?.length  || reviews.length) {
+      setPurhased(idPurchasedProducts.some((ProductId) => ProductId === id ));
+      setReviewed(reviews.some((r) => r.author === actualUser.email))
+      console.log("LO COMPRE: ", purhased)
+      console.log("HICE REVIEW: ", reviewed)
+    }
+  }, [idPurchasedProducts, actualUser, reviews.length])
+
+  useEffect(() => {
+    if(clickSubmit) {
+      setTimeout(() => {
+        dispatch(getReviews(id))
+        setReviewed(true)
+        setPurhased(idPurchasedProducts.some((ProductId) => ProductId === id ));
+      }, 2000);
+    }
+  }, clickSubmit)
 
   return (
     <>
@@ -571,7 +648,67 @@ const ProductDetail = () => {
 
 
       <Flex alignItems='flex-start'>
-      { purhased && !reviewed ? <ReviewForm /> : <></> }
+      { (purhased && !reviewed) || clickSubmit ? 
+      
+        <Flex
+          direction={{ base: 'column', sm: 'column', md: 'row', lg: 'row' }}
+          justifyContent='space-around'
+          borderRadius='md'
+          height='full'
+          w="25rem"
+          position='relative'
+          marginRight='2rem'
+        >
+          <Stack marginTop='3rem' direction='column' align='center' justify='center'>
+            <form action='submit' onSubmit={(e) => handleSubmit(e)}>
+            <Stack spacing='2' w='24rem' alignItems='center'>  {/* aca se puede modificar para hacerlo mas ancho al form */}
+                <Heading  marginBottom='2rem'>
+                Leave a Review
+                </Heading>
+                <FormControl isRequired>
+                <FormLabel>Title</FormLabel>
+                  <Input 
+                  type="text"
+                  value={input.title}
+                  name="title"
+                  onChange={handleChange}
+                  marginBottom='2rem'
+                  />
+
+                <FormLabel>Description</FormLabel>
+                  <Textarea 
+                  placeholder='Description...'
+                  value={input.description}
+                  name="description"
+                  onChange={handleChange}
+                  marginBottom='2rem'
+                  maxLength='150ch'
+                  />
+
+                  <FormLabel>Rating</FormLabel>
+                  <Select 
+                  placeholder="..." 
+                  value={input.rating}
+                  name="rating"
+                  onChange={handleChange}
+                  marginBottom='2rem'
+                  // width='25rem'
+                  >
+                  <option value='1'>1</option>
+                  <option value='2'>2</option>
+                  <option value='3'>3</option>
+                  <option value='4'>4</option>
+                  <option value='5'>5</option>
+                  </Select>
+                </FormControl>
+                <Button type="submit" colorScheme="primary" w='fit-content'>
+                  Submit review
+                </Button>
+              </Stack>
+            </form>
+          </Stack>
+        </Flex>
+      : <></> }
         <ReviewCard />
       </Flex>
       <Stack mb='1rem'>

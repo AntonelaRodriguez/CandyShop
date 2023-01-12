@@ -132,6 +132,7 @@ const CardProductCreateAndEdit = ({
                 display='flex'
                 alignItems='center'
                 justifyContent='flex-start'
+                maxW={200}
               >
                 <TagLeftIcon as={ImPriceTag} />
                 <TagLabel>$ {price}</TagLabel>
@@ -142,7 +143,7 @@ const CardProductCreateAndEdit = ({
               </Heading>
             </HStack>
 
-            <HStack justify='flex-start' align='center' gap={2}>
+            <HStack flexWrap="wrap" maxW={300} justify='flex-start' align='center' gap={2}>
               {category?.map((c) => (
                 <Tag
                   w='fit-content'
@@ -153,8 +154,9 @@ const CardProductCreateAndEdit = ({
                   colorScheme='cyan'
                   display='flex'
                   alignItems='center'
-                  justifyContent='flex-start'
+                  justifyContent='center'
                   gap={10}
+                  maxW={250}
                 >
                   <TagLabel>{c}</TagLabel>
                 </Tag>
@@ -181,8 +183,8 @@ const CardProductCreateAndEdit = ({
         </CardBody>
         <Divider />
 
-        <CardFooter w='full' justifyContent='center' borderRadius='0 0 10px 10px'>
-          <Text fontWeight={300}>{description}</Text>
+        <CardFooter maxW="full" w='full' display="flex" flexWrap="wrap" justifyContent='center' borderRadius='0 0 10px 10px'>
+          <Text  fontWeight={300}>{description}</Text>
         </CardFooter>
       </Card>
     </motion.div>

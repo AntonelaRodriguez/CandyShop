@@ -13,6 +13,8 @@ const ReviewCard = () => {
   const dispatch = useDispatch()
   let reviews = useSelector((state) => state.reviews)
   const ratings = reviews && reviews.map(r => r.rating)
+  console.log(ratings, 'ratings')
+  console.log(reviews, 'reviews')
 
   useEffect(() => {
     dispatch(getReviews(id))
@@ -38,9 +40,6 @@ const ReviewCard = () => {
     // dispatch(getReviews(pId))
   }
 
-  // const handlerUpdate = (id) => {
-  //   dispatch(updateReview(id))
-  // }
 
     return(
         <Stack  direction={{ base: 'column', lg: 'column' }} marginTop='3rem' marginBottom='2rem' >
@@ -50,9 +49,6 @@ const ReviewCard = () => {
                         currentUser && currentUser.admin === true ?
                         <Flex padding='20px'>
                           <Stack position='absolute' top={15} right={15} direction='row'>
-                              {/* <Button variant='solid' colorScheme='blue' onClick={(e) => handlerUpdate(r.id)}>
-                                <Icon as={IoMdCreate}></Icon>
-                              </Button> */}
                             <Button colorScheme='red' onClick={(e) => handlerDelete(r.id)}>
                               <Icon as={IoMdTrash}></Icon>
                             </Button>
@@ -69,7 +65,7 @@ const ReviewCard = () => {
                               {[...Array(5)].map((star, i) => {
                           const starValue = i + 1
                           return (
-                            <FaStar value={starValue} color={starValue <= Math.floor(totalAvg) ? "gold" : "lightgrey"}/>
+                            <FaStar value={starValue} color={starValue <= r.rating ? "gold" : "lightgrey"}/>
                           )
                         })}
                         <Text marginLeft='5px'>

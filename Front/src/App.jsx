@@ -5,9 +5,6 @@ import Home from './Pages/Home/Home'
 import Cart from './Pages/Cart/Cart'
 import ProductDetail from './Pages/ProductDetail/ProductDetail'
 import Products from './Pages/Products/Products.jsx'
-import SignUp from './Pages/SignUp/SignUp.jsx'
-import SignIn from './Pages/SignIn/SignIn.jsx'
-
 import EditProduct from './Pages/EditProduct/EditProduct'
 import { Container, Stack } from '@chakra-ui/react'
 import Nav from './Components/Nav/Nav'
@@ -231,8 +228,8 @@ function App() {
         <Route path='/cart' element={!usuario.admin ? <Cart /> : <Navigate to='/admin' />} />
         <Route path='/Products' element={!usuario.banned ? <Products /> : <Navigate to='/' />} />
         <Route path='/product/:id' element={!usuario.banned ? <ProductDetail /> : <Navigate to='/' />} />
-        <Route path='/signup' element={<SignUp />} />
-        <Route path='/signin' element={<SignIn />} />
+        {/* <Route path='/signup' element={<SignUp />} />
+        <Route path='/signin' element={<SignIn />} /> */}
         <Route
           path='/admin'
           element={

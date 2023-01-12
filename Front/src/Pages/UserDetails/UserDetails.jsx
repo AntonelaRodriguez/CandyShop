@@ -49,10 +49,18 @@ const UserDetails = () => {
   }, [usuario, isAuthenticated, user])
 
   function handleSubmit(values) {
+    let { name, lastName, companyName, phoneNumber, address } = values
+    
+    let nameTrimed = name?.replace(/^\s+|\s+$/, "");
+    let lastNameTrimed = lastName?.replace(/^\s+|\s+$/, "");
+    let companyNameTrimed = companyName?.replace(/^\s+|\s+$/, "");
+    let phoneNumberTrimed = phoneNumber.toString()?.replace(/^\s+|\s+$/, "");
+    let addressTrimed = address?.replace(/^\s+|\s+$/, "");
+
     if (!usuario.UserDetail) {
-      dispatch(postUserDetail({ ...input, ...values }))
+      dispatch(postUserDetail({ ...input, name: nameTrimed,lastName: lastNameTrimed, companyName: companyNameTrimed,phoneNumber: phoneNumberTrimed, address: addressTrimed}))
     } else {
-      dispatch(updateUserDetail({ ...input, ...values }))
+      dispatch(updateUserDetail({ ...input,  name: nameTrimed,lastName: lastNameTrimed, companyName: companyNameTrimed,phoneNumber: phoneNumberTrimed, address: addressTrimed}))
     }
     Swal.fire({
       position: 'center',
@@ -117,8 +125,9 @@ const UserDetails = () => {
                         variant="filled"
                         placeholder='Robert'
                         validate={(value) => {
+                          let valueTrimed = value.toString()?.replace(/^\s+|\s+$/, "");
                           let error;
-                          if (!(/^[a-zA-Z0-9\u00C0-\u017F()" "]{2,20}$/.test(value))) {
+                          if (!(/^[a-zA-Z0-9\u00C0-\u017F()" "]{2,20}$/.test(valueTrimed))) {
                             error = "Name must contain 2 to 20 characters";
                           }
                           return error;
@@ -137,8 +146,9 @@ const UserDetails = () => {
                         variant="filled"
                         placeholder='Jones'
                         validate={(value) => {
+                          let valueTrimed = value.toString()?.replace(/^\s+|\s+$/, "")
                           let error;
-                          if (!(/^[a-zA-Z0-9\u00C0-\u017F()" "]{2,20}$/.test(value))) {
+                          if (!(/^[a-zA-Z0-9\u00C0-\u017F()" "]{2,20}$/.test(valueTrimed))) {
                             error = "Last Name must contain 2 to 20 characters";
                           }
                           return error;
@@ -157,8 +167,9 @@ const UserDetails = () => {
                         variant="filled"
                         placeholder="Jones' Candy"
                         validate={(value) => {
+                          let valueTrimed = value.toString()?.replace(/^\s+|\s+$/, "")
                           let error;
-                          if (!(/^[a-zA-Z0-9\u00C0-\u017F()" "]{2,20}$/.test(value))) {
+                          if (!(/^[a-zA-Z0-9\u00C0-\u017F()" "]{2,20}$/.test(valueTrimed))) {
                             error = "Company Name must contain 2 to 20 characters";
                           }
                           return error;
@@ -176,8 +187,9 @@ const UserDetails = () => {
                         variant="filled"
                         placeholder='+549342112233'
                         validate={(value) => {
+                          let valueTrimed = value.toString()?.replace(/^\s+|\s+$/, "")
                           let error;
-                          if (!(/^[0-9]{6,30}$/.test(value))) {
+                          if (!(/^[0-9]{6,30}$/.test(valueTrimed))) {
                             error = "Phone Number must contain 6 to 30 digites";
                           }
                           return error;
@@ -196,8 +208,9 @@ const UserDetails = () => {
                         variant="filled"
                         placeholder="14 Rainsford St"
                         validate={(value) => {
+                          let valueTrimed = value.toString()?.replace(/^\s+|\s+$/, "")
                           let error;
-                          if (!(/^[a-zA-Z0-9\u00C0-\u017F()" "]{4,24}$/.test(value))) {
+                          if (!(/^[a-zA-Z0-9\u00C0-\u017F()" "]{4,24}$/.test(valueTrimed))) {
                             error = "Address must contain 4 to 24 characters";
                           }
                           return error;

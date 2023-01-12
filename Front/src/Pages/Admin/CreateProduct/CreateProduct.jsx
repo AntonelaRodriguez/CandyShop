@@ -87,11 +87,11 @@ const Create = () => {
     }
 
     if (e.target.name === 'name') {
-      if (!(/^[a-zA-Z0-9\u00C0-\u017F()" "]{0,31}$/.test(e.target.value))) {
+      if (e.target.value.length >= 70 || e.target.value.includes('  ')) {
         Swal.fire({
           position: 'center',
           icon: 'error',
-          title: 'The name must be between 1 and 21 characters',
+          title: 'The name must be between 1 and 70 characters or you have two spaces in a row ',
           showConfirmButton: false,
           timer: 1400,
         });
@@ -99,13 +99,13 @@ const Create = () => {
       }
     }
 
-
     if (e.target.name === 'description') {
-      if (!(/^[a-zA-Z0-9\u00C0-\u017F()" "]{0,51}$/.test(e.target.value))) {
+      if (e.target.value.length >= 100 || e.target.value.includes('  ')) {
         Swal.fire({
           position: 'center',
           icon: 'error',
-          title: 'The description must be between 1 and 51 characters',
+          title:
+            'The description must be between 1 and 100 characters or you have two spaces in a row ',
           showConfirmButton: false,
           timer: 1400,
         });
@@ -124,13 +124,11 @@ const Create = () => {
         });
         return;
       }
-      
     }
-    
 
     setInput({
       ...input,
-      [e.target.name]: e.target.value.replace(/^\s+|\s+$/, " "),
+      [e.target.name]: e.target.value.replace(/^\s+|\s+$/, ' '),
     });
   }
 
@@ -206,7 +204,7 @@ const Create = () => {
             <FormControl isRequired>
               <FormLabel>Name</FormLabel>
               <Input
-               // maxLength={40}
+                // maxLength={40}
                 type='text'
                 value={input.name}
                 name='name'
@@ -217,7 +215,7 @@ const Create = () => {
             <FormControl isRequired>
               <FormLabel>Description</FormLabel>
               <Textarea
-               // maxLength={55}
+                // maxLength={55}
                 placeholder='Type a Description'
                 value={input.description}
                 name='description'
@@ -306,7 +304,11 @@ const Create = () => {
               />
             </FormControl>
 
-            <Button disabled={!input?.category.length || input?.brand === ""} type='submit' colorScheme='primary'>
+            <Button
+              disabled={!input?.category.length || input?.brand === ''}
+              type='submit'
+              colorScheme='primary'
+            >
               Crear
             </Button>
           </Stack>

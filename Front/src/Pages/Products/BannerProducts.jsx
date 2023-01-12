@@ -88,7 +88,7 @@ export const Banner = () => {
                   sm: '0',
                 }}
               >
-                <Text fontWeight='medium' letterSpacing={1}>
+                <Text fontWeight='medium' fontSize="xl" letterSpacing={1}>
                   Free shipping for orders above $5000
                 </Text>
               </Stack>

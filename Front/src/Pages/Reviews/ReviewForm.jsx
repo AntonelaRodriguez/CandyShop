@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { getReviews, getProductDetails, postReview } from '../../redux/actions/actions';   
 
 
@@ -50,6 +51,13 @@ const ReviewForm = () => {
       title: "",
       description: "", 
       rating: "",
+    })
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Your Review was submitted succesfully!',
+      showConfirmButton: false,
+      timer: 1000
     })
     dispatch(getReviews(id))
   }

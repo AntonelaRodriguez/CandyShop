@@ -8,6 +8,7 @@ import {
   Spinner,
   Stack,
   FormLabel,
+  Text
 } from "@chakra-ui/react";
 import Pagination from "../../Components/Pagination/Pagination";
 import { useEffect } from "react";
@@ -17,12 +18,12 @@ import CardUserShopping from "./CardUserShopping/CardUserShopping"
 
 const UserShopping = () => {
 
-
+    const [loading, setLoading] = useState(true);
     const {isAuthenticated, user } = useAuth0();
 
     const dispatch = useDispatch();
     let carts = useSelector((state) => state.userCart)
-
+    console.log(carts, 'carts')
     carts = carts.filter((c) => c.state === 'completed' ||  c.state === 'delivered' ||  c.state === 'recived' );
     
      
@@ -32,8 +33,11 @@ const UserShopping = () => {
         }
     },[])
 
+    //Stop spinner
+    setTimeout(()=>{
+      setLoading(false)
+    }, 6000)
 
-  
     //--- pagination
     const [currentPage, setCurrentPage] = useState(1)
     const [productsPerPage] = useState(9)
@@ -90,8 +94,12 @@ const UserShopping = () => {
                   />
                 );
               })
-            ) : (
-              <Spinner size="xl" />
+            ) : (        
+              loading === true ? 
+                <Spinner size="xl" />
+              :
+              <Text fontWeight='600'>No orders found</Text>
+              
             )}
           </Stack>
         </Stack>

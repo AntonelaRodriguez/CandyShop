@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   Button,
   Drawer,
@@ -15,55 +15,56 @@ import {
   Stack,
   Text,
   useDisclosure,
-  VStack
-} from '@chakra-ui/react'
-import { BsChatDotsFill } from 'react-icons/bs'
-import { AiOutlineClose } from 'react-icons/ai'
-import axios from 'axios'
-import { IoIosSend } from 'react-icons/io'
-import { motion } from 'framer-motion'
+  VStack,
+} from '@chakra-ui/react';
+import { BsChatDotsFill } from 'react-icons/bs';
+import { AiOutlineClose } from 'react-icons/ai';
+import axios from 'axios';
+import { IoIosSend } from 'react-icons/io';
+import { motion } from 'framer-motion';
 
 const ChatBot = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [messages, setMessages] = useState([
     {
       response: '',
       from: '',
-      meMessage: ''
-    }
-  ])
+      meMessage: '',
+    },
+  ]);
 
-  const [input, setInput] = useState('')
+  const [input, setInput] = useState('');
 
   const sendMessage = async (message) => {
-    const url = 'http://localhost:3001/chatbot/send'
-    const res = await axios.post(url, { message })
+    const url = 'https://candyshop-production.up.railway.app/chatbot/send'
+    /* const url = 'http://localhost:3001/chatbot/send'; */
+    const res = await axios.post(url, { message });
     setMessages([
       ...messages,
       {
         response: res.data.response,
         from: 'me',
-        meMessage: res.data.meMesssage
-      }
-    ])
-  }
+        meMessage: res.data.meMesssage,
+      },
+    ]);
+  };
 
-  let mensajes = messages.slice(1)
+  let mensajes = messages.slice(1);
 
   const handleSubmit = (event) => {
-    event.preventDefault()
-    sendMessage(input)
-    setInput('')
-  }
+    event.preventDefault();
+    sendMessage(input);
+    setInput('');
+  };
 
   return (
-    <motion.div
+    <motion.div 
       initial={{ opacity: 1 }}
       animate={{
         scale: [1, 1.2, 1.2, 1, 1],
         rotate: [0, 0, 270, 270, 0],
-        borderRadius: ['20%', '20%', '50%', '50%', '20%']
+        borderRadius: ['20%', '20%', '50%', '50%', '20%'],
       }}
       transition={{ duration: 2 }}
       whileHover={{ scale: 0.9 }}
@@ -73,13 +74,13 @@ const ChatBot = () => {
         bottom: 15,
         padding: 10,
         right: 15,
-        zIndex: 100
+        zIndex: 1000000,
       }}
     >
       <Icon w={8} h={8} color='primary.300' as={BsChatDotsFill} onClick={onOpen} cursor='pointer' />
-      <Drawer placement='right' onClose={onClose} colorScheme='primary' isOpen={isOpen} size='md'>
+      <Drawer zIndex={100000000}  placement='right' onClose={onClose} colorScheme='primary' isOpen={isOpen} size='md'>
         <DrawerOverlay />
-        <DrawerContent bg='primary.100' w='full' h='full' minW='30%' maxH='full'>
+        <DrawerContent  zIndex={10000000} bg='gray.200' w='full' h='full' minW='30%' maxH='full'>
           <Icon
             w={7}
             h={7}
@@ -107,7 +108,8 @@ const ChatBot = () => {
               {mensajes?.map((message, i) => {
                 return (
                   <List
-                    bg='primary.200'
+                    bg='gray.400'
+                    borderRadius="lg"
                     key={i}
                     p={5}
                     display='flex'
@@ -151,7 +153,7 @@ const ChatBot = () => {
                       </ListItem>
                     </HStack>
                   </List>
-                )
+                );
               })}
             </VStack>
 
@@ -168,14 +170,14 @@ const ChatBot = () => {
                     placeholder='Mensaje'
                     w='full'
                     border='1px'
-                    borderColor='primary.300'
+                    borderColor='gray.500'
                     color='blackAlpha.900'
                     _placeholder={{ color: 'blackAlpha.900' }}
                     value={input}
-                    focusBorderColor='primary.500'
+                    focusBorderColor='gray.900'
                     onChange={(event) => setInput(event.target.value)}
                   />
-                  <Button colorScheme='primary' variant='outline' w='auto' type='submit'>
+                  <Button colorScheme='blackAlpha' variant='outline' w='auto' type='submit'>
                     <Icon w='full' h={6} as={IoIosSend} cursor='pointer' />
                   </Button>
                 </FormControl>
@@ -185,7 +187,7 @@ const ChatBot = () => {
         </DrawerContent>
       </Drawer>
     </motion.div>
-  )
-}
+  );
+};
 
-export default ChatBot
+export default ChatBot;

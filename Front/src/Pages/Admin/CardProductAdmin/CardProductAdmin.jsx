@@ -9,13 +9,23 @@ import {
   Stack,
   Tag,
   TagLabel,
-  Text
-} from '@chakra-ui/react'
-import React from 'react'
-import { useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+  Text,
+} from '@chakra-ui/react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import SkeletonCard from '../../../Components/SkeletonCard/SkeletonCard';
+import { getAllProducts, deleteProduct } from '../../../redux/actions/actions';
 
 const CardProductAdmin = ({ name, description, image, id, price }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const loading = useSelector((state) => state.loading);
+  const removeProduct = (id) => {
+    dispatch(deleteProduct(id));
+    dispatch(getAllProducts());
+    navigate('/admin/ProductsAdmin');
+  };
   return (
     <Card
       w='full'
@@ -32,17 +42,25 @@ const CardProductAdmin = ({ name, description, image, id, price }) => {
       gap={10}
       p={5}
     >
-      <Stack margin='auto' w={{ base: 'full', sm: '20%', lg: '15%' }} h='full'>
-        <Image
-          objectFit='cover'
-          w='full'
-          margin='auto'
-          h='full'
-          src={image}
-          loading='lazy'
-          alt={description}
-        />
-      </Stack>
+      {loading || !image ? (
+        <SkeletonCard />
+      ) : (
+        <Stack margin='auto' w={{ base: 'full', sm: '20%', lg: '15%' }} h='full'>
+          {!image ? (
+            <SkeletonCard />
+          ) : (
+            <Image
+              objectFit='cover'
+              w='full'
+              margin='auto'
+              h='full'
+              src={image}
+              loading='lazy'
+              alt={description}
+            />
+          )}
+        </Stack>
+      )}
 
       <Stack
         flex={1}
@@ -79,17 +97,17 @@ const CardProductAdmin = ({ name, description, image, id, price }) => {
             <Link to={'/edit/' + id}>Edit Product</Link>
           </Button>
           <Button
-            onClick={() => deleteProduct(id)}
+            onClick={() => removeProduct(id)}
             size={{ base: 'xs', lg: 'sm' }}
             variant='solid'
             colorScheme='red'
           >
-            <Link>Delete Product</Link>
+            Delete Product
           </Button>
         </Stack>
       </Stack>
     </Card>
-  )
-}
+  );
+};
 
-export default CardProductAdmin
+export default CardProductAdmin;

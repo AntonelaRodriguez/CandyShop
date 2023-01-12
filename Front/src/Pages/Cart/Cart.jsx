@@ -101,85 +101,84 @@ const Cart = () => {
     });
   }
 
-  // const newDetail = {
-  //   orderN: input.orderN, 
-  //   state: input.state, 
-  //   totalPrice: input.totalPrice, 
-  //   date: input.date,
-  //   trackingNumber: input.trackingNumber,
-  //   delivery: input.delivery === 'true' ? true : false,
-  // };
-
   const handleDeliverySubmit = () => {
     dispatch(updateCart(input));
   }
 
   return (
-    <Stack width='full' spacing={5} h='full' justifyContent='space-between' flexDirection='row'>
-      <Stack width='full' margin="3em 0 5em 0">
-        {storedValue?.map((p) => (
-          <CardProductCart
-            key={p.id}
-            id={p.id}
-            image={p.image}
-            description={p.description}
-            name={p.name}
-            price={p.price}
-            quantity={p.quantity}
-            variable="cart"
-          />
-        ))}
-      {
-        priceTotal >= 5000 ?
-          !cartByPk?.UserEmail ?
-            <Spinner /> :
-            <Stack>
-            <Text as='b' mt={3} fontSize={'1.5rem'}>If you buy more than $5,000 in products, shipping is free!</Text>
-            <FormLabel as='legend' marginTop='2rem'>Do you want home delivery?</FormLabel>
-            <RadioGroup defaultValue={cartByPk.delivery === "no" ? 'no' : 'yes'}>
-              <HStack spacing='24px'>
-                <Radio name='delivery' onChange={(e) => handleChange(e)} value='no'>
-                  No
-                </Radio>
-                <Radio name='delivery' onChange={(e) => handleChange(e)} value='yes'>
-                  Yes
-                </Radio>
-              </HStack>
-            </RadioGroup>
-            {input?.delivery === "yes" ?             
-            <Text>Please, complete your information for the shipment <Link to="/userDetails" style={{ color: 'red', textDecoration: 'underline' }}>here</Link>.</Text> :
-            <></>
-            }
-            </Stack> :
-          <></>
-      }
-      </Stack>
-      <Stack height='full' w='40%' p={15} spacing={15} justifyContent='center' align='center'>
-        <Heading>Payment</Heading>
-        <Stack direction={{ base: 'column', md: 'row' }} align='center'>
-          <Text fontWeight="600">TOTAL:</Text>
-          <Tag size='lg' variant='subtle' colorScheme='primary'>
-            <TagLabel>$ {priceTotal}</TagLabel>
-          </Tag>
-        </Stack>
-        {isAuthenticated 
-          ? <>
-              {loading 
-                ? <Spinner /> 
-                : showOrderReady 
-                  ? <Button variant='ghost' bg='primary.300' onClick={() => {handlerOrderReady(); handleDeliverySubmit()}} disabled={!orderN}>
-                      Order ready! 
-                    </Button>
-                  : ""
+    <>
+      {!storedValue?.length ? <Heading>Empty shopping cart!</Heading> : <Heading>Products in cart:</Heading>}
+      <Stack width='full' spacing={5} h='full' justifyContent='space-between' flexDirection='row'>
+        <Stack width='full' margin="3em 0 5em 0">
+          {storedValue?.map((p) => (
+            <CardProductCart
+              key={p.id}
+              id={p.id}
+              image={p.image}
+              description={p.description}
+              name={p.name}
+              price={p.price}
+              quantity={p.quantity}
+              variable="cart"
+            />
+          ))}
+        {
+          priceTotal >= 5000 ?
+            !cartByPk?.UserEmail ?
+              <Spinner /> :
+              <Stack>
+              <Text as='b' mt={3} fontSize={'1.5rem'}>If you buy more than $5,000 in products, shipping is free!</Text>
+              <FormLabel as='legend' marginTop='2rem'>Do you want home delivery?</FormLabel>
+              <RadioGroup defaultValue={cartByPk.delivery === "no" ? 'no' : 'yes'}>
+                <HStack spacing='24px'>
+                  <Radio name='delivery' onChange={(e) => handleChange(e)} value='no'>
+                    No
+                  </Radio>
+                  <Radio name='delivery' onChange={(e) => handleChange(e)} value='yes'>
+                    Yes
+                  </Radio>
+                </HStack>
+              </RadioGroup>
+              { JSON.stringify(input) === '{}' ? <Spinner/> :
+              input?.delivery === "yes" ?             
+              <Text>Please, complete your information for the shipment <Link to="/userDetails" style={{ color: 'red', textDecoration: 'underline' }}>here</Link>.</Text> :
+              <></>
               }
-            </>
-          : <Button variant='ghost' bg='primary.300' onClick={() => loginWithRedirect()}>
-              Log in and pay 
-            </Button>
+              </Stack> :
+            <></>
         }
-        <form id='form1' ></form>
+        </Stack>
+        <Stack height='full' w='40%' p={15} spacing={15} justifyContent='center' align='center'>
+        { storedValue?.length && 
+          <> 
+            <Heading>Payment</Heading>
+            <Stack direction={{ base: 'column', md: 'row' }} align='center'>
+              <Text fontWeight="600">TOTAL:</Text>
+              <Tag size='lg' variant='subtle' colorScheme='primary'>
+                <TagLabel>$ {priceTotal}</TagLabel>
+              </Tag>
+            </Stack>
+          </>
+        }
+          {isAuthenticated 
+            ? <>
+                {loading 
+                  ? <Spinner /> 
+                  : showOrderReady 
+                    ? <Button variant='ghost' bg='primary.300' onClick={() => {handlerOrderReady(); handleDeliverySubmit()}} disabled={!orderN}>
+                        Order ready! 
+                      </Button>
+                    : ""
+                }
+              </>
+            : <Button variant='ghost' bg='primary.300' onClick={() => loginWithRedirect()}>
+                Log in and pay 
+              </Button>
+          }
+          <form id='form1' ></form>
+        </Stack>
       </Stack>
-    </Stack>
+    </>
   )
 }
 

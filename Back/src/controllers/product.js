@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Product, Category } = require('../db.js')
+const { Product, Category, Cart, Detail } = require('../db.js')
 const loadProductsAndCategories = require("../../loadDB.js");
 
 const searchCandy = async (name) => {    //busca products por matcheo parcial
@@ -8,7 +8,7 @@ const searchCandy = async (name) => {    //busca products por matcheo parcial
 	// if(!name) throw new Error({message:"Value is undefined", status:400});
 	// }
 	let nameTrimed = name.replace(/^\s+|\s+$/, "");
-	if(!nameTrimed.length) throw new Error({message: "Value is empty string!", status:400});
+	if(!nameTrimed.length) return [];
 	let products = await Product.findAll({
       where: { name: { [Op.iLike]: "%"+nameTrimed+"%" } },
       include: [
@@ -117,6 +117,23 @@ const filteringProducts = async (querys) => {
 	return products;
   };
 
+const IdspurchasedProducts = async (email) => {
+	try {
+		let products = await Cart.findAll({ 
+			where: { 
+				state: ["completed", "delivered", "recived"],
+				UserEmail: email
+			},
+			include: [{ model: Detail }],
+		})
+		let ProductIds = products.map((p) => p.Detail.ProductId).filter((p) => p !== null)
+		ProductIds = Array.from(new Set(ProductIds));
+		return ProductIds;
+
+	} catch (error) {
+		return error.message
+	}
+}
 
 const valuesToReturn = (value) =>{	
 	return {
@@ -142,7 +159,8 @@ module.exports = {
 	updateProduct,
 	deleteProduct,
 	createProduct,
-	filteringProducts
+	filteringProducts,
+	IdspurchasedProducts
 };
 
 

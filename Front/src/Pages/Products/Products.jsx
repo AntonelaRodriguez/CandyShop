@@ -126,7 +126,7 @@ const Products = () => {
 
   return (
     <Flex direction='column' justifyContent='center' align='center'>
-      <Heading p={5} w='full'>
+      <Heading p={5} w='auto'>
         <Banner />
       </Heading>
       <form onSubmit={(event) => handleSumbit(event)}>

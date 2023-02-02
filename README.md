@@ -1,12 +1,14 @@
-E-Commerce-Candy Shop
+# E-Commerce-Candy Shop
 
-Proyecto E-Commerce
+E-Commerce proyect
 
-Levantar proyecto : npm run dev
-prueba
+## Installation
 
-mergeo de dev a main
-    hacer un git pull desde vscode de dev
-    en git hub tener un pull request para mergear dev a main verificado
-    en vs code pararse en main y hacer git merge dev para mergear dev a main
-    una vez mergeado con conflictos solucionados hacer un push
+Install NPM packages
+
+## Usage
+
+- On /Back: npm start
+- On /Front: npm run dev
+
+LINK DEPLOY: https://candy-shop-sage.vercel.app/ 
